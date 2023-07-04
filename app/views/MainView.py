@@ -74,11 +74,11 @@ class MainView(QMainWindow, Ui_MainWindow):
         self.calcTable.setItemDelegateForColumn(
             self.calcModel.fieldIndex("slopes_min_accepted_col"), NumberFormatDelegate()
         )
-        self.calcTable.model().dataChanged.connect(self.onDataChanged)        
+        self.calcTable.model().dataChanged.connect(self.onDataChanged)
 
         # Contributions Table
         self.contribTable.setModel(self.contribModel)
-        self.contribTable.setEditTriggers(QAbstractItemView.NoEditTriggers)        
+        self.contribTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.contribTable.horizontalHeader().setSectionResizeMode(True)
 
         # WaterLevelAdj Table
@@ -93,7 +93,7 @@ class MainView(QMainWindow, Ui_MainWindow):
 
         # layer features selection
         self.calcTable.verticalHeader().sectionClicked.connect(self.onRowSelected)
-        self.addLayerConnection()                                         
+        self.addLayerConnection()
 
         # menu actions
         self.actionProject.triggered.connect(self.checkProjectAction)
@@ -102,7 +102,7 @@ class MainView(QMainWindow, Ui_MainWindow):
         self.actionCalcular_DN_Creciente.triggered.connect(self.calculateGrowingDN)
         self.actionMin_Excav.triggered.connect(self.calculateMinExc)
         self.actionMin_Desnivel.triggered.connect(self.calculateMinSlope)
-        self.actionAjuste_NA.triggered.connect(self.setIterations)        
+        self.actionAjuste_NA.triggered.connect(self.setIterations)
         self.actionImportFullNetwork.triggered.connect(self.startImport)
         self.actionImportSelectedSegments.triggered.connect(lambda: self.startImport(only_selected_features=True))
         self.actionExportToXls.triggered.connect(self.downloadXls)
@@ -137,7 +137,7 @@ class MainView(QMainWindow, Ui_MainWindow):
                 self._dialogs["login"].userText.text(),
                 self._dialogs["login"].passText.text(),
             )
-        )        
+        )
         self._dialogs["export"].accepted.connect(self.createResultLayer)
 
         # Menu / View
@@ -158,27 +158,27 @@ class MainView(QMainWindow, Ui_MainWindow):
         else:
             self.actionMin_Desnivel.setChecked(True)
 
-    def set_column_header(self, colName, model, context):        
+    def set_column_header(self, colName, model, context):
         model.setHeaderData(model.fieldIndex(colName),Qt.Horizontal, translate(context, colName))
 
     def set_headers(self):
         """ Set table header text and translations """
         
         #calculations
-        columns = self.calcModel.getColumns()        
+        columns = self.calcModel.getColumns()
         for col in columns:
-            self.set_column_header(col, self.calcModel, "CalcTbl")        
+            self.set_column_header(col, self.calcModel, "CalcTbl")
         hidden = self.calcModel.getHiddenColumns()
         for h in hidden:
             self.calcTable.setColumnHidden(self.calcModel.fieldIndex(h), True)
-                
+
         # contributions
-        columns = self.contribModel.getColumns()        
+        columns = self.contribModel.getColumns()
         for col in columns:
             self.set_column_header(col, self.contribModel, "ContTbl")
         hidden = self.contribModel.getHiddenColumns()
         for h in hidden:
-            self.contribTable.setColumnHidden(self.contribModel.fieldIndex(h), True)      
+            self.contribTable.setColumnHidden(self.contribModel.fieldIndex(h), True)
 
         # water level adj
         hidden = self.wlaModel.getHiddenColumns()
@@ -186,7 +186,7 @@ class MainView(QMainWindow, Ui_MainWindow):
             self.wlaTable.setColumnHidden(self.wlaModel.fieldIndex(h), True)
 
     def viewSettings(self, bool):
-        """ Toogles table between basic and detailed view """        
+        """ Toogles table between basic and detailed view """
         self._dialogs["newProject"].model.updateDefaultView(bool)
         self.calcTable.setColumnHidden(self.calcModel.fieldIndex("initial_segment"), bool)
         self.calcTable.setColumnHidden(self.calcModel.fieldIndex("final_segment"), bool)
@@ -216,7 +216,7 @@ class MainView(QMainWindow, Ui_MainWindow):
         self.changeMainTitle()
         self.currentProjectId = self._dialogs["project"].model.getActiveId()
         self.set_table_filters()
-        self.refreshMenuStatus()        
+        self.refreshMenuStatus()
 
     def set_table_filters(self):
         """applies filters to calculations, contributions and wla_adjustments tables"""
@@ -322,24 +322,24 @@ class MainView(QMainWindow, Ui_MainWindow):
 
     def onFeaturesSelected(self):
         """ triggered every time user selects features on the map """
-        layer = self.h.GetLayer()        
+        layer = self.h.GetLayer()
         col = self.h.readValueFromProject("SEG_NAME_C")
         col_index = self.calcModel.fieldIndex("col_seg")
-        features = layer.selectedFeatures()        
+        features = layer.selectedFeatures()
         selection = QItemSelection()
         selection_model = self.calcTable.selectionModel()
         selection_model.clearSelection()
-        selected_colsegs = [ f[col] for f in features]        
+        selected_colsegs = [ f[col] for f in features]
         
         #find matching table rows
-        for row in range(self.calcModel.rowCount(self.calcTable.rootIndex())):            
+        for row in range(self.calcModel.rowCount(self.calcTable.rootIndex())):
             model_index = self.calcModel.index(row, col_index, self.calcTable.rootIndex())
             model_data = model_index.data()
             if(model_data in selected_colsegs):
                 selection.select(model_index, model_index)
         
         # Apply the selection, using the row-wise mode.
-        mode = QItemSelectionModel.Select | QItemSelectionModel.Rows        
+        mode = QItemSelectionModel.Select | QItemSelectionModel.Rows
         selection_model.select(selection, mode) 
 
     def addLayerConnection(self):

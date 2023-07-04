@@ -47,7 +47,7 @@ class RedBasica(object):
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
         locale_path = os.path.join(
-            self.plugin_dir,           
+            self.plugin_dir,
             '../i18n',
             'RedBasica_{}.qm'.format(locale))
 
@@ -101,7 +101,7 @@ class RedBasica(object):
 
         self.dockPatchs.btnUpdateFlowRateList.clicked.connect( self.UpdateFlowRateList )
              
-        #self.dockPatchs.chkSupressPopup.stateChanged.connect( self.SupressCheckChanged )        
+        #self.dockPatchs.chkSupressPopup.stateChanged.connect( self.SupressCheckChanged )
 
         # end events of widget
         
@@ -238,9 +238,9 @@ class RedBasica(object):
             parent=self.iface.mainWindow())
 
     def readProject(self):
-        """ Called every time a new project is opened and resets dock panel """      
+        """ Called every time a new project is opened and resets dock panel """
         self.HandlerInitialized = False
-        self.dockPatchs.SetSelectedId(None)            
+        self.dockPatchs.SetSelectedId(None)
         lab = QLabel()
         lab.setText(translate("AutomaticGeometricAttributes","No feature selected"))
         self.dockPatchs.saPropFeatures.setWidget(lab)
@@ -336,7 +336,7 @@ class RedBasica(object):
                         point1 = h.GetPointFromCoordinates(nodeLayer.getFeatures(),geom.asPolyline()[0])
                         if point1:
                             _qeList = point1.attributes()[nodeLayer.fields().lookupField( h.readValueFromProject('QE') )]
-                            if _qeList:                                
+                            if _qeList:
                                 
                                 
                   
@@ -347,7 +347,7 @@ class RedBasica(object):
                                         if x not in mydic:
                                             mydic[x] = [name]
                                         else:
-                                            mydic[x].append(name)                                               
+                                            mydic[x].append(name)
 
                 rowCount = blockLayer.featureCount()
 
@@ -574,7 +574,7 @@ class RedBasica(object):
                                 for v in values:
                                     #if cur_idx != keyIndex:
                                     val_dic[headers[cur_idx]] = v
-                                    cur_idx = cur_idx + 1                    
+                                    cur_idx = cur_idx + 1
 
                                 main_dic[values[keyIndex]] = val_dic
                                         
@@ -609,18 +609,18 @@ class RedBasica(object):
                                 point = h.GetPointFromCoordinates(nodeLayer.getFeatures(),geom.asPolyline()[0])
 
                                 if point:
-                                    for x in main_dic[name]:                        
+                                    for x in main_dic[name]:
                                         nodeLayer.changeAttributeValue( point.id(), nodeLayer.fields().lookupField( x ), main_dic[name][x] )
 
 
                             if name_f in main_dic:
 
                                 geom = f.geometry()
-                                geom.convertToSingleType()                                
+                                geom.convertToSingleType()
                                 point = h.GetPointFromCoordinates(nodeLayer.getFeatures(),geom.asPolyline()[-1])
 
                                 if point:
-                                    for x in main_dic[name_f]:                        
+                                    for x in main_dic[name_f]:
                                         nodeLayer.changeAttributeValue( point.id(), nodeLayer.fields().lookupField( x ), main_dic[name_f][x] )
                             
                         _myLayer.commitChanges()
@@ -628,7 +628,7 @@ class RedBasica(object):
 
         self.dlgExport.accept()
 
-            
+
 
     def importData(self):
         if self.dlgExport.txtFileName.text() == "":
@@ -664,10 +664,10 @@ class RedBasica(object):
                     for v in values:
                         if cur_idx != keyIndex:
                             val_dic[headers[cur_idx]] = v
-                        cur_idx = cur_idx + 1                    
+                        cur_idx = cur_idx + 1
 
                     main_dic[values[keyIndex]] = val_dic
-                            
+
                 cur_row = cur_row + 1
 
             _file.close()
@@ -695,7 +695,7 @@ class RedBasica(object):
             for f in _myLayer.getFeatures():
                 self.dlgExport.progressBar.setValue(self.dlgExport.progressBar.value() + 1)
                 if f[seg_name_c] in main_dic:
-                    for x in main_dic[f[seg_name_c]]:                        
+                    for x in main_dic[f[seg_name_c]]:
                         _myLayer.changeAttributeValue( f.id(), _myLayer.fields().lookupField( x ), main_dic[f[seg_name_c]][x] )
                 
             _myLayer.commitChanges()
@@ -905,14 +905,14 @@ class RedBasica(object):
                     values.append(str(nameOf))
                 else:
                     values.append("")
-                #TRM_(N-1)_B                
+                #TRM_(N-1)_B
                 fnd = h.Get_Feature_On_Index(lstMinFeatures,f,-1,False)
                 if fnd != None:
                     nameOf = fnd["SEG_NAME_C"]
                     values.append(str(nameOf))
                     toExclud = fnd["SEG_NAME"]
 
-                    #TRM_(N-1)_C                
+                    #TRM_(N-1)_C
                     fnd = h.Get_Feature_On_Index(lstMinFeatures,f,-1,False,[toExclud])
                     if fnd != None:
                         nameOf = fnd["SEG_NAME_C"]
@@ -933,7 +933,7 @@ class RedBasica(object):
                     nameOf = fnd["SEG_NAME_C"]
                     values.append(str(nameOf))
                 else:
-                    values.append("")               
+                    values.append("")
 
                 
                 if nodeLayer:
@@ -974,7 +974,7 @@ class RedBasica(object):
                         values.append("")
                         values.append("")
 
-                    if point2:                  
+                    if point2:
                         #COTA_F
                         values.append(str(point2.attributes()[cota_idx]))
 
@@ -1101,7 +1101,7 @@ class RedBasica(object):
         lab = QLabel()
         lab.setText(text)
         #lab.setAlignment(Qt.AlignCenter)
-        f = QFont()            
+        f = QFont()
         #f.setUnderline(True)
         lab.setFont(f)
         lab.setStyleSheet("QLabel { color : gray; font-weight: bold; }");
@@ -1196,7 +1196,7 @@ class RedBasica(object):
         self.Group2WHeiht = self.Group2W.height()
         self.Group3WHeiht = self.Group3W.height()
         
-        _v = h.readValueFromProject("Expanded_Group1")        
+        _v = h.readValueFromProject("Expanded_Group1")
         if _v == "False":
             self.click_expand_patch(self.btnG1)
             
@@ -1210,7 +1210,7 @@ class RedBasica(object):
 
     def SelectedFeatureAttrWindows(self,selected,deselected,clearAndSelect):
         if len(selected) == 1:
-            self.dockPatchs.SetSelectedId(selected[0])            
+            self.dockPatchs.SetSelectedId(selected[0])
 
             beg_line_coord_e = h.readValueFromProject("BEG_LINE_COORD_E")
             beg_line_coord_n = h.readValueFromProject("BEG_LINE_COORD_N")
@@ -1234,7 +1234,7 @@ class RedBasica(object):
                 minFeatureObj["SEG_NAME"] = ft[h.readValueFromProject("SEG_NAME")]
                 minFeatureObj["SEG_NAME_C"] = ft[h.readValueFromProject("SEG_NAME_C")]
                 lstMinFeatures.append(minFeatureObj)
-                lstFeatures.append(ft)   
+                lstFeatures.append(ft)
 
             _myLayer = h.GetLayer()
 
@@ -1244,7 +1244,7 @@ class RedBasica(object):
             geom.convertToSingleType()
             
             wd = QWidget()
-            self.dockPatchs.saPropFeatures.setWidget(wd)           
+            self.dockPatchs.saPropFeatures.setWidget(wd)
 
             vLayP = QHBoxLayout(wd)
             hLayP = QVBoxLayout()
@@ -1293,10 +1293,10 @@ class RedBasica(object):
                         self.CreateElementAttributeInLay(hLayP,vLayP,h.names()['QE'][0],translate("AutomaticGeometricAttributes",h.names()['QE'][0]),
                                        _qeList,False,self.saveAttributesDock,"QE")
     
-            hLayP.addWidget(btnG1)        
+            hLayP.addWidget(btnG1)
             vLayP.addLayout(hLayP)
 
-            hLayP.addWidget(wdG1)        
+            hLayP.addWidget(wdG1)
             vLayP.addLayout(hLayP)
             
             vLay = QHBoxLayout(wdG1)
@@ -1384,7 +1384,7 @@ class RedBasica(object):
 ##            self.CreateElementAttributeInLay(hLay,vLay,"ANGLE","ANGLE",
 ##                                   az,True)
 
-            isBegin,isEnd,totalEnd = h.Get_Aux_Trm(feature.id(),lstFeatures)           
+            isBegin,isEnd,totalEnd = h.Get_Aux_Trm(feature.id(),lstFeatures)
             
 
 ##            #AUX_TRM_I
@@ -1417,10 +1417,10 @@ class RedBasica(object):
                     self.Group2W = wdG2
                     self.Group2Expanded = True
 
-                    hLayP.addWidget(btnG2)        
+                    hLayP.addWidget(btnG2)
                     vLayP.addLayout(hLayP)
 
-                    hLayP.addWidget(wdG2)        
+                    hLayP.addWidget(wdG2)
                     vLayP.addLayout(hLayP)
                     
                     vLay = QHBoxLayout(wdG2)
@@ -1471,7 +1471,7 @@ class RedBasica(object):
                         fIdx = nodeLayer.fields().lookupField( f_name )
                         if fIdx > -1:
                             self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                               point1.attributes()[fIdx],True, None, "h_nodo_tp")   
+                                               point1.attributes()[fIdx],True, None, "h_nodo_tp")
 
                     if point2:
                         self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","DOWNSTREAM NODE"))
@@ -1520,7 +1520,7 @@ class RedBasica(object):
                         fIdx = nodeLayer.fields().lookupField( f_name )
                         if fIdx > -1:
                             self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                               point2.attributes()[fIdx],True, None, "h_nodo_tp")   
+                                               point2.attributes()[fIdx],True, None, "h_nodo_tp")
                     else:
                         # fix_print_with_import
                         print('falhou em achar o nó 2')
@@ -1537,10 +1537,10 @@ class RedBasica(object):
             self.Group3W = wdG3
             self.Group3Expanded = True
 
-            hLayP.addWidget(btnG3)        
+            hLayP.addWidget(btnG3)
             vLayP.addLayout(hLayP)
 
-            hLayP.addWidget(wdG3)        
+            hLayP.addWidget(wdG3)
             vLayP.addLayout(hLayP)
             
             vLay = QHBoxLayout(wdG3)
@@ -1711,12 +1711,12 @@ class RedBasica(object):
                     
                     result,prefixName,initialCount = self.showNameDialog(len(fnd_list)+1)
 
-                    if result:                    
+                    if result:
                         count = 1
                         
 
                         if not _myLayer.isEditable():
-                            _myLayer.startEditing()                       
+                            _myLayer.startEditing()
                             
                         for b in fnd_list:
                             
@@ -1840,11 +1840,11 @@ class RedBasica(object):
                     self.createDefaultAtt(layer,h.readValueFromProject(n,h.names()[n][0]),h.names()[n][1],h.names()[n][2],h.names()[n][3],h.names()[n][4])                 
         
         layer.commitChanges()
-                                          
+
 ##        self.createDefaultAtt(layer,h.readValueFromProject("BEG_LINE_COORD_E"),h.names()['LABEL_X'][1])
 ##        self.createDefaultAtt(layer,h.readValueFromProject("BEG_LINE_COORD_N"),h.names()['LABEL_X'][1])
 ##        self.createDefaultAtt(layer,h.readValueFromProject("FIN_LINE_COORD_E"),h.names()['LABEL_X'][1])
-##        self.createDefaultAtt(layer,h.readValueFromProject("FIN_LINE_COORD_N"),h.names()['LABEL_X'][1])      
+##        self.createDefaultAtt(layer,h.readValueFromProject("FIN_LINE_COORD_N"),h.names()['LABEL_X'][1])
 ##        self.createDefaultAtt(layer,h.readValueFromProject("SEG_NAME"),h.names()['LABEL_X'][1])
 ##        self.createDefaultAtt(layer,h.readValueFromProject("SEG_NAME_C"),h.names()['LABEL_X'][1])
 ##        self.createDefaultAtt(layer,h.readValueFromProject("AUX_POS"),h.names()['LABEL_X'][1])
@@ -1907,7 +1907,7 @@ class RedBasica(object):
                             
                             myLayer.featureAdded.connect( self.handleAddedFeatures )
                             myLayer.featuresDeleted.connect( self.handleDeletedFeatures )
-                            myLayer.geometryChanged.connect( self.updateFeatureAttrs )                    
+                            myLayer.geometryChanged.connect( self.updateFeatureAttrs )
                             myLayer.selectionChanged.connect( self.SelectedFeatureAttrWindows )
 
                             qmlFile = os.path.join(os.path.dirname(__file__), 'resources', 'styles', 'default_style.qml')
@@ -1960,8 +1960,8 @@ class RedBasica(object):
                             if disableDialog == 2:
                                 _mC = True
 
-                            #self.dockPatchs.chkSupressPopup.setChecked( _mC )   
-                            
+                            #self.dockPatchs.chkSupressPopup.setChecked( _mC )
+
                             h.ShowMessage(translate("AutomaticGeometricAttributes","The plugin watcher has started successfully"))
 
     def Fill_Attr_Combos(self):
@@ -1985,7 +1985,7 @@ class RedBasica(object):
         if self.dlg.cboLayers.currentText():
             for c in lstCbos:
                 c.clear()
-             
+
             _mlayer = QgsProject.instance().mapLayersByName( self.dlg.cboLayers.currentText() )[0]
 
             icon_path = ':/plugins/RedBasica/icons/new.png'
@@ -1994,11 +1994,11 @@ class RedBasica(object):
             for c in lstCbos:
                 dfName = self.GetDefaultFieldNameFromCbo(c)
                 lst = [x for x in _mlayer.fields() if x.name() == dfName]
-                
+
                 if lst == None or len(lst) == 0:
                     c.addItem(icon,str(dfName))
                     c.setItemData(1, QColor(Qt.red), Qt.TextColorRole)
-                
+
                 for field in _mlayer.fields():
                     c.addItem(field.name())
                     
@@ -2072,7 +2072,7 @@ class RedBasica(object):
             else:
                 oldName = h.readValueFromProject("LAYER")
                 if oldName:
-                    self.HandlerInitialized = False                      
+                    self.HandlerInitialized = False
                 nameLayer = self.dlg.cboLayers.currentText()
                 myLayer = QgsProject.instance().mapLayersByName( nameLayer )[0]
                 self.saveVariablesSettingsScreen()
@@ -2081,7 +2081,7 @@ class RedBasica(object):
             h.ShowMessage(translate("AutomaticGeometricAttributes","The plugin settings were aplied"))
 
 
-    def saveVariablesSettingsScreen(self):        
+    def saveVariablesSettingsScreen(self):
         proj = QgsProject.instance()
         #patch
         proj.writeEntry("AutGeoAtt","LAYER",self.dlg.cboLayers.currentText())
@@ -2127,7 +2127,7 @@ class RedBasica(object):
         h.SetItemCombo(self.dlg.cboAux1,h.readValueFromProject('AUX01'))
         
         h.SetItemCombo(self.dlg.cboAux2,h.readValueFromProject('AUX02'))
-        h.SetItemCombo(self.dlg.cboAux3,h.readValueFromProject('AUX03'))        
+        h.SetItemCombo(self.dlg.cboAux3,h.readValueFromProject('AUX03'))
         #nodes
         self.dlg.txtLayerNodeName.setText(h.readValueFromProject('NODE_LAYER',h.names()['NODE_LAYER'][0]))
         self.dlg.txtCota.setText(h.readValueFromProject('COTA',h.names()['COTA'][0]))
@@ -2198,7 +2198,7 @@ class RedBasica(object):
                         else:
                             _myLayer.changeAttributeValue( fId, _myLayer.fields().lookupField( h.names()['LABEL_VIS'][0]), "1" )
                             
-                            if nameSegment:                       
+                            if nameSegment:
                                 _myLayer.changeAttributeValue( fId, _myLayer.fields().lookupField( h.readValueFromProject('SEG_NAME' )), prefixName )
                                 _myLayer.changeAttributeValue( fId, _myLayer.fields().lookupField( h.readValueFromProject('SEG_NAME_C' )), prefixName + "-" + str(initialCount) )
                         
@@ -2307,7 +2307,7 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_Y_F")
         translate("AutomaticGeometricAttributes","field_QE_IP")
         translate("AutomaticGeometricAttributes","field_QE_FP")
-        #Calc table       
+        #Calc table
         translate("CalcTbl", "tooltip_initial_segment")
         translate("CalcTbl", "tooltip_final_segment")
         translate("CalcTbl", "tooltip_collector_number")

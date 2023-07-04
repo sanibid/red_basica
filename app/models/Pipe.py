@@ -1,10 +1,9 @@
 from PyQt5.QtSql import QSqlTableModel, QSqlRelationalTableModel, QSqlRelation, QSqlQuery
 from PyQt5.QtCore import Qt
-from ..lib.Store import Store
 
 class Pipe(QSqlRelationalTableModel):
     
-    def __init__(self, *args, db=Store().getDB(), **kwargs):        
+    def __init__(self, *args, **kwargs):
         super(Pipe, self).__init__(*args, **kwargs)
         self.setTable("pipes")
         self.setEditStrategy(QSqlTableModel.OnManualSubmit)

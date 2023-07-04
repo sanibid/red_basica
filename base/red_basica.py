@@ -30,6 +30,7 @@ from qgis.core import *
 from qgis.gui import *
 from ..app import App
 from ..profile import Profile
+from ..app.lib.Store import Store
 
 translate = QCoreApplication.translate
 
@@ -102,8 +103,6 @@ class RedBasica(object):
              
         #self.dockPatchs.chkSupressPopup.stateChanged.connect( self.SupressCheckChanged )        
 
-        self.calcApp = App()
-        self.profileApp = Profile(self.iface)
         # end events of widget
         
         self.startHandler()
@@ -1885,6 +1884,11 @@ class RedBasica(object):
                     break
         #self.iface.messageBar().pushMessage("Error", "AddHandle"+str(addHandler), level=Qgis.Critical)
         if addHandler:
+
+            Store().setup()
+            self.calcApp = App()
+            self.profileApp = Profile(self.iface)
+
             # Start a watcher to update attributes when a feature was added to layer or a geometry was changed
             #self.iface.messageBar().pushMessage("Error", "Layer Name: "+str(layerName), level=Qgis.Critical)
             if layerName:
@@ -2072,7 +2076,6 @@ class RedBasica(object):
                 nameLayer = self.dlg.cboLayers.currentText()
                 myLayer = QgsProject.instance().mapLayersByName( nameLayer )[0]
                 self.saveVariablesSettingsScreen()
-            
                 self.startHandler()
 
             h.ShowMessage(translate("AutomaticGeometricAttributes","The plugin settings were aplied"))

@@ -1,15 +1,25 @@
 import os
 import json
 import time
+from qgis.core import QgsProject
 from PyQt5.QtSql import QSqlDatabase,QSqlQuery
 
 class Store():
     def __init__(self):
-        file_path = os.path.join(os.path.dirname(__file__), '..', 'db', 'sanihub.db')
+        self.setup()
+        self.initialize()
+
+    def setup(self):
+        project = QgsProject.instance()
+        project_path = project.fileName()
+        project_directory = os.path.dirname(project_path)
+        db_directory = os.path.join(project_directory, 'db')
+        if not os.path.exists(db_directory):
+            os.makedirs(db_directory)
+        file_path = os.path.join(project_directory, 'db', 'sanihub.db')
         self.db = QSqlDatabase.addDatabase("QSQLITE")
         self.db.setDatabaseName(file_path)
-        self.initialize()
-        
+
     def initialize(self):
         start_time = time.time()
         if self.db.open():

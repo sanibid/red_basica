@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>786</width>
-    <height>711</height>
+    <height>846</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1021,10 +1021,76 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="importProfile">
+      <attribute name="title">
+       <string>Importar</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="importProfileLabel">
+         <property name="text">
+          <string>Importar Perfil</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="selectInputLabel">
+         <property name="text">
+          <string>Seleccione la ruta de la base de datos:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QgsExternalResourceWidget" name="dirInputWidget"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="availableProfilesLabel">
+         <property name="text">
+          <string>Perfiles disponibles</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QTreeWidget" name="availableProfilesWidget">
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Perfil</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCommandLinkButton" name="getProfilesButton">
+         <property name="text">
+          <string>Obtener perfiles de la base de datos</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCommandLinkButton" name="addSelectedProfileButton">
+         <property name="text">
+          <string>Agregar perfil seleccionado</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsExternalResourceWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsexternalresourcewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>ParametersWidget</tabstop>
   <tabstop>beginningPopulationEdit</tabstop>

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QDialog,
     QMessageBox,
     QErrorMessage,
+    QTreeWidgetItem
 )
 from PyQt5.QtSql import (
     QSqlRelation,
@@ -21,6 +22,7 @@ from ..models.Pipe import Pipe
 from ..models.InspectionDevice import InspectionDevice
 from .ui.ParameterDialogUi import Ui_NewParameterDialog
 from ..models.delegates.PipesDelegate import PipesDecimalsDelegate
+from ..views.GenericWindow import GenericWindow
 
 
 class ParameterView(QDialog, Ui_NewParameterDialog):
@@ -289,6 +291,8 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.occupancyRateStartEdit.value()
         )
         self.occupancyRateEndEdit.valueChanged.emit(self.occupancyRateEndEdit.value())
+        self.getProfilesButton.clicked.connect(self.getProfiles)
+        self.addSelectedProfileButton.clicked.connect(self.addProfileSelected)
 
     def validate_occupancy(self, *args, **kwargs):
         """validates occupancy rate values and sets background color"""
@@ -470,6 +474,45 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.profileComboBox.setCurrentIndex(row)
         else:
             self.error_dialog.showMessage(self.criteriaModel.lastError().text())
+
+    def getProfiles(self):
+        file = self.dirInputWidget.documentPath()
+        self.availableProfilesWidget.clear()
+        if 'sanihub.db'in file:
+            values = Criteria.getProfileList(file)
+            for value in values:
+                item = QTreeWidgetItem()
+                id = value[0]
+                name = value[1]
+                item.setText(0, str(id))
+                item.setText(1, name)
+                self.availableProfilesWidget.addTopLevelItem(item)
+
+    def addProfileSelected(self):
+        selected_items = self.availableProfilesWidget.selectedItems()
+        file = self.dirInputWidget.documentPath()
+        if (len(selected_items) > 0):
+            selected_item = selected_items[0]
+            criteria_id = selected_item.text(0)
+            criteria, pipes, inspection = Criteria.getProfileData(file, criteria_id)
+            newCriteriaId = self.criteriaModel.insertData(criteria)
+            if newCriteriaId != False:
+                pipe = self.pipeModel.insertPipes(newCriteriaId, pipes)
+                ins_dev = self.deviceModel.insertInspectionDevices(newCriteriaId, inspection)
+                if pipe != False and ins_dev != False:
+                    message = "Se ha agregado exitosamente"
+                    self.dirInputWidget.resource = None
+                    self.availableProfilesWidget.clear()
+                else:
+                    message = "Error"
+            else:
+                message = "Error"
+
+            generic_window = GenericWindow(message)
+            generic_window.showWindow()
+            self.criteriaModel.select()
+            self.profileComboBox.model().select()
+
 
     def addParameterRecord(self):
         """Creates new Parameter record"""

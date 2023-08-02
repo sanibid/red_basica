@@ -83,6 +83,12 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.residencesEndEdit, self.parameterModel.fieldIndex("residences_end")
         )
         self.mapper.addMapping(
+            self.hhConnStartEdit, self.parameterModel.fieldIndex("households_conn_start")
+        )
+        self.mapper.addMapping(
+            self.hhConnEndEdit, self.parameterModel.fieldIndex("households_conn_end")
+        )
+        self.mapper.addMapping(
             self.connectionsStartEdit,
             self.parameterModel.fieldIndex("connections_start"),
         )
@@ -185,6 +191,10 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.criteriaModel.fieldIndex("type_preferred_head_col"),
         )
         self.mapper_project_criterias.addMapping(
+            self.simplifiedTLInitialSegComboBox,
+            self.criteriaModel.fieldIndex("simplified_tl_seg"),
+        )
+        self.mapper_project_criterias.addMapping(
             self.maxDropSpinBox, self.criteriaModel.fieldIndex("max_drop")
         )
         self.mapper_project_criterias.addMapping(
@@ -260,6 +270,8 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.occupancyRateEndEdit.valueChanged.connect(self.calculateResidencesEnd)
         self.beginningPopulationEdit.valueChanged.connect(self.calculateResidencesStart)
         self.occupancyRateStartEdit.valueChanged.connect(self.calculateResidencesStart)
+        self.hhConnStartEdit.valueChanged.connect(self.calculateConnectionsStart)
+        self.hhConnEndEdit.valueChanged.connect(self.calculateConnectionsEnd)
 
         self.waterConsumptionPcSpinBox.valueChanged.connect(
             self.calculateQeReferenceMaxEdit
@@ -351,6 +363,22 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             rateStart > 0 and rateStart < begPop
         ) else self.residencesStartEdit.setValue(0)
 
+    def calculateConnectionsStart(self):
+        """Updates value to connections Start"""
+        resStart = self.residencesStartEdit.value()
+        hhConn = self.hhConnStartEdit.value()
+        self.connectionsStartEdit.setValue(resStart / hhConn) if (
+            hhConn > 0
+        ) else self.connectionsStartEdit.setValue(0)
+
+    def calculateConnectionsEnd(self):
+        """Updates value to connections End"""
+        resEnd = self.residencesEndEdit.value()
+        hhConn = self.hhConnEndEdit.value()
+        self.connectionsEndEdit.setValue(resEnd / hhConn) if (
+            hhConn > 0
+        ) else self.connectionsEndEdit.setValue(0)
+
     def onProfileChange(self, i):
         """Handles profileComboBox data change"""
         self.currentCriteriaIndex = i
@@ -388,6 +416,7 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.coverMinStreetSpinBox.setReadOnly(not self.profileIsEditable)
         self.coverMinSidewalksGsSpinBox.setReadOnly(not self.profileIsEditable)
         self.typePreferredHeadColSpinBox.setReadOnly(not self.profileIsEditable)
+        self.simplifiedTLInitialSegComboBox.setEnabled(self.profileIsEditable)
         self.maxDropSpinBox.setReadOnly(not self.profileIsEditable)
         self.bottomIbMhSpinBox.setReadOnly(not self.profileIsEditable)
         self.profileName.setReadOnly(not self.profileIsEditable)

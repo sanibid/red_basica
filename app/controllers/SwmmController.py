@@ -14,7 +14,7 @@ class SwmmController(QObject):
         if flowType in ['q_i', 'q_f']:
             self.flowType = flowType
         else:
-            raise Exception('invalid flowType value. Valid values are: q_i, q_f')  
+            raise Exception('invalid flowType value. Valid values are: q_i, q_f')
         
         if projectId:
 
@@ -22,7 +22,7 @@ class SwmmController(QObject):
             locale = QLocale().name()
             self.lang = locale[0:2] if locale[0:2] in ('en', 'es', 'pt') else 'en'
             # file sections
-            self.sections = ('TITLE', 'OPTIONS', 'JUNCTIONS', 'CONDUITS',
+            self.sections = ('TITLE', 'OPTIONS', 'JUNCTIONS', 'OUTFALLS', 'CONDUITS',
                              'XSECTIONS', 'REPORT', 'MAP', 'COORDINATES')
             self.line_tab = '\t'
             # project info
@@ -44,6 +44,7 @@ class SwmmController(QObject):
             'TITLE': self.getTitleSection,
             'OPTIONS': self.getOptionsSection,
             'JUNCTIONS': self.getJunctionsSection,
+            'OUTFALLS': self.getOutfallsSection,
             'CONDUITS': self.getConduitsSection,
             'XSECTIONS': self.getXsectionsSection,
             'REPORT': self.getReportSection,
@@ -104,8 +105,9 @@ class SwmmController(QObject):
 
     def getTitleSection(self):
         """ [TITLE] section """
-        title = {'pt': 'Sistema de Esgoto',
-                 'es': 'Sistema de Alcantarillado', 
+        title = {
+                 'pt': 'Sistema de Esgoto',
+                 'es': 'Sistema de Alcantarillado',
                  'en': 'Sewerage System'
                 }
         lines = (self.project.value('name'), title[self.lang])
@@ -143,14 +145,37 @@ class SwmmController(QObject):
 
         lines = [h1, h2, h3]
         for rec in self.nodes:
-            data = [
-                self.getString(rec['node']),
-                self.getNumber(round(rec['elev'], 2)),
-                self.getNumber(round(rec['depth'], 2)),
-                '0', '0', '0'
-            ]
-            line = self.line_tab.join(data)
-            lines.append(line)
+            if ('FINAL' not in rec['node']):
+                data = [
+                    self.getString(rec['node']),
+                    self.getNumber(round(rec['elev'], 2)),
+                    self.getNumber(round(rec['depth'], 2)),
+                    '0', '0', '0'
+                ]
+                line = self.line_tab.join(data)
+                lines.append(line)
+        return lines
+
+    def getOutfallsSection(self):
+        """ OUTFALLS section """
+        h1 = self.line_tab.join(
+            (';;', 'Invert', 'Outfall', 'Stage/Table', 'Tide'))
+        h2 = self.line_tab.join(
+            (';;Name', 'Elev.', 'Type', 'Time Series', 'Gate'))
+        h3 = self.line_tab.join(
+            (';;----', '-----', '-----', '-----------', '-----'))
+        lines = [h1, h2, h3]
+        for rec in self.nodes:
+            if ('FINAL' in rec['node']):
+                data = [
+                    self.getString(rec['node']),
+                    self.getNumber(round(rec['elev'], 2)),
+                    'FREE',
+                    '',
+                    'NO'
+                ]
+                line = self.line_tab.join(data)
+                lines.append(line)
         return lines
 
     def getConduitsSection(self):

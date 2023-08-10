@@ -200,6 +200,9 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.mapper_project_criterias.addMapping(
             self.bottomIbMhSpinBox, self.criteriaModel.fieldIndex("bottom_ib_mh")
         )
+        self.mapper_project_criterias.addMapping(
+            self.minStepIbMhSpinBox, self.criteriaModel.fieldIndex("min_step_ib_mh")
+        )
 
         # Pipes
         self.pipeModel = Pipe()
@@ -419,6 +422,7 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.simplifiedTLInitialSegComboBox.setEnabled(self.profileIsEditable)
         self.maxDropSpinBox.setReadOnly(not self.profileIsEditable)
         self.bottomIbMhSpinBox.setReadOnly(not self.profileIsEditable)
+        self.minStepIbMhSpinBox.setReadOnly(not self.profileIsEditable)
         self.profileName.setReadOnly(not self.profileIsEditable)
         # tables
         self.pipesTable.setEditTriggers(

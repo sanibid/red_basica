@@ -18,5 +18,6 @@
     "type_preferred_head_col": "CI",
     "simplified_tl_seg": "0",
     "max_drop": "0.5",
-    "bottom_ib_mh": "0.00"
+    "bottom_ib_mh": "0.00",
+    "min_step_ib_mh": "0.00"
 }]

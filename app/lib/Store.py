@@ -84,6 +84,7 @@ class Store():
             simplified_tl_seg boolean,\
             max_drop double precision,\
             bottom_ib_mh double precision,\
+            min_step_ib_mh double precision,\
             parent_project_id integer, \
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP, \
@@ -242,6 +243,10 @@ class Store():
             y_final double precision,\
             observations text,\
             slopes_min_modified boolean,\
+            conc_flow_qcf double precision,\
+            conc_flow_qci double precision,\
+            rec_des_flow_qfr double precision,\
+            initial_rec_des_flow_qfr double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE)")
@@ -425,12 +430,12 @@ class Store():
             values += "('"+p['name']+"','"+p['water_consumption_pc']+"','"+p['k1_daily']+"','"+p['k2_hourly']+"','"+p['coefficient_return_c']+"',\
                 '"+p['intake_rate']+"','"+p['avg_tractive_force_min']+"','"+p['flow_min_qmin']+"','"+p['water_surface_max']+"','"+p['max_water_level']+"',\
                 '"+p['min_diameter']+"','"+p['diameter_up_150']+"','"+p['diameter_up_200']+"','"+p['from_diameter_250']+"','"+p['cover_min_street']+"',\
-                '"+p['cover_min_sidewalks_gs']+"','"+p['type_preferred_head_col']+"','"+p['simplified_tl_seg']+"','"+p['max_drop']+"','"+p['bottom_ib_mh']+"', datetime('now'), datetime('now')),"
+                '"+p['cover_min_sidewalks_gs']+"','"+p['type_preferred_head_col']+"','"+p['simplified_tl_seg']+"','"+p['max_drop']+"','"+p['bottom_ib_mh']+"', '"+p['min_step_ib_mh']+"', datetime('now'), datetime('now')),"
 
         execQuery = "INSERT INTO project_criterias (name, water_consumption_pc, k1_daily, k2_hourly, coefficient_return_c, intake_rate, \
             avg_tractive_force_min, flow_min_qmin, water_surface_max, max_water_level, min_diameter, diameter_up_150, diameter_up_200, \
             from_diameter_250, cover_min_street, cover_min_sidewalks_gs, type_preferred_head_col, simplified_tl_seg, max_drop, bottom_ib_mh, \
-            created_at, updated_at) VALUES "+ values[:-1] + ";"
+            min_step_ib_mh, created_at, updated_at) VALUES "+ values[:-1] + ";"
 
         query.exec_('BEGIN TRANSACTION;')
         query.exec_(execQuery)

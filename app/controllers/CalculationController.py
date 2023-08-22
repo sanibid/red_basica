@@ -17,7 +17,7 @@ translate = QCoreApplication.translate
 class CalculationController(QObject):
     
     finished = pyqtSignal(object)
-    error = pyqtSignal(Exception, basestring)
+    error = pyqtSignal(Exception, str)
     progress = pyqtSignal(float)
     info = pyqtSignal(str)
     message = pyqtSignal(str)
@@ -177,7 +177,8 @@ class CalculationController(QObject):
                     rec.setValue('m2_col_id',row['TRM_(N-1)_C'])
                     if not row['ID_UC'] == 'NULL':
                         rec.setValue('block_others_id',row['ID_UC'])
-                    rec.setValue('qty_final_qe',row['QE_FP']) if 'QE_FP' in row else rec.setValue('qty_final_qe',row['QEF'])
+                    qeFp = row['QE_FP'] if 'QE_FP' in row else row['QEF']
+                    rec.setValue('qty_final_qe', qeFp)
                     rec.setValue('qty_initial_qe',row['QE_IP']) if 'QE_IP' in row else rec.setValue('qty_initial_qe',row['QEI'])
                     intake_in_seg = round(self.critModel.getValueBy('intake_rate') * self.strToFloat(row['L'])/1000, 6)
                     rec.setValue('intake_in_seg', intake_in_seg)
@@ -200,8 +201,7 @@ class CalculationController(QObject):
                     if (self.model.insertRecord(rowCount,rec)):
                         cRec = self.contModel.record()
                         cRec.setValue('calculation_id', self.model.query().lastInsertId())
-                        qeFp = row['QE_FP'] if 'QE_FP' in row else row['QEF']
-                        condominial_lines_end = self.getMaximumFlow() * self.strToFloat(qeFp)
+                        condominial_lines_end = self.strToFloat(qeFp) * self.paramVal('occupancy_rate_end') * self.critVal('water_consumption_pc') * self.critVal('coefficient_return_c') / 86400
                         cRec.setValue('condominial_lines_end', condominial_lines_end)
                         cRec.setValue('initial_segment',row['AUX_TRM_I'])
                         cRec.setValue('col_seg',row['ID_TRM_(N)'])
@@ -400,7 +400,7 @@ class CalculationController(QObject):
         if ext == 0:
             return 0
         else:
-            return ((self.getContributionAux(ext) * self.critModel.getValueBy('k1_daily') * self.critModel.getValueBy('k2_hourly') * self.parameterModel.getValueBy('sewer_contribution_rate_end') * ext) / 1000)
+            return ((self.getContributionAux(ext) * self.paramVal('sewer_contribution_rate_end') * ext) / 1000)
 
     # $A1.$N$1 START-Linear Contribution in Segment (l/s)
     def getStartLinearContInSeg(self, ext):
@@ -418,6 +418,11 @@ class CalculationController(QObject):
         if (adoptedDiameter >= 250):
             return  self.critModel.getValueBy('from_diameter_250')
 
+    def critVal(self, field):
+        return self.critModel.getValueBy(field)
+
+    def paramVal(self, field):
+        return self.parameterModel.getValueBy(field)
 
     @staticmethod
     def strToFloat(str):

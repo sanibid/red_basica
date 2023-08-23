@@ -24,7 +24,18 @@ class Contribution(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("ContTbl", "col_pipe_m2_start"),
             QT_TRANSLATE_NOOP("ContTbl", "subtotal_up_seg_start"),
             QT_TRANSLATE_NOOP("ContTbl", "condominial_lines_start"),
-            QT_TRANSLATE_NOOP("ContTbl", "linear_contr_seg_start")
+            QT_TRANSLATE_NOOP("ContTbl", "linear_contr_seg_start"),
+            QT_TRANSLATE_NOOP("ContTbl", "avg_flow_end"),
+            QT_TRANSLATE_NOOP("ContTbl", "recur_flow_end"),
+            QT_TRANSLATE_NOOP("ContTbl", "max_flow_end"),
+            QT_TRANSLATE_NOOP("ContTbl", "avg_flow_start"),
+            QT_TRANSLATE_NOOP("ContTbl", "recur_flow_start"),
+            QT_TRANSLATE_NOOP("ContTbl", "max_flow_start"),
+            QT_TRANSLATE_NOOP("ContTbl", "intake_prev_col"),
+            QT_TRANSLATE_NOOP("ContTbl", "intake_col_m1"),
+            QT_TRANSLATE_NOOP("ContTbl", "intake_col_m2"),
+            QT_TRANSLATE_NOOP("ContTbl", "intake_seg"),
+            QT_TRANSLATE_NOOP("ContTbl", "intake_accumulated")
         )
         self.hiddenColumns = ["id", "calculation_id", "created_at", "updated_at", "initial_segment"]
 

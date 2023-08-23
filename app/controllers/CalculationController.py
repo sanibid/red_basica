@@ -298,18 +298,18 @@ class CalculationController(QObject):
                 if calc.value('m1_col_id') in m1List:
                     self.recursiveContributions(projectId, calc.value('m1_col_id'), True, m1List, m2List)
                     calMod.select()
-                    m1End = calMod.getTotalFlowEndByColSeg(calc.value('m1_col_id'))
+                    m1End = calMod.getAvgFlowEndByColSeg(calc.value('m1_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m1_end')), m1End)
                     m1Start = calMod.getTotalFlowStartByColSeg(calc.value('m1_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m1_start')), m1Start)
                 else:
-                    m1End = calMod.getTotalFlowEndByColSeg(calc.value('m1_col_id'))
+                    m1End = calMod.getAvgFlowEndByColSeg(calc.value('m1_col_id'))
                     m1Start = calMod.getTotalFlowStartByColSeg(calc.value('m1_col_id'))
             else:
                 if calc.value('m1_col_id'):
                     self.recursiveContributions(projectId, calc.value('m1_col_id'))
                     calMod.select()
-                    m1End = calMod.getTotalFlowEndByColSeg(calc.value('m1_col_id'))
+                    m1End = calMod.getAvgFlowEndByColSeg(calc.value('m1_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m1_end')), m1End)
                     m1Start = calMod.getTotalFlowStartByColSeg(calc.value('m1_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m1_start')), m1Start)
@@ -318,23 +318,23 @@ class CalculationController(QObject):
                 if calc.value('m2_col_id') in m2List:
                     self.recursiveContributions(projectId, calc.value('m2_col_id'), True, m1List, m2List)
                     calMod.select()
-                    m2End = calMod.getTotalFlowEndByColSeg(calc.value('m2_col_id'))
+                    m2End = calMod.getAvgFlowEndByColSeg(calc.value('m2_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m2_end')), m2End)
                     m2Start = calMod.getTotalFlowStartByColSeg(calc.value('m2_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m2_start')), m2Start)
                 else:
-                    m2End = calMod.getTotalFlowEndByColSeg(calc.value('m2_col_id'))
+                    m2End = calMod.getAvgFlowEndByColSeg(calc.value('m2_col_id'))
                     m2Start = calMod.getTotalFlowStartByColSeg(calc.value('m2_col_id'))
             else:
                 if calc.value('m2_col_id'):
                     self.recursiveContributions(projectId, calc.value('m2_col_id'))
                     calMod.select()
-                    m2End = calMod.getTotalFlowEndByColSeg(calc.value('m2_col_id'))
+                    m2End = calMod.getAvgFlowEndByColSeg(calc.value('m2_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m2_end')), m2End)
                     m2Start = calMod.getTotalFlowStartByColSeg(calc.value('m2_col_id'))
                     conMod.setData(conMod.index(i, conMod.fieldIndex('col_pipe_m2_start')), m2Start)
 
-            prevEnd = calMod.getTotalFlowEndByColSeg(calc.value('previous_col_seg_id'))
+            prevEnd = calMod.getAvgFlowEndByColSeg(calc.value('previous_col_seg_id'))
             conMod.setData(conMod.index(i, conMod.fieldIndex('previous_col_seg_end')), prevEnd)
             prevStart = calMod.getTotalFlowStartByColSeg(calc.value('previous_col_seg_id'))
             conMod.setData(conMod.index(i, conMod.fieldIndex('previous_col_seg_start')), prevStart)

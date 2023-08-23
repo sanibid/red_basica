@@ -278,6 +278,17 @@ class Store():
             subtotal_up_seg_start double precision,\
             condominial_lines_start double precision,\
             linear_contr_seg_start double precision,\
+            avg_flow_end double precision,\
+            recur_flow_end double precision,\
+            max_flow_end double precision,\
+            avg_flow_start double precision,\
+            recur_flow_start double precision,\
+            max_flow_start double precision,\
+            intake_prev_col double precision,\
+            intake_col_m1 double precision,\
+            intake_col_m2 double precision,\
+            intake_seg double precision,\
+            intake_accumulated double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             FOREIGN KEY(calculation_id) REFERENCES calculations(id) ON DELETE CASCADE)")

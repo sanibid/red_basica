@@ -338,7 +338,8 @@ class CalculationController(QObject):
             conMod.setData(conMod.index(i, conMod.fieldIndex('previous_col_seg_end')), prevEnd)
             prevStart = calMod.getTotalFlowStartByColSeg(calc.value('previous_col_seg_id'))
             conMod.setData(conMod.index(i, conMod.fieldIndex('previous_col_seg_start')), prevStart)
-            conMod.setData(conMod.index(i, conMod.fieldIndex('subtotal_up_seg_end')), (prevEnd + m1End + m2End))
+            subtotalUpSegEnd = prevEnd + m1End + m2End
+            conMod.setData(conMod.index(i, conMod.fieldIndex('subtotal_up_seg_end')), subtotalUpSegEnd)
             conMod.setData(conMod.index(i, conMod.fieldIndex('subtotal_up_seg_start')), (prevStart + m1Start + m2Start))
             ext = calMod.getValueBy('extension', 'col_seg = "{}"'.format(con.value('col_seg')))
             endLinear = self.getEndLinearContInSeg(ext)
@@ -347,7 +348,10 @@ class CalculationController(QObject):
             conMod.setData(conMod.index(i, conMod.fieldIndex('linear_contr_seg_start')), startLinear)
             if conMod.updateRowInTable(i, conMod.record(i)):
                 linearContEnd = conMod.record(i).value('linear_contr_seg_end') if conMod.record(i).value('linear_contr_seg_end') != None else 0
-                totalFlowEnd = round(calc.value('intake_in_seg') + (prevEnd + m1End + m2End) + con.value('condominial_lines_end') + linearContEnd, 6)
+                totalFlowEnd = round(calc.value('intake_in_seg') + subtotalUpSegEnd + con.value('condominial_lines_end') + linearContEnd, 6)
+                concFlowFinal = calMod.record(i).value('conc_flow_qcf') if calMod.record(i).value('conc_flow_qcf') != None else 0
+                avgFlowEnd = round((subtotalUpSegEnd + con.value('condominial_lines_end')+ concFlowFinal + endLinear), 6)
+                conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_end')), avgFlowEnd)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_end')), totalFlowEnd)
                 linearContStart = conMod.record(i).value('linear_contr_seg_start') if conMod.record(i).value('linear_contr_seg_start') != None else 0
                 totalFlowStart = round(calc.value('intake_in_seg') + (prevStart + m1Start + m2Start) + conMod.record(i).value('condominial_lines_start') + linearContStart, 6)
@@ -371,6 +375,7 @@ class CalculationController(QObject):
                 cManning = 0 if (calc.value('extension') == 0 or calc.value('collector_number') == 0) else self.pipe.getValueBy('manning_adopted',"diameter ='{}'".format(adoptedDiameter))
                 calMod.setData(calMod.index(i, calMod.fieldIndex('c_manning')), cManning)
                 calMod.updateRowInTable(i, calMod.record(i))
+                conMod.updateRowInTable(i, conMod.record(i))
 
     # $Parametros.$L$24 || Getting Maximum Flow l/s
     def getMaximumFlow(self):

@@ -167,8 +167,19 @@ class Calculation(QSqlRelationalTableModel):
                         LEFT JOIN projects pr ON c.project_id = pr.id\
                         WHERE pr.active AND col_seg = '{}'".format(colSeg))
         if query.first():
-            return 0 if query.value(0)==None else round(query.value(0), 5)
-        else: 
+            return 0 if query.value(0) == None else round(query.value(0), 5)
+        else:
+            return 0
+
+    def getAvgFlowEndByColSeg(self, colSeg):
+        query = QSqlQuery("SELECT avg_flow_end\
+                        FROM contributions c\
+                        LEFT JOIN calculations ca ON ca.id = c.calculation_id\
+                        LEFT JOIN projects pr ON ca.project_id = pr.id\
+                        WHERE pr.active AND c.col_seg = '{}'".format(colSeg))
+        if query.first():
+            return 0 if query.value(0) == None else round(query.value(0), 5)
+        else:
             return 0
 
     def getTotalFlowStartByColSeg(self, colSeg):

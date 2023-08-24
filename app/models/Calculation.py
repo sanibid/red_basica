@@ -192,6 +192,17 @@ class Calculation(QSqlRelationalTableModel):
         else: 
             return 0
 
+    def getAvgFlowStartByColSeg(self, colSeg):
+        query = QSqlQuery("SELECT avg_flow_start\
+                        FROM contributions c\
+                        LEFT JOIN calculations ca ON ca.id = c.calculation_id\
+                        LEFT JOIN projects pr ON ca.project_id = pr.id\
+                        WHERE pr.active AND c.col_seg = '{}'".format(colSeg))
+        if query.first():
+            return 0 if query.value(0) == None else round(query.value(0), 5)
+        else:
+            return 0
+
     def getValueBy(self, column, where=None):
         sql = "SELECT c.{}\
                 FROM calculations c\

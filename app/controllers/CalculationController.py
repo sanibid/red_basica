@@ -413,7 +413,7 @@ class CalculationController(QObject):
         if ext == 0:
             return 0
         else:
-            return ((self.getContributionAux(ext) * self.critModel.getValueBy('k2_hourly') * self.parameterModel.getValueBy('sewer_contribution_rate_start') * ext) / 1000)
+            return ((self.getContributionAux(ext) * self.paramVal('sewer_contribution_rate_start') * ext) / 1000)
 
     #TODO check if is universal and ask what happen btw 200 and 250s
     def slopesMinAcceptedCalc(self, adoptedDiameter):

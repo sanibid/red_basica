@@ -79,7 +79,6 @@ class MainView(QMainWindow, Ui_MainWindow):
         # Contributions Table
         self.contribTable.setModel(self.contribModel)
         self.contribTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.contribTable.horizontalHeader().setSectionResizeMode(True)
 
         # WaterLevelAdj Table
         self.wlaTable.setModel(self.wlaModel)

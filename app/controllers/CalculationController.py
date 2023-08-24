@@ -179,7 +179,8 @@ class CalculationController(QObject):
                         rec.setValue('block_others_id',row['ID_UC'])
                     qeFp = row['QE_FP'] if 'QE_FP' in row else row['QEF']
                     rec.setValue('qty_final_qe', qeFp)
-                    rec.setValue('qty_initial_qe',row['QE_IP']) if 'QE_IP' in row else rec.setValue('qty_initial_qe',row['QEI'])
+                    qeIp = row['QE_IP'] if 'QE_IP' in row else row['QEI']
+                    rec.setValue('qty_initial_qe', qeIp)
                     intake_in_seg = round(self.critModel.getValueBy('intake_rate') * self.strToFloat(row['L'])/1000, 6)
                     rec.setValue('intake_in_seg', intake_in_seg)
                     if not row['AUX_POS'] == 'NULL':
@@ -205,8 +206,8 @@ class CalculationController(QObject):
                         cRec.setValue('condominial_lines_end', condominial_lines_end)
                         cRec.setValue('initial_segment',row['AUX_TRM_I'])
                         cRec.setValue('col_seg',row['ID_TRM_(N)'])
-                        qeIp = row['QE_IP'] if 'QE_IP' in row else row['QEI']
-                        cRec.setValue('condominial_lines_start',self.getCondominialLinesStart(qeIp))
+                        condominial_lines_start = self.strToFloat(qeIp) * self.paramVal('occupancy_rate_start') * self.critVal('water_consumption_pc') * self.critVal('coefficient_return_c') / 86400
+                        cRec.setValue('condominial_lines_start', condominial_lines_start)
                         cRow = self.contModel.rowCount()
                         self.contModel.insertRecord(cRow, cRec)            
 

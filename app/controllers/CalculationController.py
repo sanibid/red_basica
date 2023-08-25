@@ -388,6 +388,10 @@ class CalculationController(QObject):
                 intakeInSeg = calc.value('intake_in_seg')
                 intakeAccumulated = intakePrevCol + intakeColM1 + intakeColM2 + intakeInSeg
                 conMod.setData(conMod.index(i, conMod.fieldIndex('intake_accumulated')), intakeAccumulated)
+                recurFlowEnd = (avgFlowEnd * self.critVal('k2_hourly')) + intakeAccumulated
+                conMod.setData(conMod.index(i, conMod.fieldIndex('recur_flow_end')), recurFlowEnd)
+                maxFlowEnd = (avgFlowEnd * self.critVal('k1_daily') * self.critVal('k2_hourly')) + intakeAccumulated
+                conMod.setData(conMod.index(i, conMod.fieldIndex('max_flow_end')), maxFlowEnd)
 
                 calMod.updateRowInTable(i, calMod.record(i))
                 conMod.updateRowInTable(i, conMod.record(i))

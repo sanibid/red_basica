@@ -287,7 +287,6 @@ class Store():
             intake_prev_col double precision,\
             intake_col_m1 double precision,\
             intake_col_m2 double precision,\
-            intake_seg double precision,\
             intake_accumulated double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\

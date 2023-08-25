@@ -354,13 +354,13 @@ class CalculationController(QObject):
                 concFlowFinal = calMod.record(i).value('conc_flow_qcf') if calMod.record(i).value('conc_flow_qcf') != None else 0
                 avgFlowEnd = round((subtotalUpSegEnd + con.value('condominial_lines_end')+ concFlowFinal + endLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_end')), avgFlowEnd)
-                calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_end')), totalFlowEnd)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_end')), avgFlowEnd)
                 linearContStart = conMod.record(i).value('linear_contr_seg_start') if conMod.record(i).value('linear_contr_seg_start') != None else 0
                 totalFlowStart = round(calc.value('intake_in_seg') + subtotalUpSegStart + conMod.record(i).value('condominial_lines_start') + linearContStart, 6)
-                calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_start')), totalFlowStart)
                 concFlowStart = calMod.record(i).value('conc_flow_qci') if calMod.record(i).value('conc_flow_qci') != None else 0
                 avgFlowStart = round((subtotalUpSegStart + con.value('condominial_lines_start') + concFlowStart + startLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_start')), avgFlowStart)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_start')), avgFlowStart)
                 flowQMin = self.critModel.getValueBy('flow_min_qmin')
                 prjFlowRateQmax = 0 if (calc.value('collector_number')==None or totalFlowEnd == 0) else flowQMin if totalFlowEnd < flowQMin else totalFlowEnd
                 calMod.setData(calMod.index(i, calMod.fieldIndex('prj_flow_rate_qgmax')), prjFlowRateQmax)

@@ -379,6 +379,16 @@ class CalculationController(QObject):
                     calMod.setData(calMod.index(i, calMod.fieldIndex('slopes_min_accepted_col')), slopesMinAccepted)
                 cManning = 0 if (calc.value('extension') == 0 or calc.value('collector_number') == 0) else self.pipe.getValueBy('manning_adopted',"diameter ='{}'".format(adoptedDiameter))
                 calMod.setData(calMod.index(i, calMod.fieldIndex('c_manning')), cManning)
+                intakePrevCol = conMod.getIntakeBySegment(calc.value('previous_col_seg_id'))
+                conMod.setData(conMod.index(i, conMod.fieldIndex('intake_prev_col')), intakePrevCol)
+                intakeColM1 = conMod.getIntakeBySegment(calc.value('m1_col_id'))
+                conMod.setData(conMod.index(i, conMod.fieldIndex('intake_col_m1')), intakeColM1)
+                intakeColM2 = conMod.getIntakeBySegment(calc.value('m2_col_id'))
+                conMod.setData(conMod.index(i, conMod.fieldIndex('intake_col_m2')), intakeColM2)
+                intakeInSeg = calc.value('intake_in_seg')
+                intakeAccumulated = intakePrevCol + intakeColM1 + intakeColM2 + intakeInSeg
+                conMod.setData(conMod.index(i, conMod.fieldIndex('intake_accumulated')), intakeAccumulated)
+
                 calMod.updateRowInTable(i, calMod.record(i))
                 conMod.updateRowInTable(i, conMod.record(i))
 

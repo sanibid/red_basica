@@ -39,7 +39,22 @@ class Contribution(QSqlRelationalTableModel):
         )
         self.hiddenColumns = ["id", "calculation_id", "created_at", "updated_at", "initial_segment"]
 
-    
+    def getIntakeBySegment(self, colSeg):
+        query = QSqlQuery()
+        query.prepare("""
+            SELECT intake_accumulated
+            FROM contributions c
+            LEFT JOIN calculations ca ON ca.id = c.calculation_id
+            LEFT JOIN projects pr ON ca.project_id = pr.id
+            WHERE pr.active AND c.col_seg = :colSeg
+        """)
+        query.bindValue(":colSeg", colSeg)
+
+        if query.exec() and query.first():
+            return round(query.value(0), 6)
+        else:
+            return 0
+
     def getColumns(self):
         return self.columns
 

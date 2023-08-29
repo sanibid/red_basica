@@ -396,8 +396,21 @@ class CalculationController(QObject):
                 conMod.setData(conMod.index(i, conMod.fieldIndex('recur_flow_start')), recurFlowStart)
                 maxFlowStart = (avgFlowStart * self.critVal('k1_daily') * self.critVal('k2_hourly')) + intakeAccumulated
                 conMod.setData(conMod.index(i, conMod.fieldIndex('max_flow_start')), maxFlowStart)
+                recDesFlowQfr = self.getRecurrentDesignFlow(calc.value('collector_number'), recurFlowEnd)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('rec_des_flow_qfr')), recDesFlowQfr)
+                initRecDesFlowQfr = self.getRecurrentDesignFlow(calc.value('collector_number'), recurFlowStart)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('initial_rec_des_flow_qfr')), initRecDesFlowQfr)
+
                 calMod.updateRowInTable(i, calMod.record(i))
                 conMod.updateRowInTable(i, conMod.record(i))
+
+    def getRecurrentDesignFlow(self, colNo, recurFlow):
+        if (colNo == None or recurFlow == 0):
+            return 0
+        flowMinQmin = self.critVal('flow_min_qmin')
+        if (recurFlow < flowMinQmin):
+            return flowMinQmin
+        return recurFlow
 
     # $Parametros.$L$24 || Getting Maximum Flow l/s
     def getMaximumFlow(self):

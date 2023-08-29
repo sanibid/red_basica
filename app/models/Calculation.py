@@ -39,7 +39,8 @@ class Calculation(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("CalcTbl", "water_level_pipe_start"), QT_TRANSLATE_NOOP("CalcTbl", "tractive_force_start"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_up"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_up"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_down"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_down"),
-            QT_TRANSLATE_NOOP("CalcTbl", "downstream_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "observations")
+            QT_TRANSLATE_NOOP("CalcTbl", "downstream_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "observations"),
+            QT_TRANSLATE_NOOP("CalcTbl", "rec_des_flow_qfr"), QT_TRANSLATE_NOOP("CalcTbl", "initial_rec_des_flow_qfr")
         )
         self.hiddenColumns = [
             "id","project_id","layer_name","created_at","updated_at", 
@@ -81,7 +82,7 @@ class Calculation(QSqlRelationalTableModel):
             col = index.column()
             val = QSqlRelationalTableModel.data(self, index, Qt.DisplayRole)
 
-            if col in [7, 15, 16, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 38, 39, 41, 42, 43, 44, 45, 47]:
+            if col in [7, 15, 16, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 38, 39, 41, 42, 43, 44, 45, 47, 61, 62]:
                 if val == None:
                     return ''
                 if not isinstance(val, float):

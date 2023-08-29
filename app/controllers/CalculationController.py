@@ -361,11 +361,6 @@ class CalculationController(QObject):
                 avgFlowStart = round((subtotalUpSegStart + con.value('condominial_lines_start') + concFlowStart + startLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_start')), avgFlowStart)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_start')), avgFlowStart)
-                flowQMin = self.critModel.getValueBy('flow_min_qmin')
-                prjFlowRateQmax = 0 if (calc.value('collector_number')==None or totalFlowEnd == 0) else flowQMin if totalFlowEnd < flowQMin else totalFlowEnd
-                calMod.setData(calMod.index(i, calMod.fieldIndex('prj_flow_rate_qgmax')), prjFlowRateQmax)
-                initialFlowRateQi = 0 if (calc.value('collector_number')==None or totalFlowStart == 0) else flowQMin if totalFlowStart < flowQMin else totalFlowStart
-                calMod.setData(calMod.index(i, calMod.fieldIndex('initial_flow_rate_qi')), initialFlowRateQi)
 
                 adoptedDiameterInserted = calMod.getValueBy('adopted_diameter', 'col_seg = "{}"'.format(calc.value('col_seg')))
                 if adoptedDiameterInserted == None:
@@ -392,25 +387,30 @@ class CalculationController(QObject):
                 conMod.setData(conMod.index(i, conMod.fieldIndex('recur_flow_end')), recurFlowEnd)
                 maxFlowEnd = (avgFlowEnd * self.critVal('k1_daily') * self.critVal('k2_hourly')) + intakeAccumulated
                 conMod.setData(conMod.index(i, conMod.fieldIndex('max_flow_end')), maxFlowEnd)
+                prjFlowRateQmax = self.getDesignFlow(calc.value('collector_number'), maxFlowEnd)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('prj_flow_rate_qgmax')), prjFlowRateQmax)
                 recurFlowStart = (avgFlowStart * self.critVal('k2_hourly')) + intakeAccumulated
                 conMod.setData(conMod.index(i, conMod.fieldIndex('recur_flow_start')), recurFlowStart)
                 maxFlowStart = (avgFlowStart * self.critVal('k1_daily') * self.critVal('k2_hourly')) + intakeAccumulated
                 conMod.setData(conMod.index(i, conMod.fieldIndex('max_flow_start')), maxFlowStart)
-                recDesFlowQfr = self.getRecurrentDesignFlow(calc.value('collector_number'), recurFlowEnd)
+                initialFlowRateQi = self.getDesignFlow(calc.value('collector_number'), maxFlowStart)
+                calMod.setData(calMod.index(i, calMod.fieldIndex('initial_flow_rate_qi')), initialFlowRateQi)
+
+                recDesFlowQfr = self.getDesignFlow(calc.value('collector_number'), recurFlowEnd)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('rec_des_flow_qfr')), recDesFlowQfr)
-                initRecDesFlowQfr = self.getRecurrentDesignFlow(calc.value('collector_number'), recurFlowStart)
+                initRecDesFlowQfr = self.getDesignFlow(calc.value('collector_number'), recurFlowStart)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('initial_rec_des_flow_qfr')), initRecDesFlowQfr)
 
                 calMod.updateRowInTable(i, calMod.record(i))
                 conMod.updateRowInTable(i, conMod.record(i))
 
-    def getRecurrentDesignFlow(self, colNo, recurFlow):
-        if (colNo == None or recurFlow == 0):
+    def getDesignFlow(self, colNo, flow):
+        if (colNo == None or flow == 0):
             return 0
         flowMinQmin = self.critVal('flow_min_qmin')
-        if (recurFlow < flowMinQmin):
+        if (flow < flowMinQmin):
             return flowMinQmin
-        return recurFlow
+        return flow
 
     # $Parametros.$L$24 || Getting Maximum Flow l/s
     def getMaximumFlow(self):

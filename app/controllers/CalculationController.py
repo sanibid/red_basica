@@ -570,6 +570,8 @@ class CalculationController(QObject):
             prjFlowRateQGMax = calc.value('prj_flow_rate_qgmax')
             colNo = calc.value('collector_number')
             cManning = calc.value('c_manning')
+            initialFlowRateQi = calc.value('initial_flow_rate_qi')
+            initialRecDesFlowQfr = calc.value('initial_rec_des_flow_qfr')
 
             prevDepthDown = calMod.getValueBy('depth_down',"col_seg = '{}'".format(calc.value('previous_col_seg_id')))
             amtSegDepth = prevDepthDown if (calc.value('initial_segment') != 1 and extension > 0) else 0
@@ -611,7 +613,6 @@ class CalculationController(QObject):
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y')), round(waterLevelY, 4))
             waterLevelPipeEnd = self.getFunc('laminarel', extension, colNo, prjFlowRateQGMax,adoptedDiameter, slopesAdoptedCol, cManning )
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_pipe_end')), round(waterLevelPipeEnd, 4)*100)
-            flowQMin = self.critModel.getValueBy('flow_min_qmin')
 
             tractiveForce = self.getFunc('tenstrat', extension, colNo, calc.value('rec_des_flow_qfr'),adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('tractive_force')), round(tractiveForce, 4))
@@ -619,15 +620,17 @@ class CalculationController(QObject):
             calMod.setData(calMod.index(i, calMod.fieldIndex('critical_velocity')), round(criticalVelocity, 4))
             velocity = self.getFunc('velocid', extension, colNo, prjFlowRateQGMax, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('velocity')), round(velocity, 2))
-            waterLevelYStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.laminaabs(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, cManning)
-            calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y_start')), round(waterLevelYStart, 4))
-            waterLevelPipeStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.laminarel(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, cManning)
-            calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_pipe_start')), round(waterLevelPipeStart, 4)*100)
 
-            totalFlowRateStart = calc.value('total_flow_rate_start')
-            trForceStartQls = flowQMin if (((totalFlowRateStart - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg')) < flowQMin else (((totalFlowRateStart - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg'))
-            tractiveForceStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.tenstrat(trForceStartQls, adoptedDiameter, slopesAdoptedCol, cManning)
+            waterLevelYStart = self.getFunc('laminaabs', extension, colNo, initialFlowRateQi, adoptedDiameter, slopesAdoptedCol, cManning)
+            calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y_start')), round(waterLevelYStart, 4))
+            waterLevelPipeStart = self.getFunc('laminarel', extension, colNo, initialFlowRateQi, adoptedDiameter, slopesAdoptedCol, cManning)
+            calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_pipe_start')), round(waterLevelPipeStart, 4) * 100)
+            tractiveForceStart = self.getFunc('tenstrat', extension, colNo, initialRecDesFlowQfr, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('tractive_force_start')), round(tractiveForceStart, 4))
+            criticalVelocityStart = self.getFunc('velocrit', extension, colNo, initialFlowRateQi, adoptedDiameter, slopesAdoptedCol, cManning)
+            calMod.setData(calMod.index(i, calMod.fieldIndex('initial_critical_velocity')), round(criticalVelocityStart, 4))
+            velocityStart = self.getFunc('velocid', extension, colNo, initialRecDesFlowQfr, adoptedDiameter, slopesAdoptedCol, cManning)
+            calMod.setData(calMod.index(i, calMod.fieldIndex('initial_velocity')), round(velocityStart, 4))
 
             prevCoveringDown = calMod.getValueBy('covering_down',"col_seg = '{}'".format(calc.value('previous_col_seg_id')))
             amtSegCov = prevCoveringDown if (calc.value('initial_segment') != 1 and extension > 0) else 0

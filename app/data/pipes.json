@@ -4,97 +4,97 @@
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 150,
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 200,
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 250,
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 300,
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 350,
    "criteria_id": 1,
    "material_id": 1,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 400,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 450,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 500,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 600,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 700,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 800,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 900,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  },
  {
    "diameter": 1000,
    "criteria_id": 1,
    "material_id": 2,
    "manning_suggested": "0.01",
-   "manning_adopted": "0.013"
+   "manning_adopted": "0.01"
  }
 ]

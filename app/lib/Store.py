@@ -247,6 +247,8 @@ class Store():
             conc_flow_qci double precision,\
             rec_des_flow_qfr double precision,\
             initial_rec_des_flow_qfr double precision,\
+            initial_critical_velocity double precision,\
+            initial_velocity double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE)")

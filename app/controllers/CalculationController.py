@@ -1,5 +1,4 @@
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, Qt, QCoreApplication
-from PyQt5.QtSql import QSqlRelation, QSqlRelationalTableModel, QSqlTableModel, QSqlQuery
+from PyQt5.QtCore import QObject, pyqtSignal, QCoreApplication
 from ..models.Calculation import Calculation
 from ..models.Parameter import Parameter
 from ..models.Project import Project
@@ -23,7 +22,7 @@ class CalculationController(QObject):
     message = pyqtSignal(str)
 
     def __init__(self, projectId=None):
-        QObject.__init__(self)                       
+        QObject.__init__(self)
         self.projectId = projectId
         self.model = Calculation()
         self.parameterModel = Parameter()
@@ -36,14 +35,14 @@ class CalculationController(QObject):
 
     def importData(self, only_selected_features=False):
         success = True
-        projectId = self.projectId        
+        projectId = self.projectId
         try:
-            # we dont check if is firstTime anymore            
+            # we dont check if is firstTime anymore
             start_time = time.time()
             if success:
                 self.progress.emit(25)
                 self.projModel.setSrid(projectId)
-                success = self.uploadCalculations(projectId, only_selected_features)                    
+                success = self.uploadCalculations(projectId, only_selected_features)
                 print("Total time execution to calculations:--- %s seconds ---" % (time.time() - start_time))
 
             if success:
@@ -57,15 +56,15 @@ class CalculationController(QObject):
             if success:
                 success = self.calcAfter(projectId)
                 self.progress.emit(90)
-                print("Total time execution to upload:--- %s seconds ---" % (time.time() - start_time))            
+                print("Total time execution to upload:--- %s seconds ---" % (time.time() - start_time))
 
             if success:
-                self.progress.emit(100)                
+                self.progress.emit(100)
             
         except Exception as e:
             self.error.emit(e, traceback.format_exc())
 
-        self.finished.emit(success)                            
+        self.finished.emit(success)
     
 
     def exportData(self, projectId):
@@ -188,7 +187,7 @@ class CalculationController(QObject):
                     if not row['AUX_PROF_I'] == 'NULL':
                         rec.setValue('aux_prof_i',row['AUX_PROF_I'])
                     rec.setValue('el_terr_up',row['COTA_I'])
-                    rec.setValue('el_terr_down',row['COTA_F'])            
+                    rec.setValue('el_terr_down',row['COTA_F'])
                     slopesTerr = 0 if (float(row['L']) == 0 or row['ID_COL'] == None) else round((float(row['COTA_I']) - float(row['COTA_F'])) / float(row['L']), 4)
                     rec.setValue('slopes_terr',slopesTerr)
                     rec.setValue('inspection_id_up',row['NODO_I'])
@@ -209,7 +208,7 @@ class CalculationController(QObject):
                         condominial_lines_start = self.strToFloat(qeIp) * self.paramVal('occupancy_rate_start') * self.critVal('water_consumption_pc') * self.critVal('coefficient_return_c') / 86400
                         cRec.setValue('condominial_lines_start', condominial_lines_start)
                         cRow = self.contModel.rowCount()
-                        self.contModel.insertRecord(cRow, cRec)            
+                        self.contModel.insertRecord(cRow, cRec)
 
                         wlRec = self.wlAdj.record()
                         wlRec.setValue('calculation_id', self.model.query().lastInsertId())
@@ -227,7 +226,7 @@ class CalculationController(QObject):
         
         except Exception as e:
             self.error.emit(e, traceback.format_exc())
-        return False       
+        return False
 
     # When the calculations have been loaded, the missing parameters are generated
     def updateParameters(self):
@@ -260,7 +259,7 @@ class CalculationController(QObject):
         print(msg)
         try:
             if projectId:
-                self.model.setFilter('project_id = {} and initial_segment = 1'.format(projectId))                
+                self.model.setFilter('project_id = {} and initial_segment = 1'.format(projectId))
                 for i in range(self.model.rowCount()):
                     self.model.select()
                     colSeg = self.model.record(i).value('col_seg')
@@ -270,7 +269,7 @@ class CalculationController(QObject):
                         self.waterLevelAdjustments(projectId, colSeg)
                 return True
             else:
-                raise Exception("projectId is required to update contributions")                
+                raise Exception("projectId is required to update contributions")
         except Exception as e:
             self.error.emit(e, traceback.format_exc())
         return False
@@ -468,13 +467,33 @@ class CalculationController(QObject):
     def strToFloat(str):
         return float(str) if len(str) > 0 else 0
 
+    def getFunc(self, function, ext, colNo, a, b, c, d):
+        if ext == 0 or colNo == 0:
+            return 0
+
+        calMod = Calculation()
+
+        map = {
+            'laminaabs': calMod.laminaabs,
+            'laminarel': calMod.laminarel,
+            'tenstrat': calMod.tenstrat,
+            'velocrit': calMod.velocrit,
+            'velocid': calMod.velocid
+        }
+
+        selected_function = map.get(function)
+        if selected_function is not None:
+            return selected_function(a, b, c, d)
+        else:
+            return 0
+
     def waterLevelAdjustments(self, projectId, colSeg, recalculate=False, m1List=[], m2List=[], action = ''):
         calMod = Calculation()
         wlMod = WaterLevelAdj()
 
         splitCol = colSeg.split('-')
         wlMod.setFilter('calculation_id in (select id from calculations where project_id = {}) and col_seg like "{}-%" ORDER BY initial_segment DESC'.format(projectId, splitCol[0]))
-        calMod.setFilter('project_id = {} and col_seg like "{}-%" ORDER BY initial_segment DESC'.format(projectId, splitCol[0]))       
+        calMod.setFilter('project_id = {} and col_seg like "{}-%" ORDER BY initial_segment DESC'.format(projectId, splitCol[0]))
 
         wlMod.select()
         calMod.select()
@@ -548,6 +567,10 @@ class CalculationController(QObject):
                     wlMod.setData(wlMod.index(i, wlMod.fieldIndex('m2_col_na')), m2ColNa)
 
             extension = calc.value('extension')
+            prjFlowRateQGMax = calc.value('prj_flow_rate_qgmax')
+            colNo = calc.value('collector_number')
+            cManning = calc.value('c_manning')
+
             prevDepthDown = calMod.getValueBy('depth_down',"col_seg = '{}'".format(calc.value('previous_col_seg_id')))
             amtSegDepth = prevDepthDown if (calc.value('initial_segment') != 1 and extension > 0) else 0
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('amt_seg_depth')), amtSegDepth)
@@ -562,7 +585,7 @@ class CalculationController(QObject):
             adoptedDiameter = calc.value('adopted_diameter')
             coveringUp = depthUp - adoptedDiameter / 1000
             calMod.setData(calMod.index(i, calMod.fieldIndex('covering_up')), coveringUp)
-            elColUp = (calc.value('el_terr_up') - depthUp) if (extension != 0 or calc.value('collector_number') != 0) else 0
+            elColUp = (calc.value('el_terr_up') - depthUp) if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_col_up')), elColUp)
 
             depthDown = self.calcDepthDown(calc, wl, elColUp)
@@ -572,41 +595,38 @@ class CalculationController(QObject):
 
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('down_end_h')), round(depthDown,6))
 
-            elColDown = (calc.value('el_terr_down') - depthDown) if (extension != 0 or calc.value('collector_number') != 0) else 0
+            elColDown = (calc.value('el_terr_down') - depthDown) if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_col_down')), round(elColDown, 8))
-            elTopGenUp =  (calc.value('el_terr_up') - coveringUp) if (extension != 0 or calc.value('collector_number') != 0) else 0
+            elTopGenUp =  (calc.value('el_terr_up') - coveringUp) if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_top_gen_up')), elTopGenUp)
-            elTopGenDown =  (calc.value('el_terr_down') - coveringDown) if (extension != 0 or calc.value('collector_number') != 0) else 0
+            elTopGenDown =  (calc.value('el_terr_down') - coveringDown) if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_top_gen_down')), elTopGenDown)
-            slopesAdoptedCol =  (elTopGenUp-elTopGenDown)/extension if (extension != 0 or calc.value('collector_number') != 0) else 0
+            slopesAdoptedCol =  (elTopGenUp-elTopGenDown)/extension if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('slopes_adopted_col')), round(slopesAdoptedCol, 6))
 
-            dn1mm = calMod.dn1mm(calc.value('prj_flow_rate_qgmax'), round(slopesAdoptedCol, 6), calc.value('c_manning'), self.critModel.getValueBy('max_water_level'))
+            dn1mm = calMod.dn1mm(prjFlowRateQGMax, round(slopesAdoptedCol, 6), cManning, self.critModel.getValueBy('max_water_level'))
             diam1 = self.critModel.getValueBy('min_diameter') if dn1mm < self.critModel.getValueBy('min_diameter') else self.pipe.getMinDiameter(dn1mm)
             calMod.setData(calMod.index(i, calMod.fieldIndex('suggested_diameter')), diam1)
-
-            waterLevelY = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.laminaabs(calc.value('prj_flow_rate_qgmax'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            waterLevelY = self.getFunc('laminaabs', extension, colNo, prjFlowRateQGMax, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y')), round(waterLevelY, 4))
-            waterLevelPipeEnd = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.laminarel(calc.value('prj_flow_rate_qgmax'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            waterLevelPipeEnd = self.getFunc('laminarel', extension, colNo, prjFlowRateQGMax,adoptedDiameter, slopesAdoptedCol, cManning )
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_pipe_end')), round(waterLevelPipeEnd, 4)*100)
             flowQMin = self.critModel.getValueBy('flow_min_qmin')
-            totalFlowRateEnd = calc.value('total_flow_rate_end')
 
-            trForceQls = flowQMin if (((totalFlowRateEnd - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg')) < flowQMin else (((totalFlowRateEnd - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg'))
-            tractiveForce = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.tenstrat(trForceQls, adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            tractiveForce = self.getFunc('tenstrat', extension, colNo, calc.value('rec_des_flow_qfr'),adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('tractive_force')), round(tractiveForce, 4))
-            criticalVelocity = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.velocrit(calc.value('prj_flow_rate_qgmax'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            criticalVelocity = self.getFunc('velocrit', extension, colNo, prjFlowRateQGMax, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('critical_velocity')), round(criticalVelocity, 4))
-            velocity = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.velocid(calc.value('prj_flow_rate_qgmax'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            velocity = self.getFunc('velocid', extension, colNo, prjFlowRateQGMax, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('velocity')), round(velocity, 2))
-            waterLevelYStart = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.laminaabs(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            waterLevelYStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.laminaabs(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y_start')), round(waterLevelYStart, 4))
-            waterLevelPipeStart = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.laminarel(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            waterLevelPipeStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.laminarel(calc.value('initial_flow_rate_qi'), adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_pipe_start')), round(waterLevelPipeStart, 4)*100)
 
             totalFlowRateStart = calc.value('total_flow_rate_start')
             trForceStartQls = flowQMin if (((totalFlowRateStart - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg')) < flowQMin else (((totalFlowRateStart - calc.value('intake_in_seg')) / self.critModel.getValueBy('k1_daily')) + calc.value('intake_in_seg'))
-            tractiveForceStart = 0 if calc.value('collector_number') == 0 or calc.value('extension') == 0 else calMod.tenstrat(trForceStartQls, adoptedDiameter, slopesAdoptedCol, calc.value('c_manning'))
+            tractiveForceStart = 0 if colNo == 0 or calc.value('extension') == 0 else calMod.tenstrat(trForceStartQls, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('tractive_force_start')), round(tractiveForceStart, 4))
 
             prevCoveringDown = calMod.getValueBy('covering_down',"col_seg = '{}'".format(calc.value('previous_col_seg_id')))
@@ -692,7 +712,7 @@ class CalculationController(QObject):
                 auxHImpDepth = None if auxImpDepthUp == None else  None if (auxImpDepthUp - downEnd) == 0 else round(auxImpDepthUp, 2)
                 wlMod.setData(wlMod.index(i, wlMod.fieldIndex('aux_h_imp_depth')), auxHImpDepth)
                 calMod.updateRowInTable(i, calMod.record(i))
-                wlMod.updateRowInTable(i, wlMod.record(i))                
+                wlMod.updateRowInTable(i, wlMod.record(i))
             return True
         except Exception as e:
             self.error.emit(e, traceback.format_exc())
@@ -1057,7 +1077,7 @@ class CalculationController(QObject):
             calMod.setFilter('project_id = {}'.format(projectId))
             calMod.select()
             wlMod = WaterLevelAdj()
-            wlMod.setFilter("calculation_id in (select id from calculations where project_id = {})".format(projectId))            
+            wlMod.setFilter("calculation_id in (select id from calculations where project_id = {})".format(projectId))
             wlMod.select()
             self.progress.emit(10)
             progress = 10

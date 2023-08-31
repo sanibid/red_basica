@@ -670,7 +670,8 @@ class CalculationController(QObject):
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_ad')), adoptedDiameter)
             dnCalcMax = diam1 if (calc.value('initial_segment') == 1 or diam1 > adoptedDiameter) else adoptedDiameter
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_calc_max')), dnCalcMax)
-            calMod.setData(calMod.index(i, calMod.fieldIndex('inspection_type_up')), self.inspectionoDevice.getInspectionTypeUp(depthUp, adoptedDiameter))
+            inspectionTypeUp = "TL" if (calc.value('initial_segment') == 1 and self.critVal('simplified_tl_seg') == 1) else self.inspectionoDevice.getInspectionTypeUp(depthUp, adoptedDiameter)
+            calMod.setData(calMod.index(i, calMod.fieldIndex('inspection_type_up')), inspectionTypeUp)
             calMod.updateRowInTable(i, calMod.record(i))
             wlMod.updateRowInTable(i, wlMod.record(i))
 

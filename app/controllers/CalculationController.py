@@ -348,14 +348,10 @@ class CalculationController(QObject):
             startLinear = self.getStartLinearContInSeg(ext)
             conMod.setData(conMod.index(i, conMod.fieldIndex('linear_contr_seg_start')), startLinear)
             if conMod.updateRowInTable(i, conMod.record(i)):
-                linearContEnd = conMod.record(i).value('linear_contr_seg_end') if conMod.record(i).value('linear_contr_seg_end') != None else 0
-                totalFlowEnd = round(calc.value('intake_in_seg') + subtotalUpSegEnd + con.value('condominial_lines_end') + linearContEnd, 6)
                 concFlowFinal = calMod.record(i).value('conc_flow_qcf') if calMod.record(i).value('conc_flow_qcf') != None else 0
                 avgFlowEnd = round((subtotalUpSegEnd + con.value('condominial_lines_end')+ concFlowFinal + endLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_end')), avgFlowEnd)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_end')), avgFlowEnd)
-                linearContStart = conMod.record(i).value('linear_contr_seg_start') if conMod.record(i).value('linear_contr_seg_start') != None else 0
-                totalFlowStart = round(calc.value('intake_in_seg') + subtotalUpSegStart + conMod.record(i).value('condominial_lines_start') + linearContStart, 6)
                 concFlowStart = calMod.record(i).value('conc_flow_qci') if calMod.record(i).value('conc_flow_qci') != None else 0
                 avgFlowStart = round((subtotalUpSegStart + con.value('condominial_lines_start') + concFlowStart + startLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_start')), avgFlowStart)
@@ -363,10 +359,9 @@ class CalculationController(QObject):
 
                 adoptedDiameterInserted = calMod.getValueBy('adopted_diameter', 'col_seg = "{}"'.format(calc.value('col_seg')))
                 if adoptedDiameterInserted == None:
-                    adoptedDiameter = self.critModel.getValueBy('min_diameter') if calc.value('initial_segment') == 1 else calMod.getValueBy('adopted_diameter', 'col_seg = "{}"'.format(calc.value('previous_col_seg_id')))
+                    adoptedDiameter = self.critVal('min_diameter') if calc.value('initial_segment') == 1 else calMod.getValueBy('adopted_diameter', 'col_seg = "{}"'.format(calc.value('previous_col_seg_id')))
                 else:
                     adoptedDiameter = adoptedDiameterInserted
-
                 calMod.setData(calMod.index(i, calMod.fieldIndex('adopted_diameter')), adoptedDiameter)
                 slopesMinAccepted = 0 if calc.value('extension') == 0 else self.slopesMinAcceptedCalc(adoptedDiameter)
                 if calc.value('slopes_min_modified') != True:
@@ -462,6 +457,13 @@ class CalculationController(QObject):
 
     def paramVal(self, field):
         return self.parameterModel.getValueBy(field)
+
+    def getNaDiffNeeded(self, amtSegNa, inspDevCoverNa, naDeeper):
+        if (amtSegNa == 0 or (inspDevCoverNa - naDeeper) < 0.00000001):
+            return 0
+        if (inspDevCoverNa - naDeeper) < self.critVal('min_step_ib_mh'):
+            return self.round_up(self.critVal('min_step_ib_mh'), 2)
+        return self.round_up(inspDevCoverNa - naDeeper, 2)
 
     @staticmethod
     def strToFloat(str):
@@ -605,9 +607,8 @@ class CalculationController(QObject):
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_top_gen_down')), elTopGenDown)
             slopesAdoptedCol =  (elTopGenUp-elTopGenDown)/extension if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('slopes_adopted_col')), round(slopesAdoptedCol, 6))
-
-            dn1mm = calMod.dn1mm(prjFlowRateQGMax, round(slopesAdoptedCol, 6), cManning, self.critModel.getValueBy('max_water_level'))
-            diam1 = self.critModel.getValueBy('min_diameter') if dn1mm < self.critModel.getValueBy('min_diameter') else self.pipe.getMinDiameter(dn1mm)
+            dn1mm = calMod.dn1mm(max(prjFlowRateQGMax, initialFlowRateQi), round(slopesAdoptedCol, 6), cManning, self.critVal('max_water_level'))
+            diam1 = self.critVal('min_diameter') if dn1mm < self.critVal('min_diameter') else self.pipe.getMinDiameter(dn1mm)
             calMod.setData(calMod.index(i, calMod.fieldIndex('suggested_diameter')), diam1)
             waterLevelY = self.getFunc('laminaabs', extension, colNo, prjFlowRateQGMax, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('water_level_y')), round(waterLevelY, 4))
@@ -650,9 +651,9 @@ class CalculationController(QObject):
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('insp_dev_cov_up')), elColUp)
             upDiffNeeded = 0 if amtSegUp == 0 else round(elColUp - lowestUp + self.critModel.getValueBy('bottom_ib_mh'), 6) if elColUp - lowestUp > (self.critModel.getValueBy('bottom_ib_mh') * (-1)) else 0
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('up_diff_needed')), upDiffNeeded)
-            upstreamSideSeg = 0 if calc.value('extension') == 0  else elColUp + waterLevelY #$A3.H15
+            upstreamSideSeg = 0 if calc.value('extension') == 0  else elColUp + max(waterLevelY, waterLevelYStart)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('up_side_seg')), round(upstreamSideSeg, 6))
-            downstreamSideSeg = 0 if calc.value('extension') == 0 else elColDown + waterLevelY #$A3.I15
+            downstreamSideSeg = 0 if calc.value('extension') == 0 else elColDown + max(waterLevelY, waterLevelYStart) #$A3.I15
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('down_side_seg')), round(downstreamSideSeg, 6))
             downSidePrev = wlMod.getValueBy('down_side_seg',"w.col_seg = '{}'".format(calc.value('previous_col_seg_id')))
             amtSegNa = 0 if downSidePrev == None else 0 if wlMod.isError(downSidePrev) else downSidePrev
@@ -663,12 +664,15 @@ class CalculationController(QObject):
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('na_deeper')), naDeeper)
             upstreamSideSeg = 0 if wlMod.isError(upstreamSideSeg) == True else round(upstreamSideSeg, 6)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('insp_dev_cov_na')), upstreamSideSeg)
-            naDiffNeeded = 0 if amtSegNa == 0 else self.round_up(upstreamSideSeg - naDeeper, 2) if (upstreamSideSeg - naDeeper) > 0 else 0
+            naDiffNeeded = self.getNaDiffNeeded(amtSegNa, upstreamSideSeg, naDeeper)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('na_diff_needed')), naDiffNeeded)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('calc_depth_up')), round(depthUp + naDiffNeeded, 2))
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_est_need')), diam1)
+            dnAdPrevCol = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('previous_col_seg_id')))
+            dnAdM1Col = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('m1_col_id')))
+            dnAdM2Col = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('m2_col_id')))
+            dnCalcMax = diam1 if calc.value('initial_segment') == 1 else max(diam1, dnAdPrevCol, dnAdM1Col, dnAdM2Col)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_ad')), adoptedDiameter)
-            dnCalcMax = diam1 if (calc.value('initial_segment') == 1 or diam1 > adoptedDiameter) else adoptedDiameter
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_calc_max')), dnCalcMax)
             inspectionTypeUp = "TL" if (calc.value('initial_segment') == 1 and self.critVal('simplified_tl_seg') == 1) else self.inspectionoDevice.getInspectionTypeUp(depthUp, adoptedDiameter)
             calMod.setData(calMod.index(i, calMod.fieldIndex('inspection_type_up')), inspectionTypeUp)

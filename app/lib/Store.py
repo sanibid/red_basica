@@ -198,6 +198,8 @@ class Store():
             block_others_id text,\
             qty_final_qe integer,\
             qty_initial_qe integer,\
+            conc_flow_qcf double precision,\
+            conc_flow_qci double precision,\
             intake_in_seg double precision,\
             total_flow_rate_end double precision,\
             total_flow_rate_start double precision,\
@@ -222,16 +224,20 @@ class Store():
             suggested_diameter double precision,\
             adopted_diameter double precision,\
             c_manning double precision,\
+            rec_des_flow_qfr double precision,\
             prj_flow_rate_qgmax double precision,\
             water_level_y double precision,\
             water_level_pipe_end double precision,\
             tractive_force double precision,\
             critical_velocity double precision,\
             velocity double precision,\
+            initial_rec_des_flow_qfr double precision,\
             initial_flow_rate_qi double precision,\
             water_level_y_start double precision,\
             water_level_pipe_start double precision,\
             tractive_force_start double precision,\
+            initial_critical_velocity double precision,\
+            initial_velocity double precision,\
             inspection_id_up text,\
             inspection_type_up text,\
             inspection_id_down text,\
@@ -243,12 +249,6 @@ class Store():
             y_final double precision,\
             observations text,\
             slopes_min_modified boolean,\
-            conc_flow_qcf double precision,\
-            conc_flow_qci double precision,\
-            rec_des_flow_qfr double precision,\
-            initial_rec_des_flow_qfr double precision,\
-            initial_critical_velocity double precision,\
-            initial_velocity double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             FOREIGN KEY(project_id) REFERENCES projects(id) ON DELETE CASCADE)")

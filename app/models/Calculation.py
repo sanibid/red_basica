@@ -81,8 +81,7 @@ class Calculation(QSqlRelationalTableModel):
         if role == Qt.DisplayRole:
             col = index.column()
             val = QSqlRelationalTableModel.data(self, index, Qt.DisplayRole)
-
-            if col in [7, 15, 16, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 38, 39, 41, 42, 43, 44, 45, 47, 61, 62]:
+            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 41, 42, 44, 45, 46, 48, 49, 51]:
                 if val == None:
                     return ''
                 if not isinstance(val, float):
@@ -91,22 +90,22 @@ class Calculation(QSqlRelationalTableModel):
                     return 'DN !!'
                 return '{:.2f}'.format(round(val, 2))
 
-            if col in [37]:
+            if col in [39]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.3f}'.format(round(val, 3))
 
-            if col in [14, 32]:
+            if col in [16, 34]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.4f}'.format(round(val, 4))
 
-            if col in [33, 34]:
+            if col in [35, 36]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.5f}'.format(round(val, 5))
 
-            if col in [40, 46]:
+            if col in [43, 50]:
                 if not isinstance(val, float):
                     val = float(val)
                 if (val < -88888):

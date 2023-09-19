@@ -247,6 +247,7 @@ class CalculationController(QObject):
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex("point_flows_start")), self.model.getQtyInitialQeSum())
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_end")), round(sewerContEnd,5))
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_start")), round(sewerContStart,5))
+            paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_system_length")), round(self.model.getExtensionSum(),5))
             paramModel.updateRowInTable(row, paramModel.record(row))
             return True
         except Exception as e:
@@ -415,9 +416,10 @@ class CalculationController(QObject):
         extensionSum = self.model.getExtensionSum()
         if extensionSum == 0:
             return 0
-        population = self.parameterModel.getValueBy('beginning_population') if start else self.parameterModel.getValueBy('final_population')
-        x = self.critModel.getValueBy('water_consumption_pc * pc.coefficient_return_c')
-        return round((((population * x) / 86400)/extensionSum)*1000, 3)
+        population = self.parameterModel.getValueBy('beginning_population') if start == 1 else self.parameterModel.getValueBy('final_population')
+        waterCosumption = self.critModel.getValueBy('water_consumption_pc') if start == 1 else self.critModel.getValueBy('water_consumption_pc_end')
+        coefRetC = self.critModel.getValueBy('coefficient_return_c')
+        return round((((population * waterCosumption * coefRetC) / 86400) / extensionSum) * 1000, 3)
 
     # $A1.$B$1
     def getContributionAux(self, extension):
@@ -630,7 +632,7 @@ class CalculationController(QObject):
             calMod.setData(calMod.index(i, calMod.fieldIndex('tractive_force_start')), round(tractiveForceStart, 4))
             criticalVelocityStart = self.getFunc('velocrit', extension, colNo, initialFlowRateQi, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('initial_critical_velocity')), round(criticalVelocityStart, 4))
-            velocityStart = self.getFunc('velocid', extension, colNo, initialRecDesFlowQfr, adoptedDiameter, slopesAdoptedCol, cManning)
+            velocityStart = self.getFunc('velocid', extension, colNo, initialFlowRateQi, adoptedDiameter, slopesAdoptedCol, cManning)
             calMod.setData(calMod.index(i, calMod.fieldIndex('initial_velocity')), round(velocityStart, 4))
 
             prevCoveringDown = calMod.getValueBy('covering_down',"col_seg = '{}'".format(calc.value('previous_col_seg_id')))

@@ -120,6 +120,17 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.sewerContributionRateEndEdit,
             self.parameterModel.fieldIndex("sewer_contribution_rate_end"),
         )
+
+        self.mapper.addMapping(
+            self.lengthSewerSystemStartEdit,
+            self.parameterModel.fieldIndex("sewer_system_length"),
+        )
+
+        self.mapper.addMapping(
+            self.lengthSewerSystemEndEdit,
+            self.parameterModel.fieldIndex("sewer_system_length"),
+        )
+
         self.mapper.addMapping(self.profileComboBox, criteria_idx)
         self.mapper.setItemDelegate(QSqlRelationalDelegate(self.profileComboBox))
 
@@ -137,6 +148,10 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.mapper_project_criterias.addMapping(
             self.waterConsumptionPcSpinBox,
             self.criteriaModel.fieldIndex("water_consumption_pc"),
+        )
+        self.mapper_project_criterias.addMapping(
+            self.waterConsumptionPcEndSpinBox,
+            self.criteriaModel.fieldIndex("water_consumption_pc_end"),
         )
         self.mapper_project_criterias.addMapping(
             self.k1DailySpinBox, self.criteriaModel.fieldIndex("k1_daily")
@@ -350,13 +365,22 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.qeReferenceMaxEdit.setValue(qeReferenceMax)
         self.qeReferenceMaxEdit.setVisible(False)
         self.qeReferenceMaxVisible.setValue(qeReferenceMax)
+        waterConsEnd = self.waterConsumptionPcEndSpinBox.value()
+        occRateEnd = self.occupancyRateEndEdit.value()
+        qeReferenceMaxEnd = (waterConsEnd *  occRateEnd * coeffRetC * k1Dly * k2Hrly) / 86400
+        self.qeReferenceMaxEndEdit.setValue(qeReferenceMaxEnd)
+        self.qeReferenceMaxEndEdit.setVisible(False)
+        self.qeReferenceMaxEndVisible.setValue(qeReferenceMaxEnd)
 
     def calculateQeReferenceMedEdit(self):
         """Updates value to qeReferenceMedEdit"""
         waterCons = self.waterConsumptionPcSpinBox.value()
-        occRate = self.occupancyRateEndEdit.value()
+        occRate = self.occupancyRateStartEdit.value()
         coeffRetC = self.coefficientReturnCSpinBox.value()
         self.qeReferenceMedEdit.setValue(waterCons * occRate * coeffRetC)
+        waterConsEnd = self.waterConsumptionPcEndSpinBox.value()
+        occRateEnd = self.occupancyRateEndEdit.value()
+        self.qeReferenceMedEndEdit.setValue(waterConsEnd * occRateEnd * coeffRetC)       
 
     def calculateResidencesStart(self):
         """Updates value to residencesStartEdit"""
@@ -404,6 +428,7 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
 
         # TODO: loop over widgets
         self.waterConsumptionPcSpinBox.setReadOnly(not self.profileIsEditable)
+        self.waterConsumptionPcEndSpinBox.setReadOnly(not self.profileIsEditable)
         self.k1DailySpinBox.setReadOnly(not self.profileIsEditable)
         self.k2HourlySpinBox.setReadOnly(not self.profileIsEditable)
         self.coefficientReturnCSpinBox.setReadOnly(not self.profileIsEditable)

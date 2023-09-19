@@ -66,6 +66,7 @@ class Store():
             (id integer primary key autoincrement,\
             name text unique not null,\
             water_consumption_pc double precision,\
+            water_consumption_pc_end double precision,\
             k1_daily double precision,\
             k2_hourly double precision,\
             coefficient_return_c double precision,\
@@ -116,6 +117,7 @@ class Store():
             contribution_sewage boolean,\
             sewer_contribution_rate_end double precision,\
             sewer_contribution_rate_start double precision,\
+            sewer_system_length double precision,\
             created_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             updated_at timestamp DEFAULT CURRENT_TIMESTAMP,\
             FOREIGN KEY(project_criteria_id) REFERENCES project_criterias(id) ON DELETE CASCADE)")
@@ -439,12 +441,12 @@ class Store():
             criterias = json.load(json_file)
         values = ''
         for p in criterias:
-            values += "('"+p['name']+"','"+p['water_consumption_pc']+"','"+p['k1_daily']+"','"+p['k2_hourly']+"','"+p['coefficient_return_c']+"',\
+            values += "('"+p['name']+"','"+p['water_consumption_pc']+"','"+p['water_consumption_pc_end']+"','"+p['k1_daily']+"','"+p['k2_hourly']+"','"+p['coefficient_return_c']+"',\
                 '"+p['intake_rate']+"','"+p['avg_tractive_force_min']+"','"+p['flow_min_qmin']+"','"+p['water_surface_max']+"','"+p['max_water_level']+"',\
                 '"+p['min_diameter']+"','"+p['diameter_up_150']+"','"+p['diameter_up_200']+"','"+p['from_diameter_250']+"','"+p['cover_min_street']+"',\
                 '"+p['cover_min_sidewalks_gs']+"','"+p['type_preferred_head_col']+"','"+p['simplified_tl_seg']+"','"+p['max_drop']+"','"+p['bottom_ib_mh']+"', '"+p['min_step_ib_mh']+"', datetime('now'), datetime('now')),"
 
-        execQuery = "INSERT INTO project_criterias (name, water_consumption_pc, k1_daily, k2_hourly, coefficient_return_c, intake_rate, \
+        execQuery = "INSERT INTO project_criterias (name, water_consumption_pc, water_consumption_pc_end, k1_daily, k2_hourly, coefficient_return_c, intake_rate, \
             avg_tractive_force_min, flow_min_qmin, water_surface_max, max_water_level, min_diameter, diameter_up_150, diameter_up_200, \
             from_diameter_250, cover_min_street, cover_min_sidewalks_gs, type_preferred_head_col, simplified_tl_seg, max_drop, bottom_ib_mh, \
             min_step_ib_mh, created_at, updated_at) VALUES "+ values[:-1] + ";"

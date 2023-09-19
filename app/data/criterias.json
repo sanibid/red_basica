@@ -1,6 +1,7 @@
 [{
     "name": "saniHUB - default",
-    "water_consumption_pc": "150",
+    "water_consumption_pc": "120",
+    "water_consumption_pc_end" : "120",
     "k1_daily": "1.20",
     "k2_hourly": "1.50",
     "coefficient_return_c": "0.80",

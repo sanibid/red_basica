@@ -46,10 +46,12 @@ class Pipe(QSqlRelationalTableModel):
                 return False
 
     def getMinDiameter(self, diameter):
-        #TODO check if is (min) or (min and equal)
-        sql = "SELECT min(diameter)\
-            FROM pipes\
-            WHERE {} < diameter".format(diameter)
+        sql = "SELECT min(p.diameter)\
+            FROM pipes p\
+            LEFT JOIN parameters pa on p.criteria_id = pa.id\
+            LEFT JOIN projects pr on pa.id = pr.parameter_id\
+            WHERE pr.active\
+            AND {} <= p.diameter".format(diameter)
         query = QSqlQuery(sql)
         if query.first():
             return query.value(0)

@@ -607,7 +607,7 @@ class CalculationController(QObject):
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_top_gen_up')), elTopGenUp)
             elTopGenDown =  (calc.value('el_terr_down') - coveringDown) if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('el_top_gen_down')), elTopGenDown)
-            slopesAdoptedCol =  (elTopGenUp-elTopGenDown)/extension if (extension != 0 or colNo != 0) else 0
+            slopesAdoptedCol = (elTopGenUp - elTopGenDown) / extension if (extension != 0 or colNo != 0) else 0
             calMod.setData(calMod.index(i, calMod.fieldIndex('slopes_adopted_col')), round(slopesAdoptedCol, 6))
             dn1mm = calMod.dn1mm(max(prjFlowRateQGMax, initialFlowRateQi), round(slopesAdoptedCol, 6), cManning, self.critVal('max_water_level'))
             diam1 = self.critVal('min_diameter') if dn1mm < self.critVal('min_diameter') else self.pipe.getMinDiameter(dn1mm)
@@ -670,11 +670,11 @@ class CalculationController(QObject):
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('na_diff_needed')), naDiffNeeded)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('calc_depth_up')), round(depthUp + naDiffNeeded, 2))
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_est_need')), diam1)
+            wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_ad')), adoptedDiameter)
             dnAdPrevCol = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('previous_col_seg_id')))
             dnAdM1Col = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('m1_col_id')))
             dnAdM2Col = wlMod.getValueBy('dn_ad',"w.col_seg = '{}'".format(calc.value('m2_col_id')))
             dnCalcMax = diam1 if calc.value('initial_segment') == 1 else max(diam1, dnAdPrevCol, dnAdM1Col, dnAdM2Col)
-            wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_ad')), adoptedDiameter)
             wlMod.setData(wlMod.index(i, wlMod.fieldIndex('dn_calc_max')), dnCalcMax)
             inspectionTypeUp = "TL" if (calc.value('initial_segment') == 1 and self.critVal('simplified_tl_seg') == 1) else self.inspectionoDevice.getInspectionTypeUp(depthUp, adoptedDiameter)
             calMod.setData(calMod.index(i, calMod.fieldIndex('inspection_type_up')), inspectionTypeUp)
@@ -847,7 +847,6 @@ class CalculationController(QObject):
         self.finished.emit(success)
     
     def calculateGrowDN(self, projectId):
-        #en el recalculate pasar true
         success = False
         try:
             msg = translate("Calculation", "Calculating Growing DN")
@@ -855,54 +854,8 @@ class CalculationController(QObject):
             self.progress.emit(10)
             print(msg)
             start_time = time.time()
-            calMod = Calculation()
-            calMod.setFilter('project_id = {}'.format(projectId))
-            calMod.select()
-            # if growing == True:
-            #     wlMod = WaterLevelAdj()
-            #     wlMod.setFilter("calculation_id in (select id from calculations where project_id = {})".format(projectId))
-            #     wlMod.select()
-            #     while wlMod.canFetchMore():
-            #         wlMod.fetchMore()
-            listRows = {}
-            m1ColList = m2ColList = []
-
-            self.progress.emit(10)
-
-            while calMod.canFetchMore():
-                calMod.fetchMore()
-
-            for i in range(calMod.rowCount()):
-                calc = calMod.record(i)
-                prevCalc = calMod.record(i-1)
-                a = calc.value('suggested_diameter')
-                b = calc.value('adopted_diameter')
-                c = prevCalc.value('adopted_diameter')
-                d = calc.value('initial_segment')
-                if d == 1 or a > c:
-                    calMod.setData(calMod.index(i, calMod.fieldIndex('adopted_diameter')), a)
-                else:
-                    calMod.setData(calMod.index(i, calMod.fieldIndex('adopted_diameter')), c)
-                if  calc.value('adopted_diameter') != calc.value('suggested_diameter'):
-                    if calMod.updateRowInTable(i, calMod.record(i)):
-                        listRows[calc.value('collector_number')] = calc.value('col_seg')
-                        m1 = calMod.getValueBy('m1_col_id','m1_col_id= "{}"'.format(calc.value('col_seg')))
-                        if m1 != None:
-                            m1ColList.append(m1)
-                        m2 = calMod.getValueBy('m2_col_id','m2_col_id= "{}"'.format(calc.value('col_seg')))
-                        if m2 != None:
-                            m2ColList.append(m2)
-                calMod.select()
-
-            self.progress.emit(60)
-
-            for key, colSeg in listRows.items():
-                self.recursiveContributions(projectId, colSeg, True, m1ColList, m2ColList)
-                self.waterLevelAdjustments(projectId, colSeg, True, m1ColList, m2ColList)
-
+            self.growDN(projectId)
             self.progress.emit(90)
-            self.calcAfter(projectId)
-
             success = True
             self.progress.emit(100)
             self.info.emit(translate("Calculation", "Done."))
@@ -911,6 +864,85 @@ class CalculationController(QObject):
             # forward the exception upstream
             self.error.emit(e, traceback.format_exc())
         self.finished.emit(success)
+
+    def growDN(self, projectId, iterationNo=0):
+        calMod = Calculation()
+        calMod.setFilter('project_id = {}'.format(projectId))
+        calMod.select()
+        wlMod = WaterLevelAdj()
+        wlMod.setFilter("calculation_id in (select id from calculations where project_id = {})".format(projectId))
+        wlMod.select()
+        while wlMod.canFetchMore():
+            wlMod.fetchMore()
+
+        listRows = {}
+        m1ColList = m2ColList = []
+
+        self.progress.emit(10)
+
+        while calMod.canFetchMore():
+            calMod.fetchMore()
+
+        for i in range(calMod.rowCount()):
+            calc = calMod.record(i)
+            prevCalc = calMod.record(i-1)
+            wl = wlMod.record(i)
+            adoptedDiameter = calc.value('adopted_diameter')
+            prevAdoptedDiameter = prevCalc.value('adopted_diameter')
+            initialSegment = calc.value('initial_segment')
+            dnCalcMax = wl.value('dn_calc_max')
+            if initialSegment == 1 or dnCalcMax > prevAdoptedDiameter:
+                calMod.setData(calMod.index(i, calMod.fieldIndex('adopted_diameter')), dnCalcMax)
+            else:
+                calMod.setData(calMod.index(i, calMod.fieldIndex('adopted_diameter')), prevAdoptedDiameter)
+            if  adoptedDiameter != dnCalcMax:
+                if calMod.updateRowInTable(i, calMod.record(i)):
+                    listRows[calc.value('collector_number')] = calc.value('col_seg')
+                    m1 = calMod.getValueBy('m1_col_id','m1_col_id = "{}"'.format(calc.value('col_seg')))
+                    if m1 != None:
+                        m1ColList.append(m1)
+                    m2 = calMod.getValueBy('m2_col_id','m2_col_id = "{}"'.format(calc.value('col_seg')))
+                    if m2 != None:
+                        m2ColList.append(m2)
+            calMod.select()
+
+        self.progress.emit(60)
+        for key, colSeg in listRows.items():
+            self.recursiveContributions(projectId, colSeg, True, m1ColList, m2ColList)
+            self.waterLevelAdjustments(projectId, colSeg, True, m1ColList, m2ColList)
+        maxWaterLvl = self.critModel.getValueBy('max_water_level')
+        compare = calMod.getValueBy('col_seg',
+                                    'water_level_pipe_end > {} OR water_level_pipe_start > {}'
+                                    .format(maxWaterLvl, maxWaterLvl))
+
+        self.calcAfter(projectId)
+
+        if (iterationNo <= 15):
+            iterationNo = iterationNo + 1
+            if (compare):
+                return self.growDN(projectId, iterationNo)
+            else:
+                """"""
+                for i in range(calMod.rowCount()):
+                    calc = calMod.record(i)
+                    adoptedDiam = calc.value('adopted_diameter')
+                    prevColSeg = calc.value('previous_col_seg_id')
+                    m1 = calc.value('m1_col_id')
+                    m2 = calc.value('m2_col_id')
+                    check = self.checkNoLargerUpDiam(adoptedDiam, prevColSeg, m1, m2)
+                    if check:
+                        self.growDN(projectId, iterationNo)
+
+    def checkNoLargerUpDiam(self, currentVal, prevColSeg, m1, m2):
+        compare = self.model.getValueBy('col_seg',
+                                        '(col_seg = "{}" OR col_seg = "{}" OR col_seg = "{}")\
+                                        AND adopted_diameter > {}'
+                                        .format(prevColSeg, m1, m2, currentVal))
+        if compare != 0:
+            return True
+        return False
+
+
 
     # TODO filter by projectId
     def updateVal(self, projectId, colSeg):

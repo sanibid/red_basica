@@ -202,10 +202,6 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
             self.criteriaModel.fieldIndex("cover_min_sidewalks_gs"),
         )
         self.mapper_project_criterias.addMapping(
-            self.typePreferredHeadColSpinBox,
-            self.criteriaModel.fieldIndex("type_preferred_head_col"),
-        )
-        self.mapper_project_criterias.addMapping(
             self.simplifiedTLInitialSegComboBox,
             self.criteriaModel.fieldIndex("simplified_tl_seg"),
         )
@@ -443,7 +439,6 @@ class ParameterView(QDialog, Ui_NewParameterDialog):
         self.diameterUp250SpinBox.setReadOnly(not self.profileIsEditable)
         self.coverMinStreetSpinBox.setReadOnly(not self.profileIsEditable)
         self.coverMinSidewalksGsSpinBox.setReadOnly(not self.profileIsEditable)
-        self.typePreferredHeadColSpinBox.setReadOnly(not self.profileIsEditable)
         self.simplifiedTLInitialSegComboBox.setEnabled(self.profileIsEditable)
         self.maxDropSpinBox.setReadOnly(not self.profileIsEditable)
         self.bottomIbMhSpinBox.setReadOnly(not self.profileIsEditable)

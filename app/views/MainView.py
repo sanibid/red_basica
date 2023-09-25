@@ -439,6 +439,7 @@ class MainView(QMainWindow, Ui_MainWindow):
         controller = CalculationController()
         ProgressThread(
             self, controller, (lambda: controller.calculateGrowDN(projectId))
+            # self, controller, (lambda: controller.calculateDN(projectId, True))
         )
 
     def calculateMinExc(self):

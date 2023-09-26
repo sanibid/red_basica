@@ -245,8 +245,8 @@ class CalculationController(QObject):
             sewerContStart = self.avgLinearContributionRate(1) if contributionSewage > 0 else 0
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex('point_flows_end')), self.model.getQtyFinalQeSum())
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex("point_flows_start")), self.model.getQtyInitialQeSum())
-            paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_end")), round(sewerContEnd,5))
-            paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_start")), round(sewerContStart,5))
+            paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_end")), round(sewerContEnd, 13))
+            paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_contribution_rate_start")), round(sewerContStart,13))
             paramModel.setData(paramModel.index(row, paramModel.fieldIndex("sewer_system_length")), round(self.model.getExtensionSum(),5))
             paramModel.updateRowInTable(row, paramModel.record(row))
             return True

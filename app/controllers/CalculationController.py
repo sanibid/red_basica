@@ -419,7 +419,7 @@ class CalculationController(QObject):
         population = self.parameterModel.getValueBy('beginning_population') if start == 1 else self.parameterModel.getValueBy('final_population')
         waterCosumption = self.critModel.getValueBy('water_consumption_pc') if start == 1 else self.critModel.getValueBy('water_consumption_pc_end')
         coefRetC = self.critModel.getValueBy('coefficient_return_c')
-        return round((((population * waterCosumption * coefRetC) / 86400) / extensionSum) * 1000, 3)
+        return round((((population * waterCosumption * coefRetC) / 86400) / extensionSum) * 1000, 13)
 
     # $A1.$B$1
     def getContributionAux(self, extension):

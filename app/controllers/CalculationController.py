@@ -855,6 +855,12 @@ class CalculationController(QObject):
             print(msg)
             start_time = time.time()
             self.growDN(projectId)
+            calMod = Calculation()
+            listRows, m1ColList, m2ColList = calMod.getCompleteStructure(projectId)
+            for key, colSegList in listRows.items():
+                self.recursiveContributions(projectId, colSegList[0], True, m1ColList, m2ColList)
+                self.waterLevelAdjustments(projectId, colSegList[0], True, m1ColList, m2ColList)
+            self.calcAfter(projectId)
             self.progress.emit(90)
             success = True
             self.progress.emit(100)
@@ -905,7 +911,6 @@ class CalculationController(QObject):
                     if m2 != None:
                         m2ColList.append(m2)
             calMod.select()
-
         self.progress.emit(60)
         for key, colSeg in listRows.items():
             self.recursiveContributions(projectId, colSeg, True, m1ColList, m2ColList)

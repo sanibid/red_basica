@@ -428,7 +428,7 @@ class Calculation(QSqlRelationalTableModel):
         
         sql = "select col_seg, extension, c_manning, inspection_id_up, inspection_id_down, \
               (adopted_diameter / 1000) as dn_meters, round(el_col_down - \
-              (select el_col_up from calculations where col_seg = c.downstream_seg_id),2) as total_slope, \
+              (select el_col_up from calculations where col_seg = c.downstream_seg_id),2) as upstream_drop, \
               round(initial_flow_rate_qi,2) as q_i, round(prj_flow_rate_qgmax,2) as q_f from calculations c \
               LEFT JOIN projects pr ON c.project_id = pr.id\
                 WHERE pr.active"

@@ -92,7 +92,7 @@ class CalculationController(QObject):
                 col_up = calMod.getValueBy('el_col_up', 'm1_col_id = "{}"'.format(col_seg))
                 if col_up == 0:
                     col_up = calMod.getValueBy('el_col_up', 'm2_col_id = "{}"'.format(col_seg))
-            total_slope = round(col_down - col_up, 6) if col_up > 0 else 0 #TODO:check this 
+            upstream_drop = round(col_down - col_up, 6) if col_up > 0 else 0 #TODO:check this
             
             segment = {
                 'ID_TRM_(N)': col_seg,
@@ -103,8 +103,8 @@ class CalculationController(QObject):
                 'S': round(rec.value('slopes_adopted_col'), 5),
                 'DN': rec.value('adopted_diameter'),
                 'Mat_col': calMod.getMaterialByDiameter(rec.value('adopted_diameter'), projectId),
-                'Caida_p2': (total_slope>0 and ((total_slope<max_drop and ("D",) or ("TC",))[0],) or ("",))[0],
-                'Caida_p2_h': round(total_slope, 2),
+                'Caida_p2': (upstream_drop > 0.005 and ((upstream_drop < max_drop and ("D",) or ("TC",))[0],) or ("",))[0],
+                'Caida_p2_h': round(upstream_drop, 2),
                 'n': rec.value('c_manning'),
                 'Qt_i': round(rec.value('total_flow_rate_start'), 2),
                 'Qt_f': round(rec.value('total_flow_rate_end'), 2),

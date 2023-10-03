@@ -106,8 +106,8 @@ class Store():
             occupancy_rate_end double precision,\
             residences_end integer,\
             residences_start integer,\
-            households_conn_start integer,\
-            households_conn_end integer,\
+            households_conn_start double precision,\
+            households_conn_end double precision,\
             connections_end integer,\
             connections_start integer,\
             point_flows_end double precision,\

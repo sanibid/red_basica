@@ -20,6 +20,7 @@ class Calculation(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("CalcTbl", "previous_col_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "m1_col_id"),
             QT_TRANSLATE_NOOP("CalcTbl", "m2_col_id"), QT_TRANSLATE_NOOP("CalcTbl", "block_others_id"),
             QT_TRANSLATE_NOOP("CalcTbl", "qty_final_qe"), QT_TRANSLATE_NOOP("CalcTbl", "qty_initial_qe"),
+            QT_TRANSLATE_NOOP("CalcTbl", "conc_flow_qcf"),QT_TRANSLATE_NOOP("CalcTbl", "conc_flow_qci"),
             QT_TRANSLATE_NOOP("CalcTbl", "intake_in_seg"), QT_TRANSLATE_NOOP("CalcTbl", "total_flow_rate_end"),
             QT_TRANSLATE_NOOP("CalcTbl", "total_flow_rate_start"), QT_TRANSLATE_NOOP("CalcTbl", "col_pipe_position"),
             QT_TRANSLATE_NOOP("CalcTbl", "aux_prof_i"), QT_TRANSLATE_NOOP("CalcTbl", "force_depth_up"),
@@ -32,15 +33,17 @@ class Calculation(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("CalcTbl", "slopes_terr"), QT_TRANSLATE_NOOP("CalcTbl", "slopes_min_accepted_col"),
             QT_TRANSLATE_NOOP("CalcTbl", "slopes_adopted_col"), QT_TRANSLATE_NOOP("CalcTbl", "suggested_diameter"),
             QT_TRANSLATE_NOOP("CalcTbl", "adopted_diameter"), QT_TRANSLATE_NOOP("CalcTbl", "c_manning"),
+            QT_TRANSLATE_NOOP("CalcTbl", "rec_des_flow_qfr"),
             QT_TRANSLATE_NOOP("CalcTbl", "prj_flow_rate_qgmax"), QT_TRANSLATE_NOOP("CalcTbl", "water_level_y"),
             QT_TRANSLATE_NOOP("CalcTbl", "water_level_pipe_end"), QT_TRANSLATE_NOOP("CalcTbl", "tractive_force"),
-            QT_TRANSLATE_NOOP("CalcTbl", "critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "velocity"),
+            QT_TRANSLATE_NOOP("CalcTbl", "critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "velocity"), QT_TRANSLATE_NOOP("CalcTbl", "initial_rec_des_flow_qfr"),
             QT_TRANSLATE_NOOP("CalcTbl", "initial_flow_rate_qi"), QT_TRANSLATE_NOOP("CalcTbl", "water_level_y_start"),
             QT_TRANSLATE_NOOP("CalcTbl", "water_level_pipe_start"), QT_TRANSLATE_NOOP("CalcTbl", "tractive_force_start"),
+            QT_TRANSLATE_NOOP("CalcTbl", "initial_critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "initial_velocity"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_up"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_up"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_down"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_down"),
             QT_TRANSLATE_NOOP("CalcTbl", "downstream_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "observations"),
-            QT_TRANSLATE_NOOP("CalcTbl", "rec_des_flow_qfr"), QT_TRANSLATE_NOOP("CalcTbl", "initial_rec_des_flow_qfr")
+            QT_TRANSLATE_NOOP("CalcTbl", "slopes_min_modified")
         )
         self.hiddenColumns = [
             "id","project_id","layer_name","created_at","updated_at", 

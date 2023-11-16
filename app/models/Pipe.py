@@ -1,5 +1,5 @@
 from PyQt5.QtSql import QSqlTableModel, QSqlRelationalTableModel, QSqlQuery
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QLocale
 
 class Pipe(QSqlRelationalTableModel):
 
@@ -9,10 +9,23 @@ class Pipe(QSqlRelationalTableModel):
         self.setEditStrategy(QSqlTableModel.OnManualSubmit)
         self.setSort(self.fieldIndex('diameter'), Qt.AscendingOrder)
         #headers
-        self.setHeaderData(self.fieldIndex("diameter"), Qt.Horizontal, "DN(mm)")
-        self.setHeaderData(self.fieldIndex("material_id"), Qt.Horizontal, "Material")
-        self.setHeaderData(self.fieldIndex("manning_suggested"), Qt.Horizontal, "C. Manning n sugerido")
-        self.setHeaderData(self.fieldIndex("manning_adopted"), Qt.Horizontal, "C. Manning n adoptado")
+        self.locale = QLocale().name()
+        self.language = self.locale[0:2] if self.locale[0:2] in ('en','es','pt') else 'en'
+        if self.language == "es":
+            self.setHeaderData(self.fieldIndex("diameter"), Qt.Horizontal, "DN(mm)")
+            self.setHeaderData(self.fieldIndex("material_id"), Qt.Horizontal, "Material")
+            self.setHeaderData(self.fieldIndex("manning_suggested"), Qt.Horizontal, "C. Manning n sugerido")
+            self.setHeaderData(self.fieldIndex("manning_adopted"), Qt.Horizontal, "C. Manning n adoptado")
+        elif self.language == "pt":
+            self.setHeaderData(self.fieldIndex("diameter"), Qt.Horizontal, "DN(mm)")
+            self.setHeaderData(self.fieldIndex("material_id"), Qt.Horizontal, "Material")
+            self.setHeaderData(self.fieldIndex("manning_suggested"), Qt.Horizontal, "C. Manning n sugerido")
+            self.setHeaderData(self.fieldIndex("manning_adopted"), Qt.Horizontal, "C. Manning n adoptado")
+        else:
+            self.setHeaderData(self.fieldIndex("diameter"), Qt.Horizontal, "DN(mm)")
+            self.setHeaderData(self.fieldIndex("material_id"), Qt.Horizontal, "Material")
+            self.setHeaderData(self.fieldIndex("manning_suggested"), Qt.Horizontal, "C. Manning n suggested")
+            self.setHeaderData(self.fieldIndex("manning_adopted"), Qt.Horizontal, "C. Manning n adopted")
         self.select()
 
     def getValueBy(self, column, where=None):

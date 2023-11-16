@@ -13,12 +13,12 @@ class InspectionDevice(QSqlTableModel):
         self.language = self.locale[0:2] if self.locale[0:2] in ('en','es','pt') else 'en'
         if self.language == "es":
             self.setHeaderData(self.fieldIndex("type_es"), Qt.Horizontal, "Tipo")
-            self.setHeaderData(self.fieldIndex("max_depth"), Qt.Horizontal, "Prof. máxima (m)")
-            self.setHeaderData(self.fieldIndex("max_diameter_suggested"), Qt.Horizontal, "DN Máximo (mm)")
+            self.setHeaderData(self.fieldIndex("max_depth"), Qt.Horizontal, "Prof. Máx. (m)")
+            self.setHeaderData(self.fieldIndex("max_diameter_suggested"), Qt.Horizontal, "DN Máx. Admitido (mm)")
         elif self.language == "pt":
             self.setHeaderData(self.fieldIndex("type_pt"), Qt.Horizontal, "Tipo")
-            self.setHeaderData(self.fieldIndex("max_depth"), Qt.Horizontal, "Prof. máxima (m)")
-            self.setHeaderData(self.fieldIndex("max_diameter_suggested"), Qt.Horizontal, "DN Máximo (mm)")
+            self.setHeaderData(self.fieldIndex("max_depth"), Qt.Horizontal, "Prof. Máx. (m)")
+            self.setHeaderData(self.fieldIndex("max_diameter_suggested"), Qt.Horizontal, "DN Máx. Admitido (mm)")
         else:
             self.setHeaderData(self.fieldIndex("type_en"), Qt.Horizontal, "Type")
             self.setHeaderData(self.fieldIndex("max_depth"), Qt.Horizontal, "Max Depth (m)")

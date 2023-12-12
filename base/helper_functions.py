@@ -428,7 +428,7 @@ class HelperFunctions:
     def GetQEFromBlockLayer(self,ids):
         qei = 0
         qef = 0
-        qconf = 0
+        qconcf = 0
         qconci = 0
         lst = QgsProject.instance().mapLayersByName( names["BLOCK_LAYER_NAME"][0] )
         if lst:
@@ -442,19 +442,19 @@ class HelperFunctions:
                         _qe = 0
                         if f[names["QE_FP"][0]]:
                             _qe = f[names["QE_FP"][0]]
-                        _qconf = 0
+                        _qconcf = 0
                         if f[names["QConcF"][0]]:
-                            _qconf = f[names["QConcF"][0]]
+                            _qconcf = f[names["QConcF"][0]]
 
                         _qconci = 0
                         if f[names["QConcI"][0]]:
                             _qconci = f[names["QConcI"][0]]
                         qei = qei + _qi
                         qef = qef + _qe
-                        qconf = qconf+ _qconf
+                        qconcf = qconcf+ _qconcf
                         qconci = qconci + _qconci
 
-        return qei, qef, qconf, qconci
+        return qei, qef, qconcf, qconci
                     
     def CreateLayer(self,name,fields,lType,crs,destName = None):
         path_absolute = QgsProject.instance().readPath("./")+"/layers"

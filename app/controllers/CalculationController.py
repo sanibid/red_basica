@@ -180,6 +180,10 @@ class CalculationController(QObject):
                     rec.setValue('qty_final_qe', qeFp)
                     qeIp = row['QE_IP'] if 'QE_IP' in row else row['QEI']
                     rec.setValue('qty_initial_qe', qeIp)
+                    qconcf =  row['QConcF'] if 'QConcF' in row else None
+                    rec.setValue('conc_flow_qcf', qconcf)
+                    qconci =  row['QConcI'] if 'QConcI' in row else None
+                    rec.setValue('conc_flow_qci', qconci)
                     intake_in_seg = round(self.critModel.getValueBy('intake_rate') * self.strToFloat(row['L'])/1000, 6)
                     rec.setValue('intake_in_seg', intake_in_seg)
                     if not row['AUX_POS'] == 'NULL':

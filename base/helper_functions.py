@@ -89,6 +89,8 @@ class HelperFunctions:
         names["ID_QE"] = ["ID_QE",QVariant.String,"String",10,0,"BLOCK","ATTRIBUTE"]
         names["QE_IP"] = ["QE_IP",QVariant.Int,"integer",10,0,"BLOCK","ATTRIBUTE"]
         names["QE_FP"] = ["QE_FP",QVariant.Int,"integer",10,0,"BLOCK","ATTRIBUTE"]
+        names["QConcF"] = ["QConcF",QVariant.Double,"Real",10,4,"BLOCK","ATTRIBUTE"]
+        names["QConcI"] = ["QConcI",QVariant.Double,"Real",10,4,"BLOCK","ATTRIBUTE"]
 
 
 
@@ -426,7 +428,8 @@ class HelperFunctions:
     def GetQEFromBlockLayer(self,ids):
         qei = 0
         qef = 0
-       
+        qconf = 0
+        qconci = 0
         lst = QgsProject.instance().mapLayersByName( names["BLOCK_LAYER_NAME"][0] )
         if lst:
             retLayer = lst[0]
@@ -439,11 +442,19 @@ class HelperFunctions:
                         _qe = 0
                         if f[names["QE_FP"][0]]:
                             _qe = f[names["QE_FP"][0]]
-                            
+                        _qconf = 0
+                        if f[names["QConcF"][0]]:
+                            _qconf = f[names["QConcF"][0]]
+
+                        _qconci = 0
+                        if f[names["QConcI"][0]]:
+                            _qconci = f[names["QConcI"][0]]
                         qei = qei + _qi
                         qef = qef + _qe
+                        qconf = qconf+ _qconf
+                        qconci = qconci + _qconci
 
-        return qei,qef
+        return qei, qef, qconf, qconci
                     
     def CreateLayer(self,name,fields,lType,crs,destName = None):
         path_absolute = QgsProject.instance().readPath("./")+"/layers"

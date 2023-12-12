@@ -1555,7 +1555,7 @@ class RedBasica(object):
                #                        _qeList,False,self.saveAttributesDock,"QE")
 
                 if _qeList:
-                    qei,qef = h.GetQEFromBlockLayer(_qeList.split(","))
+                    qei,qef, qconcf, qconci = h.GetQEFromBlockLayer(_qeList.split(","))
 
                     #QEI
                     self.CreateElementAttributeInLay(hLay,vLay,h.names()['QEI'][0],translate("AutomaticGeometricAttributes",h.names()['QEI'][0]),
@@ -1564,7 +1564,13 @@ class RedBasica(object):
                     #QEF
                     self.CreateElementAttributeInLay(hLay,vLay,h.names()['QEF'][0],translate("AutomaticGeometricAttributes",h.names()['QEF'][0]),
                                            qef,True,None,"QEF")
-                    
+
+                    self.CreateElementAttributeInLay(hLay,vLay,h.names()['QConcI'][0],translate("AutomaticGeometricAttributes",h.names()['QConcI'][0]),
+                                           qconci,True,None,"QConcI")
+
+                    self.CreateElementAttributeInLay(hLay,vLay,h.names()['QConcF'][0],translate("AutomaticGeometricAttributes",h.names()['QConcF'][0]),
+                                           qconcf,True,None,"QConcF")
+
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","FLOW RATE"))
 
             #Qt_i - IMPORT
@@ -2247,6 +2253,8 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","tooltip_QE")
         translate("AutomaticGeometricAttributes","tooltip_QEI")
         translate("AutomaticGeometricAttributes","tooltip_QEF")
+        translate("AutomaticGeometricAttributes","tooltip_QConcI")
+        translate("AutomaticGeometricAttributes","tooltip_QConcF")
         translate("AutomaticGeometricAttributes","tooltip_Qt_i")
         translate("AutomaticGeometricAttributes","tooltip_Qt_f")
         translate("AutomaticGeometricAttributes","tooltip_Q_i")
@@ -2307,6 +2315,8 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_Y_F")
         translate("AutomaticGeometricAttributes","field_QE_IP")
         translate("AutomaticGeometricAttributes","field_QE_FP")
+        translate("AutomaticGeometricAttributes","field_QConcF")
+        translate("AutomaticGeometricAttributes","field_QConcI")
         #Calc table
         translate("CalcTbl", "tooltip_initial_segment")
         translate("CalcTbl", "tooltip_final_segment")

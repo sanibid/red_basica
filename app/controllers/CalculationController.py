@@ -106,19 +106,22 @@ class CalculationController(QObject):
                 'Caida_p2': (upstream_drop > 0.005 and ((upstream_drop < max_drop and ("D",) or ("TC",))[0],) or ("",))[0],
                 'Caida_p2_h': round(upstream_drop, 2),
                 'n': rec.value('c_manning'),
-                'Qt_i': round(rec.value('total_flow_rate_start'), 2),
-                'Qt_f': round(rec.value('total_flow_rate_end'), 2),
-                'Q_i': round(rec.value('initial_flow_rate_qi'), 2),
-                'Q_f': round(rec.value('prj_flow_rate_qgmax'), 2),
+                'Qmed_i': round(rec.value('total_flow_rate_start'), 2),
+                'Qmed_f': round(rec.value('total_flow_rate_end'), 2),
+                'Qmax_i': round(rec.value('initial_flow_rate_qi'), 2),
+                'Qmax_f': round(rec.value('prj_flow_rate_qgmax'), 2),
                 'yn_i': round(rec.value('water_level_y_start'), 2),
                 'yn_f': round(rec.value('water_level_y'), 2),
                 'yrel_i': round(rec.value('water_level_pipe_start'), 2),
                 'yrel_f': round(rec.value('water_level_pipe_end'), 2),
                 'Trativa_i': round(rec.value('tractive_force_start'),2),
                 'Trativa_f': round(rec.value('tractive_force'),2),
-                'V_i': '',
+                'V_i': round(rec.value('initial_velocity'),2),
                 'V_f': round(rec.value('velocity'), 2),
-                'Vc': round(rec.value('critical_velocity'), 2)
+                'Vc_f': round(rec.value('critical_velocity'), 2),
+                'Vc_i': round(rec.value('initial_critical_velocity'), 2),
+                'Qr_i': round(rec.value('initial_rec_des_flow_qfr'), 2),
+                'Qr_f': round(rec.value('rec_des_flow_qfr'), 2),
             }
             segments[col_seg] = segment
 

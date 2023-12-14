@@ -61,7 +61,7 @@ class Pipe(QSqlRelationalTableModel):
     def getMinDiameter(self, diameter):
         sql = "SELECT min(p.diameter)\
             FROM pipes p\
-            LEFT JOIN parameters pa on p.criteria_id = pa.id\
+            LEFT JOIN parameters pa on p.criteria_id = pa.project_criteria_id\
             LEFT JOIN projects pr on pa.id = pr.parameter_id\
             WHERE pr.active\
             AND {} <= p.diameter".format(diameter)

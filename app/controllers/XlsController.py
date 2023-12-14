@@ -111,8 +111,22 @@ class XlsController(QObject):
         sheet.write(6, self.slopesCol, crit.value('diameter_up_200'), self.borderStyle)
         sheet.write(7, self.slopesCol, crit.value('from_diameter_250'), self.borderStyle)
 
-        sheet.write(self.qeRow, self.qeRefMedCol, '{} l/dia'.format(params.value('qe_reference_med')), self.centerStyle)
-        sheet.write(self.qeRow, self.qeRefMaxCol, '{} l/s'.format(params.value('qe_reference_max')), self.qeMaxStyle)
+        sheet.write(self.qeRow, self.qeRefMedCol, '{} l/dia'.format(round(params.value('qe_reference_med'),4)), self.centerStyle)
+        sheet.write(self.qeRow, self.qeRefMaxCol, '{} l/s'.format(round(params.value('qe_reference_max'),4)), self.qeMaxStyle)
+
+        coeffRetC = crit.value('coefficient_return_c')
+        watConsEnd = crit.value('water_consumption_pc_end')
+        occRateEnd = params.value('occupancy_rate_end')
+        qeReferenceMedEnd = (watConsEnd * occRateEnd * coeffRetC)
+        k1Dly = crit.value('k1_daily')
+        k2Hrly = crit.value('k2_hourly')
+        qeReferenceMaxEnd = (watConsEnd *  occRateEnd * coeffRetC * k1Dly * k2Hrly) / 86400
+
+        sheet.write(self.qeRow+1, self.qeRefMedCol, '{} l/dia'.format(round(qeReferenceMedEnd,4)), self.centerStyle)
+        sheet.write(self.qeRow+1, self.qeRefMaxCol, '{} l/s'.format(round(qeReferenceMaxEnd, 4)), self.qeMaxStyle)
+
+        sheet.write(self.qeRow+2, self.qeRefMedCol, '{} l/dia'.format(round(qeReferenceMedEnd*1000),4), self.centerStyle)
+        sheet.write(self.qeRow+2, self.qeRefMaxCol, '{} l/s'.format(round(qeReferenceMaxEnd*1000), 4), self.qeMaxStyle)
 
         # Calc Table
         columns = ('col_seg', 'extension','previous_col_seg_id' ,'m1_col_id' ,'m2_col_id' ,'block_others_id' ,'qty_final_qe' , 

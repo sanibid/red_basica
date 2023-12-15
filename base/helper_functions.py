@@ -443,15 +443,28 @@ class HelperFunctions:
                         if f[names["QE_FP"][0]]:
                             _qe = f[names["QE_FP"][0]]
                         _qconcf = 0
-                        if f[names["QConcF"][0]]:
-                            _qconcf = f[names["QConcF"][0]]
+                        if (f.fields().indexFromName(names["QConcF"][0]) == -1):
+                            retLayer.startEditing()
+                            new_field = QgsField(names["QConcF"][0], QVariant.Double, 'real', 10, 4)
+                            retLayer.addAttribute(new_field)
+                            retLayer.updateFields()
+                            retLayer.commitChanges()
+                        else:
+                            _qconcf = f[names["QConcF"][0]] if f[names["QConcF"][0]] != None else 0
 
                         _qconci = 0
-                        if f[names["QConcI"][0]]:
-                            _qconci = f[names["QConcI"][0]]
+                        if (f.fields().indexFromName(names["QConcI"][0]) == -1):
+                            retLayer.startEditing()
+                            new_field = QgsField(names["QConcI"][0], QVariant.Double, 'real', 10, 4)
+                            retLayer.addAttribute(new_field)
+                            retLayer.updateFields()
+                            retLayer.commitChanges()
+                        else:
+                            _qconci = f[names["QConcI"][0]] if f[names["QConcI"][0]] != None else 0
+
                         qei = qei + _qi
                         qef = qef + _qe
-                        qconcf = qconcf+ _qconcf
+                        qconcf = qconcf + _qconcf
                         qconci = qconci + _qconci
 
         return qei, qef, qconcf, qconci

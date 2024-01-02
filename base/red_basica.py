@@ -1555,7 +1555,7 @@ class RedBasica(object):
                #                        _qeList,False,self.saveAttributesDock,"QE")
 
                 if _qeList:
-                    qei,qef = h.GetQEFromBlockLayer(_qeList.split(","))
+                    qei,qef, qconcf, qconci = h.GetQEFromBlockLayer(_qeList.split(","))
 
                     #QEI
                     self.CreateElementAttributeInLay(hLay,vLay,h.names()['QEI'][0],translate("AutomaticGeometricAttributes",h.names()['QEI'][0]),
@@ -1564,36 +1564,56 @@ class RedBasica(object):
                     #QEF
                     self.CreateElementAttributeInLay(hLay,vLay,h.names()['QEF'][0],translate("AutomaticGeometricAttributes",h.names()['QEF'][0]),
                                            qef,True,None,"QEF")
-                    
+
+                    self.CreateElementAttributeInLay(hLay,vLay,h.names()['QConcI'][0],translate("AutomaticGeometricAttributes",h.names()['QConcI'][0]),
+                                           qconci,True,None,"QConcI")
+
+                    self.CreateElementAttributeInLay(hLay,vLay,h.names()['QConcF'][0],translate("AutomaticGeometricAttributes",h.names()['QConcF'][0]),
+                                           qconcf,True,None,"QConcF")
+
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","FLOW RATE"))
 
-            #Qt_i - IMPORT
-            f_name = 'Qt_i'
+            #Qmed_i - IMPORT
+            f_name = 'Qmed_i'
             fIdx = _myLayer.fields().lookupField( f_name )
             if fIdx > -1:
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                   feature.attributes()[fIdx],True, None, "Qt_i")
+                                   feature.attributes()[fIdx],True, None, "Qmed_i")
 
-            #Qt_f - IMPORT
-            f_name = 'Qt_f'
+            #Qmed_f - IMPORT
+            f_name = 'Qmed_f'
             fIdx = _myLayer.fields().lookupField( f_name )
             if fIdx > -1:
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                   feature.attributes()[fIdx],True, None, "Qt_f")
+                                   feature.attributes()[fIdx],True, None, "Qmed_f")
+                
+            #Qr_i - IMPORT
+            f_name = 'Qr_i'
+            fIdx = _myLayer.fields().lookupField( f_name )
+            if fIdx > -1:
+                self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
+                                   feature.attributes()[fIdx],True, None, "Qr_i")
+                
+            #Qr_f - IMPORT
+            f_name = 'Qr_f'
+            fIdx = _myLayer.fields().lookupField( f_name )
+            if fIdx > -1:
+                self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
+                                   feature.attributes()[fIdx],True, None, "Qr_f")
 
-            #Q_i - IMPORT
-            f_name = 'Q_i'
+            #Qmax_i - IMPORT
+            f_name = 'Qmax_i'
             fIdx = _myLayer.fields().lookupField( f_name )
             if fIdx > -1:
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                   feature.attributes()[fIdx],True, None, "Q_i")
+                                   feature.attributes()[fIdx],True, None, "Qmax_i")
 
-            #Q_f - IMPORT
-            f_name = 'Q_f'
+            #Qmax_f - IMPORT
+            f_name = 'Qmax_f'
             fIdx = _myLayer.fields().lookupField( f_name )
             if fIdx > -1:
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                   feature.attributes()[fIdx],True, None, "Q_f")
+                                   feature.attributes()[fIdx],True, None, "Qmax_f")
 
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","HYDRAULIC CONDITIONS"))
 
@@ -1660,13 +1680,19 @@ class RedBasica(object):
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
                                    feature.attributes()[fIdx],True, None, "V_f")
 
-            #Vc - IMPORT
-            f_name = 'Vc'
+            #Vc_i - IMPORT
+            f_name = 'Vc_i'
             fIdx = _myLayer.fields().lookupField( f_name )
             if fIdx > -1:
                 self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
-                                   feature.attributes()[fIdx],True, None, "Vc")
+                                   feature.attributes()[fIdx],True, None, "Vc_i")
 
+            #Vc - IMPORT
+            f_name = 'Vc_f'
+            fIdx = _myLayer.fields().lookupField( f_name )
+            if fIdx > -1:
+                self.CreateElementAttributeInLay(hLay,vLay,f_name,f_name,
+                                   feature.attributes()[fIdx],True, None, "Vc_f")
 
             
             #self.InitializeGroupAreas()
@@ -2247,10 +2273,14 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","tooltip_QE")
         translate("AutomaticGeometricAttributes","tooltip_QEI")
         translate("AutomaticGeometricAttributes","tooltip_QEF")
-        translate("AutomaticGeometricAttributes","tooltip_Qt_i")
-        translate("AutomaticGeometricAttributes","tooltip_Qt_f")
-        translate("AutomaticGeometricAttributes","tooltip_Q_i")
-        translate("AutomaticGeometricAttributes","tooltip_Q_f")
+        translate("AutomaticGeometricAttributes","tooltip_QConcI")
+        translate("AutomaticGeometricAttributes","tooltip_QConcF")
+        translate("AutomaticGeometricAttributes","tooltip_Qmed_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qmed_f")
+        translate("AutomaticGeometricAttributes","tooltip_Qr_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qr_f")
+        translate("AutomaticGeometricAttributes","tooltip_Qmax_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qmax_f")
         translate("AutomaticGeometricAttributes","tooltip_n")
         translate("AutomaticGeometricAttributes","tooltip_yn_i")
         translate("AutomaticGeometricAttributes","tooltip_yn_f")
@@ -2260,7 +2290,8 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","tooltip_Trativa_f")
         translate("AutomaticGeometricAttributes","tooltip_V_i")
         translate("AutomaticGeometricAttributes","tooltip_V_f")
-        translate("AutomaticGeometricAttributes","tooltip_Vc")
+        translate("AutomaticGeometricAttributes","tooltip_Vc_f")
+        translate("AutomaticGeometricAttributes","tooltip_Vc_i")
         translate("AutomaticGeometricAttributes","field_SEG_NAME_C")
         translate("AutomaticGeometricAttributes","field_EXT_FIELD_NAME")
         translate("AutomaticGeometricAttributes","field_DN")
@@ -2284,10 +2315,12 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_QE")
         translate("AutomaticGeometricAttributes","field_QEI")
         translate("AutomaticGeometricAttributes","field_QEF")
-        translate("AutomaticGeometricAttributes","field_Qt_i")
-        translate("AutomaticGeometricAttributes","field_Qt_f")
-        translate("AutomaticGeometricAttributes","field_Q_i")
-        translate("AutomaticGeometricAttributes","field_Q_f")
+        translate("AutomaticGeometricAttributes","field_Qmed_i")
+        translate("AutomaticGeometricAttributes","field_Qmed_f")
+        translate("AutomaticGeometricAttributes","field_Qr_i")
+        translate("AutomaticGeometricAttributes","field_Qr_f")
+        translate("AutomaticGeometricAttributes","field_Qmax_i")
+        translate("AutomaticGeometricAttributes","field_Qmax_f")
         translate("AutomaticGeometricAttributes","field_n")
         translate("AutomaticGeometricAttributes","field_yn_i")
         translate("AutomaticGeometricAttributes","field_yn_f")
@@ -2297,7 +2330,8 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_Trativa_f")
         translate("AutomaticGeometricAttributes","field_V_i")
         translate("AutomaticGeometricAttributes","field_V_f")
-        translate("AutomaticGeometricAttributes","field_Vc")
+        translate("AutomaticGeometricAttributes","field_Vc_f")
+        translate("AutomaticGeometricAttributes","field_Vc_i")
         translate("AutomaticGeometricAttributes","field_ID_TRM_(N)")
         translate("AutomaticGeometricAttributes","field_ID_UC")
         translate("AutomaticGeometricAttributes","field_L")
@@ -2307,6 +2341,8 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_Y_F")
         translate("AutomaticGeometricAttributes","field_QE_IP")
         translate("AutomaticGeometricAttributes","field_QE_FP")
+        translate("AutomaticGeometricAttributes","field_QConcF")
+        translate("AutomaticGeometricAttributes","field_QConcI")
         #Calc table
         translate("CalcTbl", "tooltip_initial_segment")
         translate("CalcTbl", "tooltip_final_segment")
@@ -2319,6 +2355,8 @@ class RedBasica(object):
         translate("CalcTbl", "tooltip_block_others_id")
         translate("CalcTbl", "tooltip_qty_final_qe")
         translate("CalcTbl", "tooltip_qty_initial_qe")
+        translate("CalcTbl", "tooltip_conc_flow_qcf")
+        translate("CalcTbl", "tooltip_conc_flow_qci")
         translate("CalcTbl", "tooltip_intake_in_seg")
         translate("CalcTbl", "tooltip_total_flow_rate_end")
         translate("CalcTbl", "tooltip_total_flow_rate_start")
@@ -2343,20 +2381,28 @@ class RedBasica(object):
         translate("CalcTbl", "tooltip_suggested_diameter")
         translate("CalcTbl", "tooltip_adopted_diameter")
         translate("CalcTbl", "tooltip_c_manning")
+        translate("CalcTbl", "tooltip_rec_des_flow_qfr")
         translate("CalcTbl", "tooltip_prj_flow_rate_qgmax")
         translate("CalcTbl", "tooltip_water_level_y")
         translate("CalcTbl", "tooltip_water_level_pipe_end")
         translate("CalcTbl", "tooltip_tractive_force")
         translate("CalcTbl", "tooltip_critical_velocity")
         translate("CalcTbl", "tooltip_velocity")
+        translate("CalcTbl", "tooltip_initial_rec_des_flow_qfr")
         translate("CalcTbl", "tooltip_initial_flow_rate_qi")
         translate("CalcTbl", "tooltip_water_level_y_start")
         translate("CalcTbl", "tooltip_water_level_pipe_start")
         translate("CalcTbl", "tooltip_tractive_force_start")
+        translate("CalcTbl", "tooltip_initial_critical_velocity")
+        translate("CalcTbl", "tooltip_initial_velocity")
         translate("CalcTbl", "tooltip_inspection_id_up")
         translate("CalcTbl", "tooltip_inspection_type_up")
         translate("CalcTbl", "tooltip_inspection_id_down")
         translate("CalcTbl", "tooltip_inspection_type_down")
         translate("CalcTbl", "tooltip_downstream_seg_id")
+        translate("CalcTbl", "tooltip_x_initial")
+        translate("CalcTbl", "tooltip_y_initial")
+        translate("CalcTbl", "tooltip_x_final")
+        translate("CalcTbl", "tooltip_y_final")
         translate("CalcTbl", "tooltip_observations")
         translate("CalcTbl", "tooltip_slopes_min_modified")

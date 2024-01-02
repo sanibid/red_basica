@@ -34,35 +34,36 @@ class Criteria(QSqlTableModel):
 
     def insertData(self, data):
         query = QSqlQuery()
-        query.prepare("INSERT INTO project_criterias (name, water_consumption_pc, k1_daily, k2_hourly, coefficient_return_c, intake_rate,\
+        query.prepare("INSERT INTO project_criterias (name, water_consumption_pc, water_consumption_pc_end, k1_daily, k2_hourly, coefficient_return_c, intake_rate,\
                 avg_tractive_force_min, flow_min_qmin, water_surface_max, max_water_level, min_diameter, diameter_up_150, diameter_up_200,\
                 from_diameter_250, cover_min_street, cover_min_sidewalks_gs, type_preferred_head_col, max_drop, bottom_ib_mh,\
-                created_at, updated_at) VALUES (:name, :water_consumption_pc, :k1_daily, :k2_hourly, :coefficient_return_c, :intake_rate,\
+                created_at, updated_at) VALUES (:name, :water_consumption_pc, :water_consumption_pc_end, :k1_daily, :k2_hourly, :coefficient_return_c, :intake_rate,\
                 :avg_tractive_force_min, :flow_min_qmin, :water_surface_max, :max_water_level, :min_diameter, :diameter_up_150, :diameter_up_200,\
                 :from_diameter_250, :cover_min_street, :cover_min_sidewalks_gs, :type_preferred_head_col, :max_drop, :bottom_ib_mh,\
                 :created_at, :updated_at)")
 
         query.bindValue(":name", data[0])
         query.bindValue(":water_consumption_pc", data[1])
-        query.bindValue(":k1_daily", data[2])
-        query.bindValue(":k2_hourly", data[3])
-        query.bindValue(":coefficient_return_c", data[4])
-        query.bindValue(":intake_rate", data[5])
-        query.bindValue(":avg_tractive_force_min", data[6])
-        query.bindValue(":flow_min_qmin", data[7])
-        query.bindValue(":water_surface_max", data[8])
-        query.bindValue(":max_water_level", data[9])
-        query.bindValue(":min_diameter", data[10])
-        query.bindValue(":diameter_up_150", data[11])
-        query.bindValue(":diameter_up_200", data[12])
-        query.bindValue(":from_diameter_250", data[13])
-        query.bindValue(":cover_min_street", data[14])
-        query.bindValue(":cover_min_sidewalks_gs", data[15])
-        query.bindValue(":type_preferred_head_col", data[16])
-        query.bindValue(":max_drop", data[17])
-        query.bindValue(":bottom_ib_mh", data[18])
-        query.bindValue(":created_at", data[19])
-        query.bindValue(":updated_at", data[20])
+        query.bindValue(":water_consumption_pc_end", data[2])
+        query.bindValue(":k1_daily", data[3])
+        query.bindValue(":k2_hourly", data[4])
+        query.bindValue(":coefficient_return_c", data[5])
+        query.bindValue(":intake_rate", data[6])
+        query.bindValue(":avg_tractive_force_min", data[7])
+        query.bindValue(":flow_min_qmin", data[8])
+        query.bindValue(":water_surface_max", data[9])
+        query.bindValue(":max_water_level", data[10])
+        query.bindValue(":min_diameter", data[11])
+        query.bindValue(":diameter_up_150", data[12])
+        query.bindValue(":diameter_up_200", data[13])
+        query.bindValue(":from_diameter_250", data[14])
+        query.bindValue(":cover_min_street", data[15])
+        query.bindValue(":cover_min_sidewalks_gs", data[16])
+        query.bindValue(":type_preferred_head_col", data[17])
+        query.bindValue(":max_drop", data[18])
+        query.bindValue(":bottom_ib_mh", data[19])
+        query.bindValue(":created_at", data[20])
+        query.bindValue(":updated_at", data[21])
 
         if query.exec():
             inserted_id = query.lastInsertId()
@@ -93,7 +94,7 @@ class Criteria(QSqlTableModel):
 
     @staticmethod
     def getProfileData(file, id):
-        criteria_sql =  'SELECT name, water_consumption_pc, k1_daily, k2_hourly, coefficient_return_c, intake_rate,\
+        criteria_sql =  'SELECT name, water_consumption_pc, water_consumption_pc_end, k1_daily, k2_hourly, coefficient_return_c, intake_rate,\
                 avg_tractive_force_min, flow_min_qmin, water_surface_max, max_water_level, min_diameter, diameter_up_150, diameter_up_200,\
                 from_diameter_250, cover_min_street, cover_min_sidewalks_gs, type_preferred_head_col, max_drop, bottom_ib_mh,\
                 created_at, updated_at\

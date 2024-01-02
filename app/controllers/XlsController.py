@@ -32,10 +32,10 @@ class XlsController(QObject):
         self.projectCol = 2
         self.paramCol1 = 9
         self.paramCol2 = 13
-        self.paramCol3 = 19
-        self.slopesCol = 24
-        self.qeRefMedCol = 33
-        self.qeRefMaxCol = 36
+        self.paramCol3 = 17
+        self.slopesCol = 20
+        self.qeRefMedCol = 28
+        self.qeRefMaxCol = 29
         self.qeRow = 5
         self.tableStartRow = 14        
 
@@ -111,24 +111,61 @@ class XlsController(QObject):
         sheet.write(6, self.slopesCol, crit.value('diameter_up_200'), self.borderStyle)
         sheet.write(7, self.slopesCol, crit.value('from_diameter_250'), self.borderStyle)
 
-        sheet.write(self.qeRow, self.qeRefMedCol, '{} l/dia'.format(params.value('qe_reference_med')), self.centerStyle)
-        sheet.write(self.qeRow, self.qeRefMaxCol, '{} l/s'.format(params.value('qe_reference_max')), self.qeMaxStyle)
+        sheet.write(self.qeRow, self.qeRefMedCol, '{} l/dia'.format(round(params.value('qe_reference_med'),4)), self.centerStyle)
+        sheet.write(self.qeRow, self.qeRefMaxCol, '{} l/s'.format(round(params.value('qe_reference_max'),4)), self.qeMaxStyle)
+
+        coeffRetC = crit.value('coefficient_return_c')
+        watConsEnd = crit.value('water_consumption_pc_end')
+        occRateEnd = params.value('occupancy_rate_end')
+        qeReferenceMedEnd = (watConsEnd * occRateEnd * coeffRetC)
+        k1Dly = crit.value('k1_daily')
+        k2Hrly = crit.value('k2_hourly')
+        qeReferenceMaxEnd = (watConsEnd *  occRateEnd * coeffRetC * k1Dly * k2Hrly) / 86400
+
+        sheet.write(self.qeRow+1, self.qeRefMedCol, '{} l/dia'.format(round(qeReferenceMedEnd,4)), self.centerStyle)
+        sheet.write(self.qeRow+1, self.qeRefMaxCol, '{} l/s'.format(round(qeReferenceMaxEnd, 4)), self.qeMaxStyle)
+
+        sheet.write(self.qeRow+2, self.qeRefMedCol, '{} l/dia'.format(round(qeReferenceMedEnd*1000),4), self.centerStyle)
+        sheet.write(self.qeRow+2, self.qeRefMaxCol, '{} l/s'.format(round(qeReferenceMaxEnd*1000), 4), self.qeMaxStyle)
 
         # Calc Table
-
         columns = ('col_seg', 'extension','previous_col_seg_id' ,'m1_col_id' ,'m2_col_id' ,'block_others_id' ,'qty_final_qe' , 
                     'qty_initial_qe', 'intake_in_seg' , 'total_flow_rate_end', 'total_flow_rate_start','el_terr_up' , 'el_terr_down',  
-                    'el_col_up', 'el_col_down', 'el_top_gen_up', 'el_top_gen_down', 'depth_up' , 'depth_down', 'covering_up', 'covering_down', 
-                    'slopes_terr' , 'slopes_adopted_col','adopted_diameter' , 'c_manning' , 'prj_flow_rate_qgmax' , 'water_level_pipe_end' , 
-                    'tractive_force', 'critical_velocity' , 'velocity', 'initial_flow_rate_qi', 'water_level_pipe_start' , 
-                    'tractive_force_start' , 'inspection_type_up' , 'inspection_type_down')
+                    'el_col_up', 'el_col_down', 'depth_up' , 'depth_down',
+                    'slopes_terr' , 'slopes_adopted_col','adopted_diameter' , 'c_manning',
+                    'qmax', 'water_level_verification' , 'critical_velocity', 'velocity',
+                    'recurrent_design_flow_qr', 'self_clean_water_level', 'tractive_force',
+                    'inspection_type_up' , 'inspection_type_down', 'observations')
 
         currentRow = self.tableStartRow        
         for i in range(calc.rowCount()):
             rec = calc.record(i)
+            qmax = max(rec.value('prj_flow_rate_qgmax'), rec.value('initial_flow_rate_qi'))
+            water_level_verification = max(rec.value('water_level_y'), rec.value('water_level_y_start'))
+            critical_velocity = max(rec.value('critical_velocity'), rec.value('initial_critical_velocity'))
+            velocity = max(rec.value('velocity'), rec.value('initial_velocity'))
+
+            recurrent_design_flow_qr = min(rec.value('initial_rec_des_flow_qfr'), rec.value('rec_des_flow_qfr'))
+            self_clean_water_level = min(rec.value('water_level_y'), rec.value('water_level_y_start'))
+            tractive_force = min(rec.value('tractive_force_start'), rec.value('tractive_force'))
             for c in range(len(columns)):
                 col = columns[c]                
                 value = rec.value(col)
+
+                if col == 'qmax':
+                    value = qmax
+                elif col == 'water_level_verification':
+                    value = water_level_verification
+                elif col == 'critical_velocity':
+                    value = critical_velocity
+                elif col == 'velocity':
+                    value = velocity
+                elif col == 'recurrent_design_flow_qr':
+                    value = recurrent_design_flow_qr
+                elif col == 'self_clean_water_level':
+                    value = self_clean_water_level
+                elif col == 'tractive_force':
+                    value = tractive_force
                 if not value:
                    value = ''
                 else:

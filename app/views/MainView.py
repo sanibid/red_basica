@@ -79,7 +79,6 @@ class MainView(QMainWindow, Ui_MainWindow):
         # Contributions Table
         self.contribTable.setModel(self.contribModel)
         self.contribTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.contribTable.horizontalHeader().setSectionResizeMode(True)
 
         # WaterLevelAdj Table
         self.wlaTable.setModel(self.wlaModel)
@@ -440,6 +439,7 @@ class MainView(QMainWindow, Ui_MainWindow):
         controller = CalculationController()
         ProgressThread(
             self, controller, (lambda: controller.calculateGrowDN(projectId))
+            # self, controller, (lambda: controller.calculateDN(projectId, True))
         )
 
     def calculateMinExc(self):

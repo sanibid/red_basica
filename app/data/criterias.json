@@ -1,6 +1,7 @@
 [{
     "name": "saniHUB - default",
-    "water_consumption_pc": "150",
+    "water_consumption_pc": "120",
+    "water_consumption_pc_end" : "120",
     "k1_daily": "1.20",
     "k2_hourly": "1.50",
     "coefficient_return_c": "0.80",
@@ -16,6 +17,8 @@
     "cover_min_street": "0.90",
     "cover_min_sidewalks_gs": "0.65",
     "type_preferred_head_col": "CI",
+    "simplified_tl_seg": "0",
     "max_drop": "0.5",
-    "bottom_ib_mh": "0.00"
+    "bottom_ib_mh": "0.00",
+    "min_step_ib_mh": "0.00"
 }]

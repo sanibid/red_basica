@@ -204,6 +204,8 @@ class DataController(QObject):
         else:
             fieldnames.append("QEI")
 
+        fieldnames.append("QConcF")
+        fieldnames.append("QConcI")
 
         fieldnames.append(self.h.readValueFromProject("AUX_PROF_I"))
         fieldnames.append(self.h.readValueFromProject("AUX_POS"))
@@ -324,16 +326,24 @@ class DataController(QObject):
                     #QE
                     values.append(str(_qeList))
                     if _qeList:
-                        qei,qef = self.h.GetQEFromBlockLayer(_qeList.split(","))
+                        qei, qef, qconf, qconci = self.h.GetQEFromBlockLayer(_qeList.split(","))
                         #QEI
                         values.append(str(qei))
                         #QEF
                         values.append(str(qef))
+                        #QCONF
+                        values.append(str(qconf))
+                        #QCONCI
+                        values.append(str(qconci))
                     else:
                         #QEI
                         values.append("")
                         #QEF
                         values.append("")
+                        #QCONF
+                        values.append(None)
+                        #QCONCI
+                        values.append(None)
                     #COTA_I
                     values.append(str(point1.attributes()[cota_idx]))
                     #NODO_I
@@ -368,11 +378,13 @@ class DataController(QObject):
             v2.append(values[22])
             v2.append(values[24])
             v2.append(values[23])
+            v2.append(values[25])
+            v2.append(values[26])
             v2.append(values[11])
             v2.append(values[8])
             v2.append(values[12])
-            v2.append(values[25])
             v2.append(values[27])
+            v2.append(values[29])
             v2.append(values[21])
             v2.append(values[0])
             v2.append(values[2])
@@ -384,9 +396,8 @@ class DataController(QObject):
             v2.append(values[13])
             v2.append(values[14])
             v2.append(values[15])
-            v2.append(values[26])
             v2.append(values[28])
-
+            v2.append(values[30])
             v2.append("")
 
             rows.append(v2)

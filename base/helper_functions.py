@@ -89,6 +89,8 @@ class HelperFunctions:
         names["ID_QE"] = ["ID_QE",QVariant.String,"String",10,0,"BLOCK","ATTRIBUTE"]
         names["QE_IP"] = ["QE_IP",QVariant.Int,"integer",10,0,"BLOCK","ATTRIBUTE"]
         names["QE_FP"] = ["QE_FP",QVariant.Int,"integer",10,0,"BLOCK","ATTRIBUTE"]
+        names["QConcF"] = ["QConcF",QVariant.Double,"Real",10,4,"BLOCK","ATTRIBUTE"]
+        names["QConcI"] = ["QConcI",QVariant.Double,"Real",10,4,"BLOCK","ATTRIBUTE"]
 
 
 
@@ -426,7 +428,8 @@ class HelperFunctions:
     def GetQEFromBlockLayer(self,ids):
         qei = 0
         qef = 0
-       
+        qconcf = 0
+        qconci = 0
         lst = QgsProject.instance().mapLayersByName( names["BLOCK_LAYER_NAME"][0] )
         if lst:
             retLayer = lst[0]
@@ -439,11 +442,32 @@ class HelperFunctions:
                         _qe = 0
                         if f[names["QE_FP"][0]]:
                             _qe = f[names["QE_FP"][0]]
-                            
+                        _qconcf = 0
+                        if (f.fields().indexFromName(names["QConcF"][0]) == -1):
+                            retLayer.startEditing()
+                            new_field = QgsField(names["QConcF"][0], QVariant.Double, 'real', 10, 4)
+                            retLayer.addAttribute(new_field)
+                            retLayer.updateFields()
+                            retLayer.commitChanges()
+                        else:
+                            _qconcf = f[names["QConcF"][0]] if f[names["QConcF"][0]] != None else 0
+
+                        _qconci = 0
+                        if (f.fields().indexFromName(names["QConcI"][0]) == -1):
+                            retLayer.startEditing()
+                            new_field = QgsField(names["QConcI"][0], QVariant.Double, 'real', 10, 4)
+                            retLayer.addAttribute(new_field)
+                            retLayer.updateFields()
+                            retLayer.commitChanges()
+                        else:
+                            _qconci = f[names["QConcI"][0]] if f[names["QConcI"][0]] != None else 0
+
                         qei = qei + _qi
                         qef = qef + _qe
+                        qconcf = qconcf + _qconcf
+                        qconci = qconci + _qconci
 
-        return qei,qef
+        return qei, qef, qconcf, qconci
                     
     def CreateLayer(self,name,fields,lType,crs,destName = None):
         path_absolute = QgsProject.instance().readPath("./")+"/layers"

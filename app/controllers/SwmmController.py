@@ -197,7 +197,7 @@ class SwmmController(QObject):
                 self.getNumber(rec['extension']),
                 self.getNumber(rec['c_manning']),
                 '0',
-                self.getNumber(rec['total_slope']),
+                self.getNumber(rec['upstream_drop']),
                 self.getNumber(rec[self.flowType]),
                 '0'
             ]

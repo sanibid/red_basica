@@ -20,6 +20,7 @@ class Calculation(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("CalcTbl", "previous_col_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "m1_col_id"),
             QT_TRANSLATE_NOOP("CalcTbl", "m2_col_id"), QT_TRANSLATE_NOOP("CalcTbl", "block_others_id"),
             QT_TRANSLATE_NOOP("CalcTbl", "qty_final_qe"), QT_TRANSLATE_NOOP("CalcTbl", "qty_initial_qe"),
+            QT_TRANSLATE_NOOP("CalcTbl", "conc_flow_qcf"),QT_TRANSLATE_NOOP("CalcTbl", "conc_flow_qci"),
             QT_TRANSLATE_NOOP("CalcTbl", "intake_in_seg"), QT_TRANSLATE_NOOP("CalcTbl", "total_flow_rate_end"),
             QT_TRANSLATE_NOOP("CalcTbl", "total_flow_rate_start"), QT_TRANSLATE_NOOP("CalcTbl", "col_pipe_position"),
             QT_TRANSLATE_NOOP("CalcTbl", "aux_prof_i"), QT_TRANSLATE_NOOP("CalcTbl", "force_depth_up"),
@@ -32,14 +33,17 @@ class Calculation(QSqlRelationalTableModel):
             QT_TRANSLATE_NOOP("CalcTbl", "slopes_terr"), QT_TRANSLATE_NOOP("CalcTbl", "slopes_min_accepted_col"),
             QT_TRANSLATE_NOOP("CalcTbl", "slopes_adopted_col"), QT_TRANSLATE_NOOP("CalcTbl", "suggested_diameter"),
             QT_TRANSLATE_NOOP("CalcTbl", "adopted_diameter"), QT_TRANSLATE_NOOP("CalcTbl", "c_manning"),
+            QT_TRANSLATE_NOOP("CalcTbl", "rec_des_flow_qfr"),
             QT_TRANSLATE_NOOP("CalcTbl", "prj_flow_rate_qgmax"), QT_TRANSLATE_NOOP("CalcTbl", "water_level_y"),
             QT_TRANSLATE_NOOP("CalcTbl", "water_level_pipe_end"), QT_TRANSLATE_NOOP("CalcTbl", "tractive_force"),
-            QT_TRANSLATE_NOOP("CalcTbl", "critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "velocity"),
+            QT_TRANSLATE_NOOP("CalcTbl", "critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "velocity"), QT_TRANSLATE_NOOP("CalcTbl", "initial_rec_des_flow_qfr"),
             QT_TRANSLATE_NOOP("CalcTbl", "initial_flow_rate_qi"), QT_TRANSLATE_NOOP("CalcTbl", "water_level_y_start"),
             QT_TRANSLATE_NOOP("CalcTbl", "water_level_pipe_start"), QT_TRANSLATE_NOOP("CalcTbl", "tractive_force_start"),
+            QT_TRANSLATE_NOOP("CalcTbl", "initial_critical_velocity"), QT_TRANSLATE_NOOP("CalcTbl", "initial_velocity"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_up"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_up"),
             QT_TRANSLATE_NOOP("CalcTbl", "inspection_id_down"), QT_TRANSLATE_NOOP("CalcTbl", "inspection_type_down"),
-            QT_TRANSLATE_NOOP("CalcTbl", "downstream_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "observations")
+            QT_TRANSLATE_NOOP("CalcTbl", "downstream_seg_id"), QT_TRANSLATE_NOOP("CalcTbl", "observations"),
+            QT_TRANSLATE_NOOP("CalcTbl", "slopes_min_modified")
         )
         self.hiddenColumns = [
             "id","project_id","layer_name","created_at","updated_at", 
@@ -80,8 +84,7 @@ class Calculation(QSqlRelationalTableModel):
         if role == Qt.DisplayRole:
             col = index.column()
             val = QSqlRelationalTableModel.data(self, index, Qt.DisplayRole)
-
-            if col in [7, 15, 16, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 38, 39, 41, 42, 43, 44, 45, 47]:
+            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 41, 42, 44, 45, 46, 48, 49, 51]:
                 if val == None:
                     return ''
                 if not isinstance(val, float):
@@ -90,22 +93,22 @@ class Calculation(QSqlRelationalTableModel):
                     return 'DN !!'
                 return '{:.2f}'.format(round(val, 2))
 
-            if col in [37]:
+            if col in [39]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.3f}'.format(round(val, 3))
 
-            if col in [14, 32]:
+            if col in [16, 34]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.4f}'.format(round(val, 4))
 
-            if col in [33, 34]:
+            if col in [35, 36]:
                 if not isinstance(val, float):
                     val = float(val)
                 return '{:.5f}'.format(round(val, 5))
 
-            if col in [40, 46]:
+            if col in [43, 50]:
                 if not isinstance(val, float):
                     val = float(val)
                 if (val < -88888):
@@ -167,8 +170,19 @@ class Calculation(QSqlRelationalTableModel):
                         LEFT JOIN projects pr ON c.project_id = pr.id\
                         WHERE pr.active AND col_seg = '{}'".format(colSeg))
         if query.first():
-            return 0 if query.value(0)==None else round(query.value(0), 5)
-        else: 
+            return 0 if query.value(0) == None else round(query.value(0), 5)
+        else:
+            return 0
+
+    def getAvgFlowEndByColSeg(self, colSeg):
+        query = QSqlQuery("SELECT avg_flow_end\
+                        FROM contributions c\
+                        LEFT JOIN calculations ca ON ca.id = c.calculation_id\
+                        LEFT JOIN projects pr ON ca.project_id = pr.id\
+                        WHERE pr.active AND c.col_seg = '{}'".format(colSeg))
+        if query.first():
+            return 0 if query.value(0) == None else round(query.value(0), 6)
+        else:
             return 0
 
     def getTotalFlowStartByColSeg(self, colSeg):
@@ -178,7 +192,18 @@ class Calculation(QSqlRelationalTableModel):
                         WHERE pr.active AND col_seg = '{}'".format(colSeg))
         if query.first():
             return 0 if query.value(0)==None else round(query.value(0), 5)
-        else: 
+        else:
+            return 0
+
+    def getAvgFlowStartByColSeg(self, colSeg):
+        query = QSqlQuery("SELECT avg_flow_start\
+                        FROM contributions c\
+                        LEFT JOIN calculations ca ON ca.id = c.calculation_id\
+                        LEFT JOIN projects pr ON ca.project_id = pr.id\
+                        WHERE pr.active AND c.col_seg = '{}'".format(colSeg))
+        if query.first():
+            return 0 if query.value(0) == None else round(query.value(0), 6)
+        else:
             return 0
 
     def getValueBy(self, column, where=None):
@@ -406,7 +431,7 @@ class Calculation(QSqlRelationalTableModel):
         
         sql = "select col_seg, extension, c_manning, inspection_id_up, inspection_id_down, \
               (adopted_diameter / 1000) as dn_meters, round(el_col_down - \
-              (select el_col_up from calculations where col_seg = c.downstream_seg_id),2) as total_slope, \
+              (select el_col_up from calculations where col_seg = c.downstream_seg_id),2) as upstream_drop, \
               round(initial_flow_rate_qi,2) as q_i, round(prj_flow_rate_qgmax,2) as q_f from calculations c \
               LEFT JOIN projects pr ON c.project_id = pr.id\
                 WHERE pr.active"

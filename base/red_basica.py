@@ -237,6 +237,12 @@ class RedBasica(object):
             callback=self.openProfileWindow,
             parent=self.iface.mainWindow())
 
+        self.add_action(
+            icon_path + 'processing.png',
+            text="Caudales",
+            callback=self.openFlowWindow,
+            parent=self.iface.mainWindow())
+
     def readProject(self):
         """ Called every time a new project is opened and resets dock panel """
         self.HandlerInitialized = False
@@ -2248,6 +2254,9 @@ class RedBasica(object):
     
     def openProfileWindow(self):
         self.profileApp.run()
+
+    def openFlowWindow(self):
+        self.calcApp.runFlow()
 
     def tooltipsTranslate(self):
         translate("AutomaticGeometricAttributes","tooltip_SEG_NAME_C")

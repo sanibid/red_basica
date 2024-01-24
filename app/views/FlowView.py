@@ -1,5 +1,6 @@
-from qgis.core import QgsProject, QgsWkbTypes
+from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer
 from PyQt5.QtWidgets import QDialog
+import processing
 from .ui.FlowDialogUi import Ui_Dialog
 
 class FlowView(QDialog, Ui_Dialog):
@@ -28,6 +29,8 @@ class FlowView(QDialog, Ui_Dialog):
 
         self.connNoConnectionsEndPlan.currentIndexChanged.connect(lambda index, field='connNoConnectionsEndPlan': self.blockFields(index, field))
         self.flowProjected.currentIndexChanged.connect(lambda index, field='flowProjected': self.blockFields(index, field))
+
+        self.buttonBox.accepted.connect(self.create_voronoi)
     
     def blockFields(self, index, field):
       selected_field = self.connNoConnectionsEndPlan.itemText(index) if field == 'connNoConnectionsEndPlan' else self.flowProjected.itemText(index)
@@ -45,8 +48,6 @@ class FlowView(QDialog, Ui_Dialog):
         if field == 'flowProjected':
           self.flowProjectionRateVal.setReadOnly(False)
           self.flowProjectionRateVal.setStyleSheet("")
-            
-
 
     def updateAttributes(self, index, tab):
         selected_layer_name = self.popLayerSelect.itemText(index)
@@ -85,4 +86,29 @@ class FlowView(QDialog, Ui_Dialog):
           if tab == 'flow':
             self.flowCurrentStartPlan.clear()
             self.flowProjected.clear()
-          
+
+
+    def create_voronoi(self):
+      selected_layer_name = self.manholeLayerSelect.currentText()
+      selected_layer = next((layer for layer in self.layers if layer.name() == selected_layer_name), None)
+      buffer = self.influenceAreaBufferVal.value()
+      if selected_layer:
+
+        input_layer = selected_layer.source()
+
+        #TODO change output layer name
+        output_layer = "TEMPORARY_OUTPUT"
+        parameters = {
+            'BUFFER': buffer,
+            'INPUT': input_layer,
+            'OUTPUT': output_layer
+        }
+
+        feedback = QgsProcessingFeedback()
+        result = processing.run("qgis:voronoipolygons", parameters, feedback=feedback)
+
+        output_layer = result['OUTPUT']
+        QgsProject.instance().addMapLayer(output_layer)
+      else:
+          print("Error: No se pudo encontrar la capa seleccionada")
+

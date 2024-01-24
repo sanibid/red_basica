@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(455, 657)
+        Dialog.resize(460, 657)
         self.formLayout = QtWidgets.QFormLayout(Dialog)
         self.formLayout.setObjectName("formLayout")
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
@@ -220,7 +220,7 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Atribución de Caudales por Área de Influencia"))
         self.popWaterConsumptionStartLabel.setText(_translate("Dialog", "Dotación de inicio de plan (l/hab.día)"))
         self.popWaterConsumptionEndLabel.setText(_translate("Dialog", "Dotación de final de plan (l/hab.día)"))
-        self.popCoefficientReturnLabel.setText(_translate("Dialog", "Coeficiente de retorno"))
+        self.popCoefficientReturnLabel.setText(_translate("Dialog", "Coeficiente de retorno [C]"))
         self.popLayerLabel.setText(_translate("Dialog", "Seleccione la capa"))
         self.popOnlySelectedVal.setText(_translate("Dialog", "Sólo seleccionados"))
         self.popStartPlanLabel.setText(_translate("Dialog", "Población inicio de plan"))
@@ -231,7 +231,7 @@ class Ui_Dialog(object):
         self.connNoConnectionsLabel.setText(_translate("Dialog", "Cantidad de conexiones"))
         self.connNoConnectionsEndPlanLabel.setText(_translate("Dialog", "Cantidad de conexiones fin de plan (opcional)"))
         self.connGrowthRateLabel.setText(_translate("Dialog", "Tasa de crecimiento"))
-        self.connEconomyRegionLabel.setText(_translate("Dialog", "Cantidad de economía por región"))
+        self.connEconomyRegionLabel.setText(_translate("Dialog", "Cantidad de economía por conexión"))
         self.connStartConsumptionLabel.setText(_translate("Dialog", "Dotación de inicio de plan (l/hab.día)"))
         self.connEndConsumptionLabel.setText(_translate("Dialog", "Dotación de final de plan (l/hab.día)"))
         self.connOcupancyRateStartLabel.setText(_translate("Dialog", "Tasa de ocupación inicio de plan (hab/vivienda)"))

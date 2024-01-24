@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
+    <width>460</width>
     <height>657</height>
    </rect>
   </property>
@@ -71,7 +71,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="popCoefficientReturnLabel">
             <property name="text">
-             <string>Coeficiente de retorno</string>
+             <string>Coeficiente de retorno [C]</string>
             </property>
            </widget>
           </item>
@@ -182,7 +182,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="connEconomyRegionLabel">
             <property name="text">
-             <string>Cantidad de economía por región</string>
+             <string>Cantidad de economía por conexión</string>
             </property>
            </widget>
           </item>

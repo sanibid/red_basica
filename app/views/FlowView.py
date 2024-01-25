@@ -1,4 +1,4 @@
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField
+from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField, edit
 from PyQt5.QtCore import QVariant
 from PyQt5.QtWidgets import QDialog
 import processing
@@ -12,6 +12,8 @@ class FlowView(QDialog, Ui_Dialog):
         self.layers = [layer for layer in QgsProject.instance().mapLayers().values()]
         self.type = 'population'
         self.selected_layer = None
+        self.manhole_layer = None
+        self.voronoi_layer = None
 
         layer_list = []
         self.popLayerSelect.addItem("")
@@ -182,15 +184,17 @@ class FlowView(QDialog, Ui_Dialog):
 
       self.selected_layer = next((layer for layer in self.layers if layer.name() == selected_layer_name), None)
     
+    def set_manhole_layer(self):
+      manhole_layer_name = self.manholeLayerSelect.currentText()
+      self.manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)                  
+
     def run_flow_process(self):
       """ Runs the main process"""
-
-      manhole_layer_name = self.manholeLayerSelect.currentText()
-      manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)            
+      self.set_manhole_layer()
       buffer = self.influenceAreaBufferVal.value()
      
-      if self.selected_layer and manhole_layer:
-        input_layer = manhole_layer.source()
+      if self.selected_layer and self.manhole_layer:
+        input_layer = self.manhole_layer.source()
         #TODO change output layer name
         output_layer = "TEMPORARY_OUTPUT"
         parameters = {
@@ -198,9 +202,10 @@ class FlowView(QDialog, Ui_Dialog):
             'INPUT': input_layer,
             'OUTPUT': output_layer
         }
-        self.add_attributes(self.selected_layer, manhole_layer)
+        self.add_attributes()
         self.create_voronoi(parameters)
         self.calculate_flow()
+        self.iterate_over_voronoi()
 
       else:
           print("Error: No se pudo encontrar la capa seleccionada")
@@ -208,12 +213,15 @@ class FlowView(QDialog, Ui_Dialog):
     def create_voronoi(self, parameters):
       feedback = QgsProcessingFeedback()
       result = processing.run("qgis:voronoipolygons", parameters, feedback=feedback)
-      output_layer = result['OUTPUT']
-      QgsProject.instance().addMapLayer(output_layer)
+      self.voronoi_layer = result['OUTPUT']
+      QgsProject.instance().addMapLayer(self.voronoi_layer)
 
 
-    def add_attributes(self, input_layer, manhole_layer):
+    def add_attributes(self):
       """ Adds required fields to both layers if they dont exist"""    
+
+      input_layer = self.selected_layer
+      manhole_layer = self.manhole_layer
 
       input_layer_attributes = [
         dict(name='qi', type=QVariant.Int),
@@ -250,3 +258,40 @@ class FlowView(QDialog, Ui_Dialog):
         if index == -1:
           data_provider_manhole.addAttributes([QgsField(attr['name'], attr['type'])])
           manhole_layer.updateFields()
+
+
+    def iterate_over_voronoi(self):
+
+      QConc_I_idx = self.manhole_layer.fields().indexOf('QConc_I')
+      QConc_F_idx = self.manhole_layer.fields().indexOf('QConc_F')
+
+      for poly in self.voronoi_layer.getFeatures():               
+        qi_sum = 0
+        qf_sum = 0
+        for point in self.selected_layer.getFeatures():          
+          if point.geometry().intersects(poly.geometry()):
+            if self.type == 'population':
+              qi = point['Qi_pop']
+              qf = point['Qf_pop']
+            elif self.type == 'connections':
+              qi = point['Qi_con']
+              qf = point['Qf_con']
+            else:
+              qi = point['Qi_cat']
+              qf = point['Qf_cat']
+
+            if type(qi) != QVariant:
+              qi_sum = qi_sum + qi
+            if type(qf) != QVariant:
+              qf_sum = qf_sum + qf        
+        
+        inspection_box = None
+        for box in self.manhole_layer.getFeatures():
+          if box.geometry().intersects(poly.geometry()):
+            inspection_box = box
+
+        if inspection_box is not None:
+          with edit(self.manhole_layer):
+            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_I_idx, qi_sum)
+            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_F_idx, qf_sum)
+              

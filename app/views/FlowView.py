@@ -1,4 +1,4 @@
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField
+from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField, edit
 from PyQt5.QtCore import QVariant
 from PyQt5.QtWidgets import QDialog
 import processing
@@ -236,16 +236,37 @@ class FlowView(QDialog, Ui_Dialog):
 
 
     def iterate_over_voronoi(self):
-      for poly in self.voronoi_layer.getFeatures():
-        
-        poly_points = []
+
+      QConc_I_idx = self.manhole_layer.fields().indexOf('QConc_I')
+      QConc_F_idx = self.manhole_layer.fields().indexOf('QConc_F')
+
+      for poly in self.voronoi_layer.getFeatures():               
+        qi_sum = 0
+        qf_sum = 0
         for point in self.selected_layer.getFeatures():          
           if point.geometry().intersects(poly.geometry()):
-            poly_points.append(point)
+            if self.type == 'population':
+              qi = point['Qi_pop']
+              qf = point['Qf_pop']
+            elif self.type == 'connections':
+              qi = point['Qi_con']
+              qf = point['Qf_con']
+            else:
+              qi = point['Qi_cat']
+              qf = point['Qf_cat']
+
+            if type(qi) != QVariant:
+              qi_sum = qi_sum + qi
+            if type(qf) != QVariant:
+              qf_sum = qf_sum + qf        
         
         inspection_box = None
         for box in self.manhole_layer.getFeatures():
           if box.geometry().intersects(poly.geometry()):
             inspection_box = box
-        
-        print("el polygono {} tiene {} nodos y {} caja".format(poly.id(), len(poly_points), inspection_box.id()))
+
+        if inspection_box is not None:
+          with edit(self.manhole_layer):
+            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_I_idx, qi_sum)
+            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_F_idx, qf_sum)
+              

@@ -100,6 +100,8 @@ class FlowView(QDialog, Ui_Dialog):
             self.flowProjected.clear()
 
     def calculate_flow(self):
+      self.selected_layer.startEditing()
+
       if self.type == 'population':
         initial_consumption = self.popWaterConsumptionStartVal.value()
         final_consumption =  self.popWaterConsumptionEndVal.value()
@@ -111,7 +113,13 @@ class FlowView(QDialog, Ui_Dialog):
           final_population = feature[final_selected]
           initial_flow = initial_consumption * initial_population * return_coeff / 86400
           final_flow = final_consumption * final_population * return_coeff / 86400
-          #TODO set to layer the initial_flow and final_flow
+
+          feature.setAttribute('qi', initial_consumption)
+          feature.setAttribute('qf', final_consumption)
+          feature.setAttribute('C', return_coeff)
+          feature.setAttribute('Qi_pop', initial_flow)
+          feature.setAttribute('Qf_pop', final_flow)
+          self.selected_layer.updateFeature(feature)
 
       elif self.type == 'connections':
         grow_rate = self.connGrowthRateVal.value()
@@ -132,7 +140,17 @@ class FlowView(QDialog, Ui_Dialog):
             final_flow = end_consumption * no_end_conn * economy_conn * end_occupancy_rate * return_coeff / 86400
           else:
             final_flow = end_consumption * (no_connections * grow_rate) * economy_conn * end_occupancy_rate * return_coeff / 86400
-          #TODO set to layer the initial_flow and final_flow
+
+          feature.setAttribute('Gr', grow_rate)
+          feature.setAttribute('econ_con', economy_conn)
+          feature.setAttribute('qi', initial_consumption)
+          feature.setAttribute('qf', end_consumption)
+          feature.setAttribute('HF_Ini', initial_occupancy_rate)
+          feature.setAttribute('HF_Fin', end_occupancy_rate)
+          feature.setAttribute('C', return_coeff)
+          feature.setAttribute('Qi_con', initial_flow)
+          feature.setAttribute('Qf_con', final_flow)
+          self.selected_layer.updateFeature(feature)
 
       else:
         flow_start_selected = self.flowCurrentStartPlan.currentText()
@@ -145,7 +163,14 @@ class FlowView(QDialog, Ui_Dialog):
           else:
             flow_projection_rate = self.flowProjectionRateVal.value()
             final_flow = initial_flow * flow_projection_rate
-          #TODO set to layer the initial_flow and final_flow
+            feature.setAttribute('ProjRate', flow_projection_rate)
+
+          feature.setAttribute('Qi_cat', initial_flow)
+          feature.setAttribute('Qf_cat', final_flow)
+          self.selected_layer.updateFeature(feature)
+
+      self.selected_layer.updateFields()
+      self.selected_layer.commitChanges()
 
     def set_layer(self, index):
       if self.type == 'population':

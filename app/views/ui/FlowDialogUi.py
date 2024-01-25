@@ -228,7 +228,7 @@ class Ui_Dialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.populationTab), _translate("Dialog", "Población"))
         self.connLayerLabel.setText(_translate("Dialog", "Seleccione la capa"))
         self.connOnlySelectedVal.setText(_translate("Dialog", "Sólo seleccionados"))
-        self.connNoConnectionsLabel.setText(_translate("Dialog", "Cantidad de conexiones"))
+        self.connNoConnectionsLabel.setText(_translate("Dialog", "Cantidad de conexiones inicio de plan"))
         self.connNoConnectionsEndPlanLabel.setText(_translate("Dialog", "Cantidad de conexiones fin de plan (opcional)"))
         self.connGrowthRateLabel.setText(_translate("Dialog", "Tasa de crecimiento"))
         self.connEconomyRegionLabel.setText(_translate("Dialog", "Cantidad de economía por conexión"))

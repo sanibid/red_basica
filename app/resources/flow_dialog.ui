@@ -149,7 +149,7 @@
        <item>
         <widget class="QLabel" name="connNoConnectionsLabel">
          <property name="text">
-          <string>Cantidad de conexiones</string>
+          <string>Cantidad de conexiones inicio de plan</string>
          </property>
         </widget>
        </item>

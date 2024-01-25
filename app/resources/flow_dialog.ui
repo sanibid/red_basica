@@ -180,7 +180,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="connEconomyRegionLabel">
+           <widget class="QLabel" name="connEconomyConnLabel">
             <property name="text">
              <string>Cantidad de economía por conexión</string>
             </property>
@@ -225,7 +225,7 @@
            <widget class="QDoubleSpinBox" name="connGrowthRateVal"/>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="connEconomyRegionVal"/>
+           <widget class="QSpinBox" name="connEconomyConnVal"/>
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="connStartConsumptionVal"/>

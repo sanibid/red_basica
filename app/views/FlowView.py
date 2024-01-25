@@ -1,4 +1,5 @@
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer
+from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField
+from PyQt5.QtCore import QVariant
 from PyQt5.QtWidgets import QDialog
 import processing
 from .ui.FlowDialogUi import Ui_Dialog
@@ -34,7 +35,7 @@ class FlowView(QDialog, Ui_Dialog):
         self.connNoConnectionsEndPlan.currentIndexChanged.connect(lambda index, field='connNoConnectionsEndPlan': self.blockFields(index, field))
         self.flowProjected.currentIndexChanged.connect(lambda index, field='flowProjected': self.blockFields(index, field))
 
-        self.buttonBox.accepted.connect(self.create_voronoi)
+        self.buttonBox.accepted.connect(self.run_flow_process)
     
     def blockFields(self, index, field):
       selected_field = self.connNoConnectionsEndPlan.itemText(index) if field == 'connNoConnectionsEndPlan' else self.flowProjected.itemText(index)
@@ -155,15 +156,16 @@ class FlowView(QDialog, Ui_Dialog):
         selected_layer_name = self.flowLayer.itemText(index)
 
       self.selected_layer = next((layer for layer in self.layers if layer.name() == selected_layer_name), None)
+    
+    def run_flow_process(self):
+      """ Runs the main process"""
 
-    def create_voronoi(self):
-      selected_layer_name = self.manholeLayerSelect.currentText()
-      selected_layer = next((layer for layer in self.layers if layer.name() == selected_layer_name), None)
+      manhole_layer_name = self.manholeLayerSelect.currentText()
+      manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)            
       buffer = self.influenceAreaBufferVal.value()
-      if selected_layer:
-
-        input_layer = selected_layer.source()
-
+     
+      if self.selected_layer and manhole_layer:
+        input_layer = manhole_layer.source()
         #TODO change output layer name
         output_layer = "TEMPORARY_OUTPUT"
         parameters = {
@@ -171,12 +173,55 @@ class FlowView(QDialog, Ui_Dialog):
             'INPUT': input_layer,
             'OUTPUT': output_layer
         }
+        self.add_attributes(self.selected_layer, manhole_layer)
+        self.create_voronoi(parameters)
+        self.calculate_flow()
 
-        feedback = QgsProcessingFeedback()
-        result = processing.run("qgis:voronoipolygons", parameters, feedback=feedback)
-
-        output_layer = result['OUTPUT']
-        QgsProject.instance().addMapLayer(output_layer)
       else:
           print("Error: No se pudo encontrar la capa seleccionada")
 
+    def create_voronoi(self, parameters):
+      feedback = QgsProcessingFeedback()
+      result = processing.run("qgis:voronoipolygons", parameters, feedback=feedback)
+      output_layer = result['OUTPUT']
+      QgsProject.instance().addMapLayer(output_layer)
+
+
+    def add_attributes(self, input_layer, manhole_layer):
+      """ Adds required fields to both layers if they dont exist"""    
+
+      input_layer_attributes = [
+        dict(name='qi', type=QVariant.Int),
+        dict(name='qf', type=QVariant.Int),
+        dict(name='C', type=QVariant.Double),
+        dict(name='Qi_pop', type=QVariant.Double),
+        dict(name='Qf_pop', type=QVariant.Double),
+        dict(name='ProjRate', type=QVariant.Double),
+        dict(name='Qi_cat', type=QVariant.Double),
+        dict(name='Qf_cat', type=QVariant.Double),
+        dict(name='Gr', type=QVariant.Double),
+        dict(name='econ_con', type=QVariant.Int),
+        dict(name='HF_Ini', type=QVariant.Double),
+        dict(name='HF_Fin', type=QVariant.Double),
+        dict(name='Qi_con', type=QVariant.Double),
+        dict(name='Qf_con', type=QVariant.Double),
+      ]
+
+      manhole_layer_attributes = [
+        dict(name='QConc_I', type=QVariant.Double),
+        dict(name='QConc_F', type=QVariant.Double),
+      ]
+
+      data_provider_input = input_layer.dataProvider()      
+      for attr in input_layer_attributes:
+        index = input_layer.fields().indexFromName(attr['name'])
+        if index == -1:
+          data_provider_input.addAttributes([QgsField(attr['name'], attr['type'])])
+          input_layer.updateFields()
+
+      data_provider_manhole = manhole_layer.dataProvider()      
+      for attr in manhole_layer_attributes:
+        index = manhole_layer.fields().indexFromName(attr['name'])
+        if index == -1:
+          data_provider_manhole.addAttributes([QgsField(attr['name'], attr['type'])])
+          manhole_layer.updateFields()

@@ -1,7 +1,7 @@
 from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsField, edit, QgsFeatureRequest
 from PyQt5.QtCore import QVariant
 from PyQt5.QtWidgets import QDialog
-import processing
+from qgis import processing
 from .ui.FlowDialogUi import Ui_Dialog
 
 import time
@@ -211,14 +211,17 @@ class FlowView(QDialog, Ui_Dialog):
         end = time.time()
         tiempo = end - self.timer
         print('add_attributes tardó {}'.format(tiempo))
+        self.timer = time.time()
         self.create_voronoi(parameters)
         end = time.time()
         tiempo = end - self.timer
         print('create_voronoi tardó {}'.format(tiempo))
+        self.timer = time.time()
         self.calculate_flow()
         end = time.time()
         tiempo = end - self.timer
         print('calculate_flow tardó {}'.format(tiempo))
+        self.timer = time.time()
         self.iterate_over_voronoi()
         end = time.time()
         tiempo = end - self.timer
@@ -277,10 +280,7 @@ class FlowView(QDialog, Ui_Dialog):
           manhole_layer.updateFields()
 
 
-    def iterate_over_voronoi(self):
-
-      QConc_I_idx = self.manhole_layer.fields().indexOf('QConc_I')
-      QConc_F_idx = self.manhole_layer.fields().indexOf('QConc_F')
+    def iterate_over_voronoi(self):     
 
       for poly in self.voronoi_layer.getFeatures():
         qi_sum = 0
@@ -308,6 +308,9 @@ class FlowView(QDialog, Ui_Dialog):
             inspection_box = box
 
         if inspection_box is not None:
-          with edit(self.manhole_layer):
-            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_I_idx, qi_sum)
-            self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_F_idx, qf_sum)
+          self.manhole_layer.startEditing()
+          inspection_box.setAttribute('QConc_I', qi_sum)
+          inspection_box.setAttribute('QConc_F', qf_sum)
+          self.manhole_layer.updateFeature(inspection_box)
+          self.manhole_layer.commitChanges()
+

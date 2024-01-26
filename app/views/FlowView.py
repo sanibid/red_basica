@@ -1,8 +1,10 @@
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsVectorLayer, QgsField, edit
+from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsField, edit, QgsFeatureRequest
 from PyQt5.QtCore import QVariant
 from PyQt5.QtWidgets import QDialog
 import processing
 from .ui.FlowDialogUi import Ui_Dialog
+
+import time
 
 class FlowView(QDialog, Ui_Dialog):
 
@@ -14,6 +16,7 @@ class FlowView(QDialog, Ui_Dialog):
         self.selected_layer = None
         self.manhole_layer = None
         self.voronoi_layer = None
+        self.timer = None
 
         layer_list = []
         self.popLayerSelect.addItem("")
@@ -190,6 +193,7 @@ class FlowView(QDialog, Ui_Dialog):
 
     def run_flow_process(self):
       """ Runs the main process"""
+      self.timer = time.time()
       self.set_manhole_layer()
       buffer = self.influenceAreaBufferVal.value()
      
@@ -203,9 +207,22 @@ class FlowView(QDialog, Ui_Dialog):
             'OUTPUT': output_layer
         }
         self.add_attributes()
+        #TODO delete timer
+        end = time.time()
+        tiempo = end - self.timer
+        print('add_attributes tardó {}'.format(tiempo))
         self.create_voronoi(parameters)
+        end = time.time()
+        tiempo = end - self.timer
+        print('create_voronoi tardó {}'.format(tiempo))
         self.calculate_flow()
+        end = time.time()
+        tiempo = end - self.timer
+        print('calculate_flow tardó {}'.format(tiempo))
         self.iterate_over_voronoi()
+        end = time.time()
+        tiempo = end - self.timer
+        print('iterate_over_voronoi tardó {}'.format(tiempo))
 
       else:
           print("Error: No se pudo encontrar la capa seleccionada")
@@ -265,10 +282,10 @@ class FlowView(QDialog, Ui_Dialog):
       QConc_I_idx = self.manhole_layer.fields().indexOf('QConc_I')
       QConc_F_idx = self.manhole_layer.fields().indexOf('QConc_F')
 
-      for poly in self.voronoi_layer.getFeatures():               
+      for poly in self.voronoi_layer.getFeatures():
         qi_sum = 0
         qf_sum = 0
-        for point in self.selected_layer.getFeatures():          
+        for point in self.selected_layer.getFeatures(QgsFeatureRequest().setFilterRect(poly.geometry().boundingBox())):
           if point.geometry().intersects(poly.geometry()):
             if self.type == 'population':
               qi = point['Qi_pop']
@@ -286,7 +303,7 @@ class FlowView(QDialog, Ui_Dialog):
               qf_sum = qf_sum + qf        
         
         inspection_box = None
-        for box in self.manhole_layer.getFeatures():
+        for box in self.manhole_layer.getFeatures(QgsFeatureRequest().setFilterRect(poly.geometry().boundingBox())):
           if box.geometry().intersects(poly.geometry()):
             inspection_box = box
 
@@ -294,4 +311,3 @@ class FlowView(QDialog, Ui_Dialog):
           with edit(self.manhole_layer):
             self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_I_idx, qi_sum)
             self.manhole_layer.changeAttributeValue(inspection_box.id(), QConc_F_idx, qf_sum)
-              

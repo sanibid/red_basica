@@ -243,37 +243,53 @@ class FlowView(QDialog, Ui_Dialog):
       input_layer = self.selected_layer
       manhole_layer = self.manhole_layer
 
-      input_layer_attributes = [
-        dict(name='qi', type=QVariant.Int),
-        dict(name='qf', type=QVariant.Int),
-        dict(name='C', type=QVariant.Double),
-        dict(name='Qi_pop', type=QVariant.Double),
-        dict(name='Qf_pop', type=QVariant.Double),
-        dict(name='ProjRate', type=QVariant.Double),
-        dict(name='Qi_cat', type=QVariant.Double),
-        dict(name='Qf_cat', type=QVariant.Double),
-        dict(name='Gr', type=QVariant.Double),
-        dict(name='econ_con', type=QVariant.Int),
-        dict(name='HF_Ini', type=QVariant.Double),
-        dict(name='HF_Fin', type=QVariant.Double),
-        dict(name='Qi_con', type=QVariant.Double),
-        dict(name='Qf_con', type=QVariant.Double),
-      ]
+      input_layer_attributes = dict(
+        population=[
+          dict(name='qi', type=QVariant.Int),
+          dict(name='qf', type=QVariant.Int),
+          dict(name='C', type=QVariant.Double),
+          dict(name='Qi_pop', type=QVariant.Double),
+          dict(name='Qf_pop', type=QVariant.Double)
+        ],
+        connections=[
+          dict(name='ProjRate', type=QVariant.Double),
+          dict(name='Qi_cat', type=QVariant.Double),
+          dict(name='Qf_cat', type=QVariant.Double)
+        ],
+        flow=[
+          dict(name='Gr', type=QVariant.Double),
+          dict(name='econ_con', type=QVariant.Int),
+          dict(name='HF_Ini', type=QVariant.Double),
+          dict(name='HF_Fin', type=QVariant.Double),
+          dict(name='Qi_con', type=QVariant.Double),
+          dict(name='Qf_con', type=QVariant.Double)
+        ]
+      )
 
-      manhole_layer_attributes = [
-        dict(name='QConc_I', type=QVariant.Double),
-        dict(name='QConc_F', type=QVariant.Double),
-      ]
+      manhole_layer_attributes = dict(
+        population=[
+          dict(name='Qi_pop', type=QVariant.Double),
+          dict(name='Qf_pop', type=QVariant.Double),
+        ], 
+        connections=[
+          dict(name='Qi_con', type=QVariant.Double),
+          dict(name='Qf_con', type=QVariant.Double),
+        ],
+        flow=[
+          dict(name='Qi_cat', type=QVariant.Double),
+          dict(name='Qf_cat', type=QVariant.Double),
+        ]
+      )
 
       data_provider_input = input_layer.dataProvider()      
-      for attr in input_layer_attributes:
+      for attr in input_layer_attributes[self.type]:
         index = input_layer.fields().indexFromName(attr['name'])
         if index == -1:
           data_provider_input.addAttributes([QgsField(attr['name'], attr['type'])])
           input_layer.updateFields()
 
       data_provider_manhole = manhole_layer.dataProvider()      
-      for attr in manhole_layer_attributes:
+      for attr in manhole_layer_attributes[self.type]:
         index = manhole_layer.fields().indexFromName(attr['name'])
         if index == -1:
           data_provider_manhole.addAttributes([QgsField(attr['name'], attr['type'])])
@@ -281,7 +297,8 @@ class FlowView(QDialog, Ui_Dialog):
 
 
     def iterate_over_voronoi(self):     
-
+      """ Go over every polygon and acumulate flow from intersected nodes into inspection box"""
+      
       for poly in self.voronoi_layer.getFeatures():
         qi_sum = 0
         qf_sum = 0
@@ -308,9 +325,17 @@ class FlowView(QDialog, Ui_Dialog):
             inspection_box = box
 
         if inspection_box is not None:
-          self.manhole_layer.startEditing()
-          inspection_box.setAttribute('QConc_I', qi_sum)
-          inspection_box.setAttribute('QConc_F', qf_sum)
+          self.manhole_layer.startEditing()          
+          if self.type == 'population':                        
+            inspection_box.setAttribute('Qi_pop', qi_sum)
+            inspection_box.setAttribute('Qf_pop', qf_sum)
+          elif self.type == 'connections':            
+            inspection_box.setAttribute('Qi_con', qi_sum)
+            inspection_box.setAttribute('Qf_con', qf_sum)
+          else:              
+            inspection_box.setAttribute('Qi_cat', qi_sum)
+            inspection_box.setAttribute('Qf_cat', qf_sum)
+          
           self.manhole_layer.updateFeature(inspection_box)
           self.manhole_layer.commitChanges()
 

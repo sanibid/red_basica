@@ -15,8 +15,11 @@ class ProgressThread(QThread):
 
         #show progress bar
         self.bar.show()
-        self.info.show()
-        self.message.show()
+        # info and message are not mandatory
+        if self.info is not None:
+            self.info.show()
+        if self.message is not None:
+            self.message.show()
         
         #attach worker
         worker = controller
@@ -25,8 +28,10 @@ class ProgressThread(QThread):
         worker.finished.connect(self.threadFinished)        
         worker.error.connect(self.threadError)
         worker.progress.connect(self.bar.setValue)
-        worker.info.connect(self.info.setText)
-        worker.message.connect(self.message.setText)
+        if self.info is not None:
+            worker.info.connect(self.info.setText)
+        if self.message is not None:
+            worker.message.connect(self.message.setText)
         self.worker = worker
         self.start()
 
@@ -44,9 +49,13 @@ class ProgressThread(QThread):
         success = response if type(response) == bool else response['success']             
         if success:
             self.bar.hide()
-            self.info.hide()
-            self.message.hide()
-            self.refreshTables()
+            if self.info is not None:
+                self.info.hide()
+            if self.message is not None:
+                self.message.hide()
+            if self.refreshTables is not None:
+                self.refreshTables()
+
             self.iface.messageBar().pushMessage('the process ended successfully!')
             if type(response) != bool and 'message' in response:
                 if (response['message'] == True):

@@ -6,24 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
-    <height>657</height>
+    <width>602</width>
+    <height>682</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Atribución de Caudales por Área de Influencia</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="7" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -367,15 +357,8 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="influenceAreaBufferLabel">
-     <property name="text">
-      <string>Buffer del área de influencia (% de extensión)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="influenceAreaBufferVal"/>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="manholeLayerSelect"/>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="manholeOnlySelectedLabel">
@@ -391,10 +374,33 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="manholeLayerSelect"/>
+   <item row="5" column="0">
+    <widget class="QLabel" name="influenceAreaBufferLabel">
+     <property name="text">
+      <string>Buffer del área de influencia (% de extensión)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QSpinBox" name="influenceAreaBufferVal"/>
    </item>
    <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="errorMessage">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: red</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
     <widget class="QProgressBar" name="progressBar">
      <property name="enabled">
       <bool>true</bool>
@@ -407,6 +413,16 @@
      </property>
      <property name="textVisible">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

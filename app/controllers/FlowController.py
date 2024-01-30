@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QCoreApplication
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsField, edit, QgsFeatureRequest
+from PyQt5.QtCore import QObject, pyqtSignal, QCoreApplication
+from qgis.core import QgsProject, QgsProcessingFeedback, QgsField, QgsFeatureRequest, QgsProcessingFeatureSourceDefinition
 from PyQt5.QtCore import QVariant
 translate = QCoreApplication.translate
 from qgis import processing
@@ -17,7 +17,7 @@ class FlowController(QObject):
     def __init__(self, model=None):
         super().__init__()        
 
-    def run(self, input_fields, tab, buffer, selected_layer, manhole_layer):
+    def run(self, input_fields, tab, buffer, selected_layer, manhole_layer, only_selected):
         """  """
         self.timer = time.time()
         self.progress.emit(10)
@@ -30,11 +30,18 @@ class FlowController(QObject):
         
         #Step 2
         self.timer = time.time()
+
+        if only_selected['manhole']:
+          input_source = QgsProcessingFeatureSourceDefinition(manhole_layer.source(), selectedFeaturesOnly=only_selected['manhole'], featureLimit=-1,geometryCheck = QgsFeatureRequest.GeometryAbortOnInvalid)
+        else:
+          input_source = manhole_layer.source()
+
         voronoi_parameters = {
             'BUFFER': buffer,
-            'INPUT': manhole_layer.source(),
+            'INPUT': input_source,
             'OUTPUT': "TEMPORARY_OUTPUT"
         }
+
         self.create_voronoi_layer(voronoi_parameters)
         self.progress.emit(50)
         step_2 = time.time() - self.timer
@@ -42,14 +49,14 @@ class FlowController(QObject):
 
         #Step 3
         self.timer = time.time()
-        self.calculate_flow(input_fields, tab, selected_layer)
+        self.calculate_flow(input_fields, tab, selected_layer, only_selected=only_selected['layer'])
         self.progress.emit(75)
         step_3 = time.time() - self.timer
         print("calculate_flow: ", step_3)
 
         #Step 4
         self.timer = time.time()
-        self.iterate_over_voronoi(tab=tab, selected_layer=selected_layer, manhole_layer=manhole_layer)
+        self.iterate_over_voronoi(tab=tab, selected_layer=selected_layer, manhole_layer=manhole_layer, only_selected=only_selected['layer'])
         self.progress.emit(100)
         step_4 = time.time() - self.timer
         print("iterate_over_voronoi: ", step_4)
@@ -121,13 +128,14 @@ class FlowController(QObject):
           manhole_layer.updateFields()
 
 
-    def iterate_over_voronoi(self, tab, selected_layer, manhole_layer):     
+    def iterate_over_voronoi(self, tab, selected_layer, manhole_layer, only_selected):
       """ Go over every polygon and acumulate flow from intersected nodes into inspection box"""
 
       for poly in self.voronoi_layer.getFeatures():
         qi_sum = 0
         qf_sum = 0
-        for point in selected_layer.getFeatures(QgsFeatureRequest().setFilterRect(poly.geometry().boundingBox())):
+        features = selected_layer.selectedFeatures() if only_selected else selected_layer.getFeatures(QgsFeatureRequest().setFilterRect(poly.geometry().boundingBox()))
+        for point in features:
           if point.geometry().intersects(poly.geometry()):
             if tab == 'population':
               qi = point['Qi_pop']
@@ -164,7 +172,7 @@ class FlowController(QObject):
           manhole_layer.updateFeature(inspection_box)
           manhole_layer.commitChanges()
 
-    def calculate_flow(self, inputs, tab, selected_layer):
+    def calculate_flow(self, inputs, tab, selected_layer, only_selected):
       selected_layer.startEditing()
 
       if tab == 'population':
@@ -173,7 +181,8 @@ class FlowController(QObject):
         return_coeff = inputs[tab]['return_coeff']
         initial_selected = inputs[tab]['initial_selected']
         final_selected = inputs[tab]['final_selected']
-        for feature in selected_layer.getFeatures():
+        features = selected_layer.selectedFeatures() if only_selected else selected_layer.getFeatures()
+        for feature in features:
           initial_population = feature[initial_selected]
           final_population = feature[final_selected]
           initial_flow = initial_consumption * initial_population * return_coeff / 86400

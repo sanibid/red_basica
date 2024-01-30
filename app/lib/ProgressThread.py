@@ -46,7 +46,7 @@ class ProgressThread(QThread):
         if self.callback:
             return self.callback(response)
 
-        success = response if type(response) == bool else response['success']             
+        success = response if type(response) == bool else response['success']
         if success:
             self.bar.hide()
             if self.info is not None:

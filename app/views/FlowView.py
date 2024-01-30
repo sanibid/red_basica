@@ -18,17 +18,15 @@ class FlowView(QDialog, Ui_Dialog):
         self.type = 'population'
         self.selected_layer = None
         self.manhole_layer = None
-        #self.voronoi_layer = None
-        self.timer = None
+       
         #Needed for ProgressThread
         self.iface = iface
         self.progressMsg = None
         self.messageLabel = None
         self.refreshTables = None
-        self.progressBar.hide()
 
         layer_list = []
-
+        inputs = {}
         self.progressBar.hide()
         self.errorMessage.hide()
 
@@ -68,6 +66,9 @@ class FlowView(QDialog, Ui_Dialog):
 
         self.buttonBox.accepted.connect(self.perform_validation_and_accept)
     
+    def showEvent(self, event):
+      print("on show")
+
     def blockFields(self, index, field):
       selected_field = self.connNoConnectionsEndPlan.itemText(index) if field == 'connNoConnectionsEndPlan' else self.flowProjected.itemText(index)
       if selected_field != "":
@@ -95,7 +96,11 @@ class FlowView(QDialog, Ui_Dialog):
     
     def perform_validation_and_accept(self):
         if self.validate_form():
-          self.run_flow_process()          
+          self.run_flow_process()
+
+    def close_dialog(self, success):
+      self.progressBar.hide()
+      self.accept()
 
     def validate_form(self):
       self.errorMessage.hide()
@@ -208,9 +213,40 @@ class FlowView(QDialog, Ui_Dialog):
       manhole_layer_name = self.manholeLayerSelect.currentText()
       self.manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)                  
 
+    def get_inputs_values(self):
+      return dict(
+        population=dict(
+          initial_consumption = self.popWaterConsumptionStartVal.value(),
+          final_consumption =  self.popWaterConsumptionEndVal.value(),
+          return_coeff = self.popCoefficientReturnVal.value(),
+          initial_selected = self.popStartPlanVal.currentText(),
+          final_selected = self.popEndPlanVal.currentText()
+        ),
+        connections=dict(
+          dict(
+            grow_rate = self.connGrowthRateVal.value(),
+            economy_conn =  self.connEconomyConnVal.value(),
+            initial_consumption = self.connStartConsumptionVal.value(),
+            end_consumption = self.connEndConsumptionVal.value(),
+            initial_occupancy_rate = self.connOcupancyRateStartVal.value(),
+            end_occupancy_rate = self.connOcupancyRateEndVal.value(),
+            return_coeff = self.connReturnCoefficientVal.value(),
+            no_conn_selected = self.connNoConnections.currentText(),
+            no_conn_end_selected = self.connNoConnectionsEndPlan.currentText()
+          )
+        ),
+        flow=dict(
+          dict(
+            flow_start_selected = self.flowCurrentStartPlan.currentText(),
+            flow_projected = self.flowProjected.currentText()
+          )
+        )
+      )
+
     def run_flow_process(self):
       """ Runs the main process"""     
       self.set_manhole_layer()
+      input_fields = self.get_inputs_values()
       buffer = self.influenceAreaBufferVal.value()
      
       if self.selected_layer and self.manhole_layer:
@@ -219,12 +255,13 @@ class FlowView(QDialog, Ui_Dialog):
             self,
             controller,
             (lambda : controller.run(
-              dialog=self,
+              input_fields=input_fields,
               tab=self.type,
               buffer=buffer,
               selected_layer=self.selected_layer,
               manhole_layer=self.manhole_layer
-            ))
+            )),
+            callback=self.close_dialog
         )
         
 

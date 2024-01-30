@@ -3,6 +3,7 @@ from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsField, 
 from PyQt5.QtCore import QVariant
 translate = QCoreApplication.translate
 from qgis import processing
+import time
 
 class FlowController(QObject):
     finished = pyqtSignal(object)
@@ -11,21 +12,24 @@ class FlowController(QObject):
     info = pyqtSignal(str)
     message = pyqtSignal(str)
     voronoi_layer = None
+    timer = None
 
     def __init__(self, model=None):
         super().__init__()        
 
-    def run(self, dialog, tab, buffer, selected_layer, manhole_layer):
+    def run(self, input_fields, tab, buffer, selected_layer, manhole_layer):
         """  """
-        #self.timer = time.time()
-        success = False       
+        self.timer = time.time()
         self.progress.emit(10)
         
         #Step 1
         self.add_attributes(tab, selected_layer, manhole_layer)
         self.progress.emit(25)
+        step_1 = time.time() - self.timer
+        print("add_attributes: ", step_1)
         
         #Step 2
+        self.timer = time.time()
         voronoi_parameters = {
             'BUFFER': buffer,
             'INPUT': manhole_layer.source(),
@@ -33,17 +37,24 @@ class FlowController(QObject):
         }
         self.create_voronoi_layer(voronoi_parameters)
         self.progress.emit(50)
+        step_2 = time.time() - self.timer
+        print("create_voronoi_layer: ", step_2)
 
         #Step 3
-        self.calculate_flow(dialog, tab, selected_layer)
+        self.timer = time.time()
+        self.calculate_flow(input_fields, tab, selected_layer)
         self.progress.emit(75)
-        
+        step_3 = time.time() - self.timer
+        print("calculate_flow: ", step_3)
+
         #Step 4
+        self.timer = time.time()
         self.iterate_over_voronoi(tab=tab, selected_layer=selected_layer, manhole_layer=manhole_layer)
         self.progress.emit(100)
-        success = True
+        step_4 = time.time() - self.timer
+        print("iterate_over_voronoi: ", step_4)
 
-        self.finished.emit(success)
+        self.finished.emit(True)
         return True
         
         
@@ -154,15 +165,15 @@ class FlowController(QObject):
           manhole_layer.commitChanges()
     
 
-    def calculate_flow(self, dialog, tab, selected_layer):
+    def calculate_flow(self, inputs, tab, selected_layer):
       selected_layer.startEditing()
 
       if tab == 'population':
-        initial_consumption = dialog.popWaterConsumptionStartVal.value()
-        final_consumption =  dialog.popWaterConsumptionEndVal.value()
-        return_coeff = dialog.popCoefficientReturnVal.value()
-        initial_selected = dialog.popStartPlanVal.currentText()
-        final_selected = dialog.popEndPlanVal.currentText()
+        initial_consumption = inputs[tab]['initial_consumption']
+        final_consumption =  inputs[tab]['final_consumption']
+        return_coeff = inputs[tab]['return_coeff']
+        initial_selected = inputs[tab]['initial_selected']
+        final_selected = inputs[tab]['final_selected']
         for feature in selected_layer.getFeatures():
           initial_population = feature[initial_selected]
           final_population = feature[final_selected]
@@ -177,15 +188,15 @@ class FlowController(QObject):
           selected_layer.updateFeature(feature)
 
       elif tab == 'connections':
-        grow_rate = dialog.connGrowthRateVal.value()
-        economy_conn =  dialog.connEconomyConnVal.value()
-        initial_consumption = dialog.connStartConsumptionVal.value()
-        end_consumption = dialog.connEndConsumptionVal.value()
-        initial_occupancy_rate = dialog.connOcupancyRateStartVal.value()
-        end_occupancy_rate = dialog.connOcupancyRateEndVal.value()
-        return_coeff = dialog.connReturnCoefficientVal.value()
-        no_conn_selected = dialog.connNoConnections.currentText()
-        no_conn_end_selected = dialog.connNoConnectionsEndPlan.currentText()
+        grow_rate = inputs[tab]['grow_rate']
+        economy_conn =  inputs[tab]['economy_conn']
+        initial_consumption = inputs[tab]['initial_consumption']
+        end_consumption = inputs[tab]['end_consumption']
+        initial_occupancy_rate = inputs[tab]['initial_occupancy_rate']
+        end_occupancy_rate = inputs[tab]['end_occupancy_rate']
+        return_coeff = inputs[tab]['return_coeff']
+        no_conn_selected = inputs[tab]['no_conn_selected']
+        no_conn_end_selected = inputs[tab]['no_conn_end_selected']
         for feature in selected_layer.getFeatures():
           no_connections = feature[no_conn_selected]
           initial_flow = initial_consumption * no_connections * economy_conn * initial_occupancy_rate * return_coeff / 86400
@@ -208,15 +219,15 @@ class FlowController(QObject):
           selected_layer.updateFeature(feature)
 
       else:
-        flow_start_selected = dialog.flowCurrentStartPlan.currentText()
-        flow_projected = dialog.flowProjected.currentText()
+        flow_start_selected = inputs[tab]['flow_start_selected']
+        flow_projected = inputs[tab]['flow_projected']
         for feature in selected_layer.getFeatures():
           initial_flow = feature[flow_start_selected]
 
           if flow_projected != "":
             final_flow = feature[flow_projected]
           else:
-            flow_projection_rate = dialog.flowProjectionRateVal.value()
+            flow_projection_rate = inputs[tab]['flow_projection_rate']
             final_flow = initial_flow * flow_projection_rate
             feature.setAttribute('ProjRate', flow_projection_rate)
 
@@ -224,5 +235,5 @@ class FlowController(QObject):
           feature.setAttribute('Qf_cat', final_flow)
           selected_layer.updateFeature(feature)
 
-      selected_layer.updateFields()
+      selected_layer.updateFields()# TODO: ver si esto esta de mas
       selected_layer.commitChanges()

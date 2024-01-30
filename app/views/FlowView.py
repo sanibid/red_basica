@@ -14,7 +14,7 @@ class FlowView(QDialog, Ui_Dialog):
     def __init__(self):
         QDialog.__init__(self)
         self.setupUi(self)
-        self.layers = [layer for layer in QgsProject.instance().mapLayers().values()]
+        self.layers = []
         self.type = 'population'
         self.selected_layer = None
         self.manhole_layer = None
@@ -25,23 +25,8 @@ class FlowView(QDialog, Ui_Dialog):
         self.messageLabel = None
         self.refreshTables = None
 
-        layer_list = []
-        inputs = {}
         self.progressBar.hide()
         self.errorMessage.hide()
-
-        self.popLayerSelect.addItem("")
-        self.connLayerSelect.addItem("")
-        self.flowLayer.addItem("")
-        self.manholeLayerSelect.addItem("")
-        for layer in self.layers:
-            if (layer.type() == layer.VectorLayer):
-                if layer.geometryType() == QgsWkbTypes.PointGeometry:
-                  layer_list.append(layer.name())
-        self.popLayerSelect.addItems(layer_list)
-        self.connLayerSelect.addItems(layer_list)
-        self.flowLayer.addItems(layer_list)
-        self.manholeLayerSelect.addItems(layer_list)
 
         self.tabWidget.currentChanged.connect(self.tab_changed)
         self.popLayerSelect.currentIndexChanged.connect(lambda index, tab='population': self.updateAttributes(index, tab))
@@ -67,7 +52,7 @@ class FlowView(QDialog, Ui_Dialog):
         self.buttonBox.accepted.connect(self.perform_validation_and_accept)
     
     def showEvent(self, event):
-      print("on show")
+      self.reload_layer_list()
 
     def blockFields(self, index, field):
       selected_field = self.connNoConnectionsEndPlan.itemText(index) if field == 'connNoConnectionsEndPlan' else self.flowProjected.itemText(index)
@@ -85,6 +70,31 @@ class FlowView(QDialog, Ui_Dialog):
         if field == 'flowProjected':
           self.flowProjectionRateVal.setReadOnly(False)
           self.flowProjectionRateVal.setStyleSheet("")
+
+    def reload_layer_list(self):
+
+      self.layers = [layer for layer in QgsProject.instance().mapLayers().values()]
+      layer_list = []
+
+      self.popLayerSelect.clear()
+      self.connLayerSelect.clear()
+      self.flowLayer.clear()
+      self.manholeLayerSelect.clear()
+
+      self.popLayerSelect.addItem("")
+      self.connLayerSelect.addItem("")
+      self.flowLayer.addItem("")
+      self.manholeLayerSelect.addItem("")
+
+      for layer in self.layers:
+          if (layer.type() == layer.VectorLayer):
+              if layer.geometryType() == QgsWkbTypes.PointGeometry:
+                layer_list.append(layer.name())
+      
+      self.popLayerSelect.addItems(layer_list)
+      self.connLayerSelect.addItems(layer_list)
+      self.flowLayer.addItems(layer_list)
+      self.manholeLayerSelect.addItems(layer_list)
 
     def tab_changed(self, index):
         if index == 0:

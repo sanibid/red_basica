@@ -77,17 +77,17 @@ class FlowController(QObject):
           dict(name='Qf_pop', type=QVariant.Double)
         ],
         connections=[
-          dict(name='ProjRate', type=QVariant.Double),
-          dict(name='Qi_cat', type=QVariant.Double),
-          dict(name='Qf_cat', type=QVariant.Double)
-        ],
-        flow=[
           dict(name='Gr', type=QVariant.Double),
           dict(name='econ_con', type=QVariant.Int),
           dict(name='HF_Ini', type=QVariant.Double),
           dict(name='HF_Fin', type=QVariant.Double),
           dict(name='Qi_con', type=QVariant.Double),
           dict(name='Qf_con', type=QVariant.Double)
+        ],
+        flow=[
+          dict(name='ProjRate', type=QVariant.Double),
+          dict(name='Qi_cat', type=QVariant.Double),
+          dict(name='Qf_cat', type=QVariant.Double)
         ]
       )
 
@@ -123,7 +123,7 @@ class FlowController(QObject):
 
     def iterate_over_voronoi(self, tab, selected_layer, manhole_layer):     
       """ Go over every polygon and acumulate flow from intersected nodes into inspection box"""
-      
+
       for poly in self.voronoi_layer.getFeatures():
         qi_sum = 0
         qf_sum = 0
@@ -163,7 +163,6 @@ class FlowController(QObject):
           
           manhole_layer.updateFeature(inspection_box)
           manhole_layer.commitChanges()
-    
 
     def calculate_flow(self, inputs, tab, selected_layer):
       selected_layer.startEditing()

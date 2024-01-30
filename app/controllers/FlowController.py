@@ -235,5 +235,4 @@ class FlowController(QObject):
           feature.setAttribute('Qf_cat', final_flow)
           selected_layer.updateFeature(feature)
 
-      selected_layer.updateFields()# TODO: ver si esto esta de mas
       selected_layer.commitChanges()

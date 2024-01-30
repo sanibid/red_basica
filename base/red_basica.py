@@ -238,7 +238,7 @@ class RedBasica(object):
             parent=self.iface.mainWindow())
 
         self.add_action(
-            icon_path + 'processing.png',
+            icon_path + 'flow.png',
             text="Caudales",
             callback=self.openFlowWindow,
             parent=self.iface.mainWindow())

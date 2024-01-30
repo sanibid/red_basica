@@ -1,6 +1,5 @@
-from qgis.core import QgsProject, QgsWkbTypes, QgsProcessingFeedback, QgsField, edit, QgsFeatureRequest
-from PyQt5.QtCore import QVariant
-from PyQt5.QtWidgets import QDialog, QMessageBox
+from qgis.core import QgsProject, QgsWkbTypes
+from PyQt5.QtWidgets import QDialog
 from qgis import processing
 from .ui.FlowDialogUi import Ui_Dialog
 from ..lib.ProgressThread import ProgressThread
@@ -18,7 +17,7 @@ class FlowView(QDialog, Ui_Dialog):
         self.type = 'population'
         self.selected_layer = None
         self.manhole_layer = None
-       
+
         #Needed for ProgressThread
         self.iface = iface
         self.progressMsg = None
@@ -26,7 +25,6 @@ class FlowView(QDialog, Ui_Dialog):
         self.refreshTables = None
 
         layer_list = []
-        inputs = {}
         self.progressBar.hide()
         self.errorMessage.hide()
 
@@ -243,6 +241,14 @@ class FlowView(QDialog, Ui_Dialog):
         )
       )
 
+    def get_only_selected_check(self):
+      if self.type == 'population':
+        return self.popOnlySelectedVal.isChecked()
+      elif self.type == 'connections':
+        return self.connOnlySelectedVal.isChecked()
+      else:
+        return self.flowSelectedVal.isChecked()
+
     def run_flow_process(self):
       """ Runs the main process"""     
       self.set_manhole_layer()
@@ -259,7 +265,8 @@ class FlowView(QDialog, Ui_Dialog):
               tab=self.type,
               buffer=buffer,
               selected_layer=self.selected_layer,
-              manhole_layer=self.manhole_layer
+              manhole_layer=self.manhole_layer,
+              only_selected={'manhole': self.manholeOnlySelectedVal.isChecked(), 'layer': self.get_only_selected_check()}
             )),
             callback=self.close_dialog
         )

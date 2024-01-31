@@ -2268,7 +2268,7 @@ en el tramo (l/s)</translation>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="205"/>
         <source>Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]</source>
-        <translation type="unfinished">Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]</translation>
+        <translation>Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="212"/>

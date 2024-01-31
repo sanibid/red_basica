@@ -954,7 +954,7 @@ class RedBasica(object):
                         values.append(str(_qeList))
 
                         if _qeList:
-                            qei,qef = h.GetQEFromBlockLayer(_qeList.split(","))
+                            qei, qef, qconf, qconci = h.GetQEFromBlockLayer(_qeList.split(","))
 
                             #QEI
                             values.append(str(qei))

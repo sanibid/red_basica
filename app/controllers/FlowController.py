@@ -85,7 +85,7 @@ class FlowController(QObject):
         connections=[
           dict(name='Gr', type=QVariant.Double),
           dict(name='econ_con', type=QVariant.Int),
-          dict(name='HF_Ini', type=QVariant.Double),
+          dict(name='HI_Ini', type=QVariant.Double),
           dict(name='HF_Fin', type=QVariant.Double),
           dict(name='Qi_con', type=QVariant.Double),
           dict(name='Qf_con', type=QVariant.Double)
@@ -218,7 +218,7 @@ class FlowController(QObject):
           feature.setAttribute('econ_con', economy_conn)
           feature.setAttribute('qi', initial_consumption)
           feature.setAttribute('qf', end_consumption)
-          feature.setAttribute('HF_Ini', initial_occupancy_rate)
+          feature.setAttribute('HI_Ini', initial_occupancy_rate)
           feature.setAttribute('HF_Fin', end_occupancy_rate)
           feature.setAttribute('C', return_coeff)
           feature.setAttribute('Qi_con', initial_flow)

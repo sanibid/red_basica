@@ -137,12 +137,12 @@
     <message>
         <location filename="../base/red_basica.py" line="236"/>
         <source>Perfiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Profiles</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="242"/>
         <source>Caudales</source>
-        <translation type="unfinished"></translation>
+        <translation>Flow rates</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="279"/>
@@ -2082,93 +2082,107 @@ in Segment (l/s)</translation>
         <location filename="../app/views/FlowView.py" line="119"/>
         <source>Seleccione una capa.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select a layer.
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="121"/>
         <source>Seleccione la capa de caja de inspección.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the inspection devices.
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="125"/>
         <source>Seleccione el atributo de Población inicio de plan
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the start-of-plan population attribute
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="127"/>
         <source>Seleccione el atributo de Población fin de plan
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the end-of-plan population attribute
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="129"/>
         <location filename="../app/views/FlowView.py" line="143"/>
         <source>Dotación de inicio de plan debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Per capita consumption at the start-of-plan must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="131"/>
         <location filename="../app/views/FlowView.py" line="145"/>
         <source>Dotación de fin de plan debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Per capita consumption at the end-of-plan must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="133"/>
         <location filename="../app/views/FlowView.py" line="151"/>
         <source>Coeficiente de retorno debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Return coefficient must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="137"/>
         <source>Seleccione el atributo de cantidad de conexiones inicio de plan
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the attribute of number of start-of-plan connections
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="139"/>
         <source>Seleccione el atributo de cantidad de conexiones de fin de plan o la tasa de crecimiento
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the attribute of number of connections at the start-of-plan or growth rate
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="141"/>
         <source>Cantidad de economía por conexión debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Amount of economy (households) per connection must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="147"/>
         <source>Tasa de ocupación inicio de plan debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>The occupancy rate of start-of-plan must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="149"/>
         <source>Tasa de ocupación final de plan debe ser mayor a 0
 </source>
-        <translation type="unfinished"></translation>
+        <translation>The occupancy rate of end-of-plan must be greater than 0
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="154"/>
         <source>Seleccione el atributo de caudal actual (inicio de plan)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Select the current flow attribute (start of plan)
+</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="156"/>
         <source>Seleccione el atributo de caudal proyectado o la tasa de proyección</source>
-        <translation type="unfinished"></translation>
+        <translation>Select the projected flow attribute or projection rate</translation>
     </message>
     <message>
         <location filename="../app/views/FlowView.py" line="160"/>
         <source>Error de validación:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Validation error:
+</translation>
     </message>
 </context>
 <context>
@@ -2176,19 +2190,19 @@ in Segment (l/s)</translation>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="14"/>
         <source>Atribución de Caudales por Área de Influencia</source>
-        <translation type="unfinished"></translation>
+        <translation>Attribution of flow by area of ​​influence</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="24"/>
         <source>Población</source>
-        <translation type="unfinished">Population</translation>
+        <translation>Population</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="30"/>
         <location filename="../app/resources/flow_dialog.ui" line="134"/>
         <location filename="../app/resources/flow_dialog.ui" line="296"/>
         <source>Seleccione la capa</source>
-        <translation type="unfinished"></translation>
+        <translation>Select the layer</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="40"/>
@@ -2196,100 +2210,100 @@ in Segment (l/s)</translation>
         <location filename="../app/resources/flow_dialog.ui" line="303"/>
         <location filename="../app/resources/flow_dialog.ui" line="366"/>
         <source>Sólo seleccionados</source>
-        <translation type="unfinished"></translation>
+        <translation>Only selected</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="47"/>
         <source>Población inicio de plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Population of start-of-plan</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="57"/>
         <source>Población fin de plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Population of end-of-plan</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="73"/>
         <location filename="../app/resources/flow_dialog.ui" line="191"/>
         <source>Dotación de inicio de plan (l/hab.día) [qi]</source>
-        <translation type="unfinished"></translation>
+        <translation>Water per capita consumption at the start-of-plan (l/inhab.day) [qi]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="90"/>
         <location filename="../app/resources/flow_dialog.ui" line="198"/>
         <source>Dotación de final de plan (l/hab.día) [qf]</source>
-        <translation type="unfinished"></translation>
+        <translation>Water per capita consumption at the end-of-plan (l/inhab.day) [qf]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="107"/>
         <location filename="../app/resources/flow_dialog.ui" line="219"/>
         <source>Coeficiente de retorno [C]</source>
-        <translation type="unfinished"></translation>
+        <translation>Coefficient of Return [C]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="128"/>
         <source>Conexiones</source>
-        <translation type="unfinished"></translation>
+        <translation>Connections</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="151"/>
         <source>Cantidad de conexiones inicio de plan</source>
-        <translation type="unfinished"></translation>
+        <translation>Number of Connections of start-of-plan</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="161"/>
         <source>Cantidad de conexiones fin de plan (opcional)</source>
-        <translation type="unfinished"></translation>
+        <translation>Number of Connections of end-of-plan (optional)</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="177"/>
         <source>Tasa de crecimiento [Gr]</source>
-        <translation type="unfinished"></translation>
+        <translation>Growth rate [Gr]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="184"/>
         <source>Cantidad de economía por conexión [econ_con]</source>
-        <translation type="unfinished"></translation>
+        <translation>Amount of households per connection [econ_con]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="205"/>
-        <source>Tasa de ocupación inicio de plan (hab/vivienda) [Hf_Ini]</source>
-        <translation type="unfinished"></translation>
+        <source>Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]</source>
+        <translation type="unfinished">Occupation rate of start-of-plan (people/household) [Hi_Ini]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="212"/>
         <source>Tasa de ocupación final de plan (hab/vivienda) [Hf_Fin]</source>
-        <translation type="unfinished"></translation>
+        <translation>Occupation rate of end-of-plan (people/household) [Hf_Fin]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="290"/>
         <source>Caudal</source>
-        <translation type="unfinished"></translation>
+        <translation>Flow</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="310"/>
         <source>Caudal actual (inicio de plan)</source>
-        <translation type="unfinished"></translation>
+        <translation>Current flow (start-of-plan)</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="320"/>
         <source>Caudal proyectado (opcional)</source>
-        <translation type="unfinished"></translation>
+        <translation>Projected flow (optional)</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="336"/>
         <source>Tasa de proyección [ProjRate]</source>
-        <translation type="unfinished"></translation>
+        <translation>Projection rate [ProjRate]</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="356"/>
         <source>Capa de caja de inspección</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspection devices layer</translation>
     </message>
     <message>
         <location filename="../app/resources/flow_dialog.ui" line="380"/>
         <source>Buffer del área de influencia (% de extensión)</source>
-        <translation type="unfinished"></translation>
+        <translation>Buffer of the influence area (% extension)</translation>
     </message>
 </context>
 <context>

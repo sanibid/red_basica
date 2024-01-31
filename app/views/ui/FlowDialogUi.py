@@ -264,7 +264,7 @@ class Ui_FlowDialog(object):
         self.connEconomyConnLabel.setText(_translate("FlowDialog", "Cantidad de economía por conexión [econ_con]"))
         self.connStartConsumptionLabel.setText(_translate("FlowDialog", "Dotación de inicio de plan (l/hab.día) [qi]"))
         self.connEndConsumptionLabel.setText(_translate("FlowDialog", "Dotación de final de plan (l/hab.día) [qf]"))
-        self.connOcupancyRateStartLabel.setText(_translate("FlowDialog", "Tasa de ocupación inicio de plan (hab/vivienda) [Hf_Ini]"))
+        self.connOcupancyRateStartLabel.setText(_translate("FlowDialog", "Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]"))
         self.connOcupancyRateEndLabel.setText(_translate("FlowDialog", "Tasa de ocupación final de plan (hab/vivienda) [Hf_Fin]"))
         self.connReturnCoefficientLabel.setText(_translate("FlowDialog", "Coeficiente de retorno [C]"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.connectionsTab), _translate("FlowDialog", "Conexiones"))

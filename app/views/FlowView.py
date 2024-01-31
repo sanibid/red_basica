@@ -1,14 +1,14 @@
 from qgis.core import QgsProject, QgsWkbTypes
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QDialog
-from qgis import processing
-from .ui.FlowDialogUi import Ui_Dialog
+from .ui.FlowDialogUi import Ui_FlowDialog
 from ..lib.ProgressThread import ProgressThread
 from ..controllers.FlowController import FlowController
 from qgis.utils import iface
 
-import time
+translate = QCoreApplication.translate
 
-class FlowView(QDialog, Ui_Dialog):
+class FlowView(QDialog, Ui_FlowDialog):
 
     def __init__(self):
         QDialog.__init__(self)
@@ -116,48 +116,49 @@ class FlowView(QDialog, Ui_Dialog):
       error_message = ""
       self.errorMessage.setText("")
       if self.selected_layer == None:
-        error_message += "Seleccione una capa.\n"
+        error_message += translate("Flow", "Seleccione una capa.\n")
       if self.manholeLayerSelect.currentText() == "":
-        error_message += "Seleccione la capa de caja de inspección.\n"
+        error_message += translate("Flow", "Seleccione la capa de caja de inspección.\n")
       
       if self.type == 'population':
         if self.popStartPlanVal.currentText() == "":
-          error_message += "Seleccione el atributo de Población inicio de plan\n"
+          error_message += translate("Flow", "Seleccione el atributo de Población inicio de plan\n")
         if self.popEndPlanVal.currentText() == "":
-          error_message += "Seleccione el atributo de Población fin de plan\n"
+          error_message += translate("Flow", "Seleccione el atributo de Población fin de plan\n")
         if self.popWaterConsumptionStartVal.value() == 0:
-          error_message += "Dotación de inicio de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Dotación de inicio de plan debe ser mayor a 0\n")
         if self.popWaterConsumptionEndVal.value() == 0:
-          error_message += "Dotación de fin de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Dotación de fin de plan debe ser mayor a 0\n")
         if self.popCoefficientReturnVal.value() == 0:
-          error_message += "Coeficiente de retorno debe ser mayor a 0\n"
+          error_message += translate("Flow", "Coeficiente de retorno debe ser mayor a 0\n")
 
       elif self.type == 'connections':
         if self.connNoConnections.currentText() == "":
-          error_message += "Seleccione el atributo de cantidad de conexiones inicio de plan\n"
+          error_message += translate("Flow", "Seleccione el atributo de cantidad de conexiones inicio de plan\n")
         if self.connNoConnectionsEndPlan.currentText() == "" and self.connGrowthRateVal.value() == 0:
-          error_message += "Seleccione el atributo de cantidad de conexiones de fin de plan o la tasa de crecimiento\n"
+          error_message += translate("Flow", "Seleccione el atributo de cantidad de conexiones de fin de plan o la tasa de crecimiento\n")
         if self.connEconomyConnVal.value() == 0:
-          error_message += "Cantidad de economía por conexión debe ser mayor a 0\n"
+          error_message += translate("Flow", "Cantidad de economía por conexión debe ser mayor a 0\n")
         if self.connStartConsumptionVal.value() == 0:
-          error_message += "Dotación de inicio de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Dotación de inicio de plan debe ser mayor a 0\n")
         if self.connEndConsumptionVal.value() == 0:
-          error_message += "Dotación de final de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Dotación de fin de plan debe ser mayor a 0\n")
         if self.connOcupancyRateStartVal.value() == 0:
-          error_message += "Tasa de ocupación inicio de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Tasa de ocupación inicio de plan debe ser mayor a 0\n")
         if self.connOcupancyRateEndVal.value() == 0:
-          error_message += "Tasa de ocupación final de plan debe ser mayor a 0\n"
+          error_message += translate("Flow", "Tasa de ocupación final de plan debe ser mayor a 0\n")
         if self.connReturnCoefficientVal.value() == 0:
-          error_message += "Coeficiente de retorno debe ser mayor a 0\n"
+          error_message += translate("Flow", "Coeficiente de retorno debe ser mayor a 0\n")
       else:
         if self.flowCurrentStartPlan.currentText() == "":
-          error_message += "Seleccione el atributo de caudal actual (inicio de plan)\n"
+          error_message += translate("Flow", "Seleccione el atributo de caudal actual (inicio de plan)\n")
         if self.flowProjected.currentText() == "" and self.flowProjectionRateVal.value() == 0:
-          error_message += "Seleccione el atributo de caudal proyectado o la tasa de proyección"
+          error_message += translate("Flow", "Seleccione el atributo de caudal proyectado o la tasa de proyección")
 
       if error_message:
             self.errorMessage.show()
-            self.errorMessage.setText("Error de validación:\n" + error_message)
+            msg = translate("Flow", "Error de validación:\n")
+            self.errorMessage.setText(msg + error_message)
             return False
       else:
           self.errorMessage.hide()
@@ -220,13 +221,13 @@ class FlowView(QDialog, Ui_Dialog):
     
     def set_manhole_layer(self):
       manhole_layer_name = self.manholeLayerSelect.currentText()
-      self.manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)                  
+      self.manhole_layer = next((layer for layer in self.layers if layer.name() == manhole_layer_name), None)
 
     def get_inputs_values(self):
       return dict(
         population=dict(
           initial_consumption = self.popWaterConsumptionStartVal.value(),
-          final_consumption =  self.popWaterConsumptionEndVal.value(),
+          final_consumption = self.popWaterConsumptionEndVal.value(),
           return_coeff = self.popCoefficientReturnVal.value(),
           initial_selected = self.popStartPlanVal.currentText(),
           final_selected = self.popEndPlanVal.currentText()
@@ -234,7 +235,7 @@ class FlowView(QDialog, Ui_Dialog):
         connections=dict(
           dict(
             grow_rate = self.connGrowthRateVal.value(),
-            economy_conn =  self.connEconomyConnVal.value(),
+            economy_conn = self.connEconomyConnVal.value(),
             initial_consumption = self.connStartConsumptionVal.value(),
             end_consumption = self.connEndConsumptionVal.value(),
             initial_occupancy_rate = self.connOcupancyRateStartVal.value(),
@@ -261,11 +262,11 @@ class FlowView(QDialog, Ui_Dialog):
         return self.flowSelectedVal.isChecked()
 
     def run_flow_process(self):
-      """ Runs the main process"""     
+      """ Runs the main process"""
       self.set_manhole_layer()
       input_fields = self.get_inputs_values()
       buffer = self.influenceAreaBufferVal.value()
-     
+
       if self.selected_layer and self.manhole_layer:
         controller = FlowController()
         ProgressThread(
@@ -281,5 +282,5 @@ class FlowView(QDialog, Ui_Dialog):
             )),
             callback=self.close_dialog
         )
-        
+
 

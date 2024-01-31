@@ -233,13 +233,13 @@ class RedBasica(object):
 
         self.add_action(
             icon_path + 'processing.png',
-            text="Perfiles",
+            text=translate("AutomaticGeometricAttributes", "Perfiles"),
             callback=self.openProfileWindow,
             parent=self.iface.mainWindow())
 
         self.add_action(
             icon_path + 'flow.png',
-            text="Caudales",
+            text=translate("AutomaticGeometricAttributes", "Caudales"),
             callback=self.openFlowWindow,
             parent=self.iface.mainWindow())
 

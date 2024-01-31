@@ -1,7 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSignal, QCoreApplication
 from qgis.core import QgsProject, QgsProcessingFeedback, QgsField, QgsFeatureRequest, QgsProcessingFeatureSourceDefinition
 from PyQt5.QtCore import QVariant
-translate = QCoreApplication.translate
 from qgis import processing
 import time
 
@@ -15,7 +14,7 @@ class FlowController(QObject):
     timer = None
 
     def __init__(self, model=None):
-        super().__init__()        
+        super().__init__()
 
     def run(self, input_fields, tab, buffer, selected_layer, manhole_layer, only_selected):
         """  """
@@ -63,8 +62,8 @@ class FlowController(QObject):
 
         self.finished.emit(True)
         return True
-        
-        
+
+
     def create_voronoi_layer(self, parameters):
       feedback = QgsProcessingFeedback()
       result = processing.run("qgis:voronoipolygons", parameters, feedback=feedback)
@@ -73,8 +72,8 @@ class FlowController(QObject):
 
 
     def add_attributes(self, tab, selected_layer, manhole_layer):
-      """ Adds required fields to both layers if they dont exist"""    
-      
+      """ Adds required fields to both layers if they dont exist"""
+
       selected_layer_attributes = dict(
         population=[
           dict(name='qi', type=QVariant.Int),
@@ -113,14 +112,14 @@ class FlowController(QObject):
         ]
       )
 
-      data_provider_input = selected_layer.dataProvider()      
+      data_provider_input = selected_layer.dataProvider()
       for attr in selected_layer_attributes[tab]:
         index = selected_layer.fields().indexFromName(attr['name'])
         if index == -1:
           data_provider_input.addAttributes([QgsField(attr['name'], attr['type'])])
           selected_layer.updateFields()
 
-      data_provider_manhole = manhole_layer.dataProvider()      
+      data_provider_manhole = manhole_layer.dataProvider()
       for attr in manhole_layer_attributes[tab]:
         index = manhole_layer.fields().indexFromName(attr['name'])
         if index == -1:
@@ -150,25 +149,25 @@ class FlowController(QObject):
             if type(qi) != QVariant:
               qi_sum = qi_sum + qi
             if type(qf) != QVariant:
-              qf_sum = qf_sum + qf        
-        
+              qf_sum = qf_sum + qf
+
         inspection_box = None
         for box in manhole_layer.getFeatures(QgsFeatureRequest().setFilterRect(poly.geometry().boundingBox())):
           if box.geometry().intersects(poly.geometry()):
             inspection_box = box
 
         if inspection_box is not None:
-          manhole_layer.startEditing()          
-          if tab == 'population':                        
+          manhole_layer.startEditing()
+          if tab == 'population':
             inspection_box.setAttribute('Qi_pop', qi_sum)
             inspection_box.setAttribute('Qf_pop', qf_sum)
-          elif tab == 'connections':            
+          elif tab == 'connections':
             inspection_box.setAttribute('Qi_con', qi_sum)
             inspection_box.setAttribute('Qf_con', qf_sum)
-          else:              
+          else:
             inspection_box.setAttribute('Qi_cat', qi_sum)
             inspection_box.setAttribute('Qf_cat', qf_sum)
-          
+
           manhole_layer.updateFeature(inspection_box)
           manhole_layer.commitChanges()
 

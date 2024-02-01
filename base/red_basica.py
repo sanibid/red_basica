@@ -1558,7 +1558,7 @@ class RedBasica(object):
                 qconcf = 0
                 _qeList = point1.attributes()[nodeLayer.fields().lookupField( h.readValueFromProject('QE') )]
                 if _qeList:
-                    qconci, qconcf = h.GetQconcFromBlockLayer(_qeList.split(","))                
+                    qei,qef, qconcf, qconci = h.GetQEFromBlockLayer(_qeList.split(","))             
                 
                 q_fields = ['Qi_pop', 'Qf_pop','Qi_con', 'Qf_con','Qi_cat', 'Qf_cat']
                 q_dict = dict()
@@ -1570,36 +1570,16 @@ class RedBasica(object):
                 qc_i = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
                 qc_f = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
 
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "tooltip Qc_i")
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "tooltip Qc_f")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "tooltip_Qc_i")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "tooltip_Qc_f")
 
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 
-                #Se pone 1x1 en vez de loop de q_fields por las traducciones
-                q_field = 'Qi_pop'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                for q_field in q_fields:
+                    q_field_tooltip = "tooltip_{}".format(q_field)
+                    if q_dict.get(q_field) is not None:
+                        self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, q_field_tooltip)                
                 
-                q_field = 'Qf_pop'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
-                
-                q_field = 'Qi_con'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
-                
-                q_field = 'Qf_con'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
-                
-                q_field = 'Qi_cat'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
-                
-                q_field = 'Qf_cat'
-                if q_dict.get(q_field) is not None:
-                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
-
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","CONTRIBUTION UNITS"))
 
             if point1:
@@ -2400,6 +2380,24 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_QE_FP")
         translate("AutomaticGeometricAttributes","field_QConcF")
         translate("AutomaticGeometricAttributes","field_QConcI")
+        translate("AutomaticGeometricAttributes","Qi_pop")
+        translate("AutomaticGeometricAttributes","Qf_pop")
+        translate("AutomaticGeometricAttributes","Qi_con")
+        translate("AutomaticGeometricAttributes","Qf_con")
+        translate("AutomaticGeometricAttributes","Qi_cat")
+        translate("AutomaticGeometricAttributes","Qf_cat")
+        translate("AutomaticGeometricAttributes","Qc_i")
+        translate("AutomaticGeometricAttributes","Qc_f")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_pop")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_pop")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_con")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_con")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_cat")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_cat")
+        translate("AutomaticGeometricAttributes","tooltip_Qc_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qc_f")
+        
+
         #Calc table
         translate("CalcTbl", "tooltip_initial_segment")
         translate("CalcTbl", "tooltip_final_segment")

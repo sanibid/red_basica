@@ -1576,9 +1576,10 @@ class RedBasica(object):
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 
                 for q_field in q_fields:
+                    q_field_display = translate("AutomaticGeometricAttributes", "field_{}".format(q_field))
                     q_field_tooltip = "tooltip_{}".format(q_field)
                     if q_dict.get(q_field) is not None:
-                        self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, q_field_tooltip)                
+                        self.CreateElementAttributeInLay(hLay, vLay, q_field, q_field_display, q_dict.get(q_field), True, None, q_field_tooltip)                
                 
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","CONTRIBUTION UNITS"))
 
@@ -2380,14 +2381,14 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_QE_FP")
         translate("AutomaticGeometricAttributes","field_QConcF")
         translate("AutomaticGeometricAttributes","field_QConcI")
-        translate("AutomaticGeometricAttributes","Qi_pop")
-        translate("AutomaticGeometricAttributes","Qf_pop")
-        translate("AutomaticGeometricAttributes","Qi_con")
-        translate("AutomaticGeometricAttributes","Qf_con")
-        translate("AutomaticGeometricAttributes","Qi_cat")
-        translate("AutomaticGeometricAttributes","Qf_cat")
-        translate("AutomaticGeometricAttributes","Qc_i")
-        translate("AutomaticGeometricAttributes","Qc_f")
+        translate("AutomaticGeometricAttributes","field_Qi_pop")
+        translate("AutomaticGeometricAttributes","field_Qf_pop")
+        translate("AutomaticGeometricAttributes","field_Qi_con")
+        translate("AutomaticGeometricAttributes","field_Qf_con")
+        translate("AutomaticGeometricAttributes","field_Qi_cat")
+        translate("AutomaticGeometricAttributes","field_Qf_cat")
+        translate("AutomaticGeometricAttributes","field_Qc_i")
+        translate("AutomaticGeometricAttributes","field_Qc_f")
         translate("AutomaticGeometricAttributes","tooltip_Qi_pop")
         translate("AutomaticGeometricAttributes","tooltip_Qf_pop")
         translate("AutomaticGeometricAttributes","tooltip_Qi_con")

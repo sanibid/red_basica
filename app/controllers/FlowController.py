@@ -79,36 +79,36 @@ class FlowController(QObject):
           dict(name='qi', type=QVariant.Int),
           dict(name='qf', type=QVariant.Int),
           dict(name='C', type=QVariant.Double),
-          dict(name='Qi_pop', type=QVariant.Double),
-          dict(name='Qf_pop', type=QVariant.Double)
+          dict(name='Qi_pop', type=QVariant.Double, decimals=6),
+          dict(name='Qf_pop', type=QVariant.Double, decimals=6)
         ],
         connections=[
           dict(name='Gr', type=QVariant.Double),
           dict(name='econ_con', type=QVariant.Int),
           dict(name='HI_Ini', type=QVariant.Double),
           dict(name='HF_Fin', type=QVariant.Double),
-          dict(name='Qi_con', type=QVariant.Double),
-          dict(name='Qf_con', type=QVariant.Double)
+          dict(name='Qi_con', type=QVariant.Double, decimals=6),
+          dict(name='Qf_con', type=QVariant.Double, decimals=6)
         ],
         flow=[
           dict(name='ProjRate', type=QVariant.Double),
-          dict(name='Qi_cat', type=QVariant.Double),
-          dict(name='Qf_cat', type=QVariant.Double)
+          dict(name='Qi_cat', type=QVariant.Double, decimals=6),
+          dict(name='Qf_cat', type=QVariant.Double, decimals=6)
         ]
       )
 
       manhole_layer_attributes = dict(
         population=[
-          dict(name='Qi_pop', type=QVariant.Double),
-          dict(name='Qf_pop', type=QVariant.Double),
+          dict(name='Qi_pop', type=QVariant.Double, decimals=6),
+          dict(name='Qf_pop', type=QVariant.Double, decimals=6),
         ], 
         connections=[
-          dict(name='Qi_con', type=QVariant.Double),
-          dict(name='Qf_con', type=QVariant.Double),
+          dict(name='Qi_con', type=QVariant.Double, decimals=6),
+          dict(name='Qf_con', type=QVariant.Double, decimals=6),
         ],
         flow=[
-          dict(name='Qi_cat', type=QVariant.Double),
-          dict(name='Qf_cat', type=QVariant.Double),
+          dict(name='Qi_cat', type=QVariant.Double, decimals=6),
+          dict(name='Qf_cat', type=QVariant.Double, decimals=6),
         ]
       )
 
@@ -116,14 +116,22 @@ class FlowController(QObject):
       for attr in selected_layer_attributes[tab]:
         index = selected_layer.fields().indexFromName(attr['name'])
         if index == -1:
-          data_provider_input.addAttributes([QgsField(attr['name'], attr['type'])])
+          field = QgsField(attr['name'], attr['type'])
+          if 'decimals' in attr:
+            field.setLength(10)
+            field.setPrecision(attr['decimals'])
+          data_provider_input.addAttributes([field])
           selected_layer.updateFields()
 
       data_provider_manhole = manhole_layer.dataProvider()
       for attr in manhole_layer_attributes[tab]:
         index = manhole_layer.fields().indexFromName(attr['name'])
         if index == -1:
-          data_provider_manhole.addAttributes([QgsField(attr['name'], attr['type'])])
+          field = QgsField(attr['name'], attr['type'])
+          if 'decimals' in attr:
+              field.setLength(10)
+              field.setPrecision(attr['decimals'])
+          data_provider_manhole.addAttributes([field])
           manhole_layer.updateFields()
 
 

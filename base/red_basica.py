@@ -1570,14 +1570,14 @@ class RedBasica(object):
                 qc_i = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
                 qc_f = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
 
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "tooltip_Qc_i")
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "tooltip_Qc_f")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "Qc_i")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "Qc_f")
 
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 
                 for q_field in q_fields:
                     display_name = translate("AutomaticGeometricAttributes", q_field)
-                    q_field_tooltip = "tooltip_{}".format(q_field)
+                    q_field_tooltip = "{}".format(q_field)
                     if q_dict.get(q_field) is not None:
                         self.CreateElementAttributeInLay(hLay, vLay, q_field, display_name, q_dict.get(q_field), True, None, q_field_tooltip)                
                 
@@ -2330,6 +2330,14 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","tooltip_V_f")
         translate("AutomaticGeometricAttributes","tooltip_Vc_f")
         translate("AutomaticGeometricAttributes","tooltip_Vc_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_pop")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_pop")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_con")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_con")
+        translate("AutomaticGeometricAttributes","tooltip_Qi_cat")
+        translate("AutomaticGeometricAttributes","tooltip_Qf_cat")
+        translate("AutomaticGeometricAttributes","tooltip_Qc_i")
+        translate("AutomaticGeometricAttributes","tooltip_Qc_f")
         translate("AutomaticGeometricAttributes","field_SEG_NAME_C")
         translate("AutomaticGeometricAttributes","field_EXT_FIELD_NAME")
         translate("AutomaticGeometricAttributes","field_DN")
@@ -2389,14 +2397,6 @@ class RedBasica(object):
         translate("AutomaticGeometricAttributes","field_Qf_cat")
         translate("AutomaticGeometricAttributes","field_Qc_i")
         translate("AutomaticGeometricAttributes","field_Qc_f")
-        translate("AutomaticGeometricAttributes","tooltip_Qi_pop")
-        translate("AutomaticGeometricAttributes","tooltip_Qf_pop")
-        translate("AutomaticGeometricAttributes","tooltip_Qi_con")
-        translate("AutomaticGeometricAttributes","tooltip_Qf_con")
-        translate("AutomaticGeometricAttributes","tooltip_Qi_cat")
-        translate("AutomaticGeometricAttributes","tooltip_Qf_cat")
-        translate("AutomaticGeometricAttributes","tooltip_Qc_i")
-        translate("AutomaticGeometricAttributes","tooltip_Qc_f")
         
 
         #Calc table

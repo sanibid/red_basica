@@ -1552,6 +1552,54 @@ class RedBasica(object):
             vLay = QHBoxLayout(wdG3)
             hLay = QVBoxLayout()
 
+            #Qc_i and Qc_f
+            if point1:
+                qconci = 0 
+                qconcf = 0
+                _qeList = point1.attributes()[nodeLayer.fields().lookupField( h.readValueFromProject('QE') )]
+                if _qeList:
+                    qconci, qconcf = h.GetQconcFromBlockLayer(_qeList.split(","))                
+                
+                q_fields = ['Qi_pop', 'Qf_pop','Qi_con', 'Qf_con','Qi_cat', 'Qf_cat']
+                q_dict = dict()
+                for f_name in q_fields:
+                    fIdx = nodeLayer.fields().lookupField(f_name)
+                    if fIdx > -1:
+                        q_dict[f_name] = point1.attributes()[fIdx]
+                               
+                qc_i = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
+                qc_f = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
+
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "tooltip Qc_i")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "tooltip Qc_f")
+
+                self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
+                
+                #Se pone 1x1 en vez de loop de q_fields por las traducciones
+                q_field = 'Qi_pop'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                
+                q_field = 'Qf_pop'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                
+                q_field = 'Qi_con'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                
+                q_field = 'Qf_con'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                
+                q_field = 'Qi_cat'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+                
+                q_field = 'Qf_cat'
+                if q_dict.get(q_field) is not None:
+                    self.CreateElementAttributeInLay(hLay, vLay, q_field, translate("AutomaticGeometricAttributes", q_field), q_dict.get(q_field), True, None, "tooltip Qc_i")
+
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","CONTRIBUTION UNITS"))
 
             if point1:

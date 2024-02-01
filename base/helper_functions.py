@@ -468,7 +468,11 @@ class HelperFunctions:
                         qconci = qconci + _qconci
 
         return qei, qef, qconcf, qconci
-                    
+
+    def GetQconcFromBlockLayer(self, ids):
+        qei, qef, qconcf, qconci = self.GetQEFromBlockLayer(ids)
+        return qconci, qconcf
+
     def CreateLayer(self,name,fields,lType,crs,destName = None):
         path_absolute = QgsProject.instance().readPath("./")+"/layers"
         

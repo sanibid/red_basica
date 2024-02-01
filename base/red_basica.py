@@ -1571,7 +1571,7 @@ class RedBasica(object):
                 qc_f = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
 
                 self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "Qc_i")
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "Qc_f")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_f',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "Qc_f")
 
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 

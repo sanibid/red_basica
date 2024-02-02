@@ -469,6 +469,24 @@ class HelperFunctions:
 
         return qei, qef, qconcf, qconci
 
+    def getQcFlow(self, point1):
+        qconci = 0
+        qconcf = 0
+        nodeLayer = self.GetNodeLayer()
+        _qeList = point1.attributes()[nodeLayer.fields().lookupField( self.readValueFromProject('QE') )]
+        if _qeList:
+            qei,qef, qconcf, qconci = self.GetQEFromBlockLayer(_qeList.split(","))
+        q_fields = ['Qi_pop', 'Qf_pop','Qi_con', 'Qf_con','Qi_cat', 'Qf_cat']
+        q_dict = dict()
+        for f_name in q_fields:
+            fIdx = nodeLayer.fields().lookupField(f_name)
+            if fIdx > -1:
+                q_dict[f_name] = point1.attributes()[fIdx]
+
+        q_dict['Qc_i'] = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
+        q_dict['Qc_f'] = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
+
+        return q_dict
 
     def CreateLayer(self,name,fields,lType,crs,destName = None):
         path_absolute = QgsProject.instance().readPath("./")+"/layers"

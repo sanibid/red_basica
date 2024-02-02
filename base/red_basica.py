@@ -1554,32 +1554,17 @@ class RedBasica(object):
 
             #Qc_i and Qc_f
             if point1:
-                qconci = 0 
-                qconcf = 0
-                _qeList = point1.attributes()[nodeLayer.fields().lookupField( h.readValueFromProject('QE') )]
-                if _qeList:
-                    qei,qef, qconcf, qconci = h.GetQEFromBlockLayer(_qeList.split(","))             
-                
-                q_fields = ['Qi_pop', 'Qf_pop','Qi_con', 'Qf_con','Qi_cat', 'Qf_cat']
-                q_dict = dict()
-                for f_name in q_fields:
-                    fIdx = nodeLayer.fields().lookupField(f_name)
-                    if fIdx > -1:
-                        q_dict[f_name] = point1.attributes()[fIdx]
-                               
-                qc_i = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
-                qc_f = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
-
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'),qc_i, True, None, "Qc_i")
-                self.CreateElementAttributeInLay(hLay,vLay,'Qc_f',translate("AutomaticGeometricAttributes", 'Qc_f'),qc_f, True, None, "Qc_f")
+                q_dict = h.getQcFlow(point1)
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_i',translate("AutomaticGeometricAttributes", 'Qc_i'), q_dict.get('Qc_i'), True, None, "Qc_i")
+                self.CreateElementAttributeInLay(hLay,vLay,'Qc_f',translate("AutomaticGeometricAttributes", 'Qc_f'), q_dict.get('Qc_f'), True, None, "Qc_f")
 
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 
-                for q_field in q_fields:
-                    display_name = translate("AutomaticGeometricAttributes", q_field)
-                    q_field_tooltip = "{}".format(q_field)
-                    if q_dict.get(q_field) is not None:
-                        self.CreateElementAttributeInLay(hLay, vLay, q_field, display_name, q_dict.get(q_field), True, None, q_field_tooltip)                
+                for k, v in q_dict.items():
+                    display_name = translate("AutomaticGeometricAttributes", k)
+                    q_field_tooltip = "{}".format(k)
+                    if q_dict.get(k) is not None:
+                        self.CreateElementAttributeInLay(hLay, vLay, k, display_name, q_dict.get(k), True, None, q_field_tooltip)
                 
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","CONTRIBUTION UNITS"))
 

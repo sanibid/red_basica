@@ -275,7 +275,7 @@
     <message>
         <location filename="../base/red_basica.py" line="1576"/>
         <source>INFLUENCE AREA FLOWS</source>
-        <translation>Caudales de la Área de Influencia</translation>
+        <translation>CAUDALES DEL ÁREA DE INFLUENCIA</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2123"/>

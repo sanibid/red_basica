@@ -206,6 +206,8 @@ class DataController(QObject):
 
         fieldnames.append("QConcF")
         fieldnames.append("QConcI")
+        fieldnames.append("Qc_i")
+        fieldnames.append("Qc_f")
 
         fieldnames.append(self.h.readValueFromProject("AUX_PROF_I"))
         fieldnames.append(self.h.readValueFromProject("AUX_POS"))
@@ -327,6 +329,7 @@ class DataController(QObject):
                     values.append(str(_qeList))
                     if _qeList:
                         qei, qef, qconf, qconci = self.h.GetQEFromBlockLayer(_qeList.split(","))
+                        q_dict = self.h.getQcFlow(point1)
                         #QEI
                         values.append(str(qei))
                         #QEF
@@ -335,15 +338,31 @@ class DataController(QObject):
                         values.append(str(qconf))
                         #QCONCI
                         values.append(str(qconci))
+                        #Qc_i
+                        if q_dict.get("Qc_i") is not None:
+                            values.append(str(q_dict.get("Qc_i")))
+                        else:
+                            values.append("")
+                        #Qc_f
+                        if q_dict.get("Qc_f") is not None:
+                            values.append(str(q_dict.get("Qc_f")))
+                        else:
+                            values.append("")
+
                     else:
                         #QEI
                         values.append("")
                         #QEF
                         values.append("")
                         #QCONF
-                        values.append(None)
+                        values.append("")
                         #QCONCI
-                        values.append(None)
+                        values.append("")
+                        #Qc_i
+                        values.append("")
+                        #Qc_f
+                        values.append("")
+
                     #COTA_I
                     values.append(str(point1.attributes()[cota_idx]))
                     #NODO_I

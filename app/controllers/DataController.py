@@ -26,7 +26,7 @@ class DataController(QObject):
     
     finished = pyqtSignal(object)
     error = pyqtSignal(Exception, basestring)
-    progress = pyqtSignal(float)
+    progress = pyqtSignal(int)
     info = pyqtSignal(str)
     message = pyqtSignal(str)
 
@@ -206,6 +206,8 @@ class DataController(QObject):
 
         fieldnames.append("QConcF")
         fieldnames.append("QConcI")
+        fieldnames.append("Qc_i")
+        fieldnames.append("Qc_f")
 
         fieldnames.append(self.h.readValueFromProject("AUX_PROF_I"))
         fieldnames.append(self.h.readValueFromProject("AUX_POS"))
@@ -327,6 +329,7 @@ class DataController(QObject):
                     values.append(str(_qeList))
                     if _qeList:
                         qei, qef, qconf, qconci = self.h.GetQEFromBlockLayer(_qeList.split(","))
+                        q_dict = self.h.getQcFlow(point1)
                         #QEI
                         values.append(str(qei))
                         #QEF
@@ -335,6 +338,17 @@ class DataController(QObject):
                         values.append(str(qconf))
                         #QCONCI
                         values.append(str(qconci))
+                        #Qc_i
+                        if q_dict.get("Qc_i") is not None:
+                            values.append(q_dict.get("Qc_i"))
+                        else:
+                            values.append(0)
+                        #Qc_f
+                        if q_dict.get("Qc_f") is not None:
+                            values.append(q_dict.get("Qc_f"))
+                        else:
+                            values.append(0)
+
                     else:
                         #QEI
                         values.append("")
@@ -344,6 +358,11 @@ class DataController(QObject):
                         values.append(None)
                         #QCONCI
                         values.append(None)
+                        #Qc_i
+                        values.append(0)
+                        #Qc_f
+                        values.append(0)
+
                     #COTA_I
                     values.append(str(point1.attributes()[cota_idx]))
                     #NODO_I
@@ -353,6 +372,7 @@ class DataController(QObject):
                     values.append("")
                     values.append("")
                     values.append("")
+                    #TODO: Para mi aca falta hacer append("") dos veces
                 if point2:                  
                     #COTA_F
                     values.append(str(point2.attributes()[cota_idx]))
@@ -367,37 +387,39 @@ class DataController(QObject):
                 else:
                     values.append("")
             v2 = []
-            v2.append(values[16])
-            v2.append(values[17])
-            v2.append(values[6])
-            v2.append(values[7])
-            v2.append(values[1])
-            v2.append(values[18])
-            v2.append(values[19])
-            v2.append(values[20])
-            v2.append(values[22])
-            v2.append(values[24])
-            v2.append(values[23])
-            v2.append(values[25])
-            v2.append(values[26])
-            v2.append(values[11])
-            v2.append(values[8])
-            v2.append(values[12])
-            v2.append(values[27])
-            v2.append(values[29])
-            v2.append(values[21])
-            v2.append(values[0])
-            v2.append(values[2])
-            v2.append(values[3])
-            v2.append(values[4])
-            v2.append(values[5])
-            v2.append(values[9])
-            v2.append(values[10])
-            v2.append(values[13])
-            v2.append(values[14])
-            v2.append(values[15])
-            v2.append(values[28])
-            v2.append(values[30])
+            v2.append(values[16]) #AUX_TRM_I
+            v2.append(values[17]) #AUX_TRM_F
+            v2.append(values[6]) #ID_COL
+            v2.append(values[7]) #ID_TRM_(N)
+            v2.append(values[1]) #L
+            v2.append(values[18]) #TRM_(N-1)_A
+            v2.append(values[19]) #TRM_(N-1)_B
+            v2.append(values[20]) #TRM_(N-1)_C
+            v2.append(values[22]) #ID_UC
+            v2.append(values[24]) #QE_FP
+            v2.append(values[23]) #QE_IP
+            v2.append(values[25]) #QConcF
+            v2.append(values[26]) #QConcI
+            v2.append(values[27]) #Qc_i
+            v2.append(values[28]) #Qc_f
+            v2.append(values[11]) #AUX_PROF_I
+            v2.append(values[8]) #AUX_POS
+            v2.append(values[12]) #AUX_PROF_F
+            v2.append(values[29]) #COTA_I
+            v2.append(values[31]) #COTA_F
+            v2.append(values[21]) #TRM_(N+1)
+            v2.append(values[0]) #ID_TRM
+            v2.append(values[2]) #X_I
+            v2.append(values[3]) #Y_I
+            v2.append(values[4]) #X_F
+            v2.append(values[5]) #Y_F
+            v2.append(values[9]) #AUX_PAV_1
+            v2.append(values[10]) #AUX_PAV_2
+            v2.append(values[13]) #AUX01
+            v2.append(values[14]) #AUX02
+            v2.append(values[15]) #AUX03
+            v2.append(values[30]) #NODO_I
+            v2.append(values[32]) #NODO_F
             v2.append("")
 
             rows.append(v2)

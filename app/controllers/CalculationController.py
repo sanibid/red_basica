@@ -17,7 +17,7 @@ class CalculationController(QObject):
     
     finished = pyqtSignal(object)
     error = pyqtSignal(Exception, str)
-    progress = pyqtSignal(float)
+    progress = pyqtSignal(int)
     info = pyqtSignal(str)
     message = pyqtSignal(str)
 
@@ -183,10 +183,10 @@ class CalculationController(QObject):
                     rec.setValue('qty_final_qe', qeFp)
                     qeIp = row['QE_IP'] if 'QE_IP' in row else row['QEI']
                     rec.setValue('qty_initial_qe', qeIp)
-                    qconcf =  row['QConcF'] if 'QConcF' in row else None
-                    rec.setValue('conc_flow_qcf', qconcf)
-                    qconci =  row['QConcI'] if 'QConcI' in row else None
-                    rec.setValue('conc_flow_qci', qconci)
+                    qc_f =  row['Qc_f'] if 'Qc_f' in row else None
+                    rec.setValue('conc_flow_qcf', qc_f)
+                    qc_i =  row['Qc_i'] if 'Qc_i' in row else None
+                    rec.setValue('conc_flow_qci', qc_i)
                     intake_in_seg = round(self.critModel.getValueBy('intake_rate') * self.strToFloat(row['L'])/1000, 6)
                     rec.setValue('intake_in_seg', intake_in_seg)
                     if not row['AUX_POS'] == 'NULL':
@@ -356,11 +356,11 @@ class CalculationController(QObject):
             startLinear = self.getStartLinearContInSeg(ext)
             conMod.setData(conMod.index(i, conMod.fieldIndex('linear_contr_seg_start')), startLinear)
             if conMod.updateRowInTable(i, conMod.record(i)):
-                concFlowFinal = calMod.record(i).value('conc_flow_qcf') if calMod.record(i).value('conc_flow_qcf') != None else 0
+                concFlowFinal = calMod.record(i).value('conc_flow_qcf') if calMod.record(i).value('conc_flow_qcf') is not None else 0
                 avgFlowEnd = round((subtotalUpSegEnd + con.value('condominial_lines_end')+ concFlowFinal + endLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_end')), avgFlowEnd)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_end')), avgFlowEnd)
-                concFlowStart = calMod.record(i).value('conc_flow_qci') if calMod.record(i).value('conc_flow_qci') != None else 0
+                concFlowStart = calMod.record(i).value('conc_flow_qci') if calMod.record(i).value('conc_flow_qci') is not None else 0
                 avgFlowStart = round((subtotalUpSegStart + con.value('condominial_lines_start') + concFlowStart + startLinear), 6)
                 conMod.setData(conMod.index(i, conMod.fieldIndex('avg_flow_start')), avgFlowStart)
                 calMod.setData(calMod.index(i, calMod.fieldIndex('total_flow_rate_start')), avgFlowStart)

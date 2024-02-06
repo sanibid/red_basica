@@ -9,7 +9,6 @@ from PyQt5.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from PyQt5.QtGui import QIcon, QFont, QColor, QIntValidator
 from PyQt5.QtWidgets import QAction, QTableWidgetItem, QFileDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QLabel, QLineEdit
 from qgis.core import QgsProject, QgsProperty
-import json
 
 # Initialize Qt resources from file resources.py
 from . import resources

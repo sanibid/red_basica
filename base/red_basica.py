@@ -1297,11 +1297,11 @@ class RedBasica(object):
 
                 self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","INFLUENCE AREA FLOWS"))
                 
-                for k, v in q_dict.items():
-                    display_name = translate("AutomaticGeometricAttributes", k)
-                    q_field_tooltip = "{}".format(k)
-                    if q_dict.get(k) is not None:
-                        self.CreateElementAttributeInLay(hLay, vLay, k, display_name, q_dict.get(k), True, None, q_field_tooltip)
+                for key, value in q_dict.items():
+                    display_name = translate("AutomaticGeometricAttributes", key)
+                    q_field_tooltip = "{}".format(key)
+                    if key != 'Qc_i' and key != 'Qc_f':
+                        self.CreateElementAttributeInLay(hLay, vLay, key, display_name, value, True, None, q_field_tooltip)
                 
             self.CreateSeparator(hLay,vLay,translate("AutomaticGeometricAttributes","CONTRIBUTION UNITS"))
 

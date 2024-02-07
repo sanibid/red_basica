@@ -768,7 +768,7 @@ class RedBasica(object):
             v2 = []
             for f in dicionario:
                 self.dlgExport.progressBar.setValue(self.dlgExport.progressBar.value() + 1)
-                v2 = [str(value) if type(value) == int else '' if value == 'NULL' or value== None or value == '' else value for value in f.values()]
+                v2 = [str(value) if type(value) == int or type(value) == float else '' if value == 'NULL' or value== None or value == '' else value for value in f.values()]
                 line = ';'.join(v2) + '\n'
                 unicode_line = line.encode('utf-8')
                 output_file.write(unicode_line)

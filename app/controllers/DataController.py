@@ -325,11 +325,11 @@ class DataController(QObject):
                 point2 = self.h.GetPointFromCoordinates(nodeLayer.getFeatures(),geom.asPolyline()[-1])
                 if point1:
                     _qeList = point1.attributes()[nodeLayer.fields().lookupField( self.h.readValueFromProject('QE') )]
+                    q_dict = self.h.getQcFlow(point1)
                     #QE
                     values.append(str(_qeList))
                     if _qeList:
                         qei, qef, qconf, qconci = self.h.GetQEFromBlockLayer(_qeList.split(","))
-                        q_dict = self.h.getQcFlow(point1)
                         #QEI
                         values.append(str(qei))
                         #QEF
@@ -338,17 +338,6 @@ class DataController(QObject):
                         values.append(str(qconf))
                         #QCONCI
                         values.append(str(qconci))
-                        #Qc_i
-                        if q_dict.get("Qc_i") is not None:
-                            values.append(q_dict.get("Qc_i"))
-                        else:
-                            values.append(0)
-                        #Qc_f
-                        if q_dict.get("Qc_f") is not None:
-                            values.append(q_dict.get("Qc_f"))
-                        else:
-                            values.append(0)
-
                     else:
                         #QEI
                         values.append("")
@@ -358,9 +347,15 @@ class DataController(QObject):
                         values.append(None)
                         #QCONCI
                         values.append(None)
-                        #Qc_i
+                    #Qc_i
+                    if q_dict.get("Qc_i") is not None:
+                        values.append(q_dict.get("Qc_i"))
+                    else:
                         values.append(0)
-                        #Qc_f
+                    #Qc_f
+                    if q_dict.get("Qc_f") is not None:
+                        values.append(q_dict.get("Qc_f"))
+                    else:
                         values.append(0)
 
                     #COTA_I
@@ -372,7 +367,7 @@ class DataController(QObject):
                     values.append("")
                     values.append("")
                     values.append("")
-                    #TODO: Para mi aca falta hacer append("") dos veces
+                    #TODO: Para mi aca falta hacer append("") 4 veces
                 if point2:                  
                     #COTA_F
                     values.append(str(point2.attributes()[cota_idx]))

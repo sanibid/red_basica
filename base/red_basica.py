@@ -762,13 +762,18 @@ class RedBasica(object):
             output_file = open(filename, 'wb')
             obj = list(data)[0]
             fieldnames = obj.keys()
-            line = ';'.join(x for x in fieldnames) + '\n'
+            line = ';'.join(x for x in fieldnames if x not in ['QConcF', 'QConcI']) + '\n'
             unicode_line = line.encode('utf-8')
             output_file.write(unicode_line)
             v2 = []
             for f in dicionario:
                 self.dlgExport.progressBar.setValue(self.dlgExport.progressBar.value() + 1)
-                v2 = [str(value) if type(value) == int or type(value) == float else '' if value == 'NULL' or value== None or value == '' else value for value in f.values()]
+                v2 = [
+                    str(value) if type(value) == int or type(value) == float else ''
+                    if value == 'NULL' or value== None or value == '' else value
+                    for key, value in f.items()
+                    if key not in ['QConcF', 'QConcI']
+                    ]
                 line = ';'.join(v2) + '\n'
                 unicode_line = line.encode('utf-8')
                 output_file.write(unicode_line)

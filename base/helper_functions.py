@@ -481,7 +481,7 @@ class HelperFunctions:
         for f_name in q_fields:
             fIdx = nodeLayer.fields().lookupField(f_name)
             if fIdx > -1:
-                q_dict[f_name] = point1.attributes()[fIdx]
+                q_dict[f_name] = point1.attributes()[fIdx] if point1.attributes()[fIdx] != None else 0
 
         q_dict['Qc_i'] = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
         q_dict['Qc_f'] = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)

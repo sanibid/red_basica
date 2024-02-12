@@ -2884,7 +2884,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="1167"/>
         <source>Lámina máx. especial (DN &lt; 150mm)</source>
-        <translation type="unfinished">Water Surface máx.(DN &lt; 150mm)</translation>
+        <translation>Water Surface máx.(DN &lt; 150mm)</translation>
     </message>
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="903"/>

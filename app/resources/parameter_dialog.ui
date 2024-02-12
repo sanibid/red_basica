@@ -684,12 +684,18 @@ p, li { white-space: pre-wrap; }
          <property name="maximum">
           <double>9999999.990000000223517</double>
          </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="6" column="3">
         <widget class="QDoubleSpinBox" name="hhConnEndEdit">
          <property name="maximum">
           <double>9999999.990000000223517</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
          </property>
         </widget>
        </item>

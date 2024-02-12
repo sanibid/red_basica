@@ -483,8 +483,8 @@ class HelperFunctions:
             if fIdx > -1:
                 q_dict[f_name] = point1.attributes()[fIdx] if point1.attributes()[fIdx] != None else 0
 
-        q_dict['Qc_i'] = sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci)
-        q_dict['Qc_f'] = sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf)
+        q_dict['Qc_i'] = round(sum([val for key, val in q_dict.items() if key.startswith('Qi')], qconci), 6)
+        q_dict['Qc_f'] = round(sum([val for key, val in q_dict.items() if key.startswith('Qf')], qconcf), 6)
 
         return q_dict
 

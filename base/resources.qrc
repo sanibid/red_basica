@@ -24,5 +24,6 @@
 		<file>../icons/arrow-right.png</file>
 		<file>../icons/recobrimento.png</file>
 		<file>../icons/pendencias.png</file>
+		<file>../icons/flow.png</file>
     </qresource>
 </RCC>

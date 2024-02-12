@@ -13,6 +13,7 @@ from .views.EditValuesView import EditValuesView
 from .views.IterationsView import IterationsView
 from .views.LoginView import LoginView
 from .views.ExportLayersView import ExportLayersView
+from .views.FlowView import FlowView
 
 class App(QMainWindow):
 
@@ -26,6 +27,7 @@ class App(QMainWindow):
         self.iterationsDialog = IterationsView()
         self.loginDialog = LoginView()
         self.exportDialog = ExportLayersView()
+        self.flowDialog = FlowView()
 
         self.dialogs = {
             'newProject': self.newProjectDialog,
@@ -34,7 +36,8 @@ class App(QMainWindow):
             'editValues': self.editValuesDialog,
             'iterations': self.iterationsDialog,
             'login': self.loginDialog,
-            'export': self.exportDialog
+            'export': self.exportDialog,
+            'flow': self.flowDialog
         }
 
         self.MainView = MainView(self.dialogs)
@@ -51,6 +54,9 @@ class App(QMainWindow):
             self.insert_new_project()
         if self.projectModel.getActiveProject():
             self.MainView.setWindowTitle('saniHUB [' + self.projectModel.getNameActiveProject() + ']')
+
+    def runFlow(self):
+        self.flowDialog.show()
 
 
     def insert_new_project(self):

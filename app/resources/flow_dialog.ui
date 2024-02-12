@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FlowDialog</class>
+ <widget class="QDialog" name="FlowDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>602</width>
+    <height>705</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Atribución de Caudales por Área de Influencia</string>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="populationTab">
+      <attribute name="title">
+       <string>Población</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_6">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="popLayerLabel">
+         <property name="text">
+          <string>Seleccione la capa</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QComboBox" name="popLayerSelect"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="popOnlySelectedVal">
+         <property name="text">
+          <string>Sólo seleccionados</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="popStartPlanLabel">
+         <property name="text">
+          <string>Población inicio de plan</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QComboBox" name="popStartPlanVal"/>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="popEndPlanLabel">
+         <property name="text">
+          <string>Población fin de plan</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QComboBox" name="popEndPlanVal"/>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="popWaterConsumptionStartLabel">
+            <property name="text">
+             <string>Dotación de inicio de plan (l/hab.día) [qi]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="popWaterConsumptionStartVal">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>150</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="popWaterConsumptionEndLabel">
+            <property name="text">
+             <string>Dotación de final de plan (l/hab.día) [qf]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="popWaterConsumptionEndVal">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>150</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="popCoefficientReturnLabel">
+            <property name="text">
+             <string>Coeficiente de retorno [C]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QDoubleSpinBox" name="popCoefficientReturnVal">
+            <property name="maximum">
+             <double>9999999999.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.800000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="connectionsTab">
+      <attribute name="title">
+       <string>Conexiones</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="connLayerLabel">
+         <property name="text">
+          <string>Seleccione la capa</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="connLayerSelect"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="connOnlySelectedVal">
+         <property name="text">
+          <string>Sólo seleccionados</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="connNoConnectionsLabel">
+         <property name="text">
+          <string>Cantidad de conexiones inicio de plan</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="connNoConnections"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="connNoConnectionsEndPlanLabel">
+         <property name="text">
+          <string>Cantidad de conexiones fin de plan (opcional)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="connNoConnectionsEndPlan"/>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="connGrowthRateLabel">
+            <property name="text">
+             <string>Tasa de crecimiento [Gr]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="connEconomyConnLabel">
+            <property name="text">
+             <string>Cantidad de economía por conexión [econ_con]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="connStartConsumptionLabel">
+            <property name="text">
+             <string>Dotación de inicio de plan (l/hab.día) [qi]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="connEndConsumptionLabel">
+            <property name="text">
+             <string>Dotación de final de plan (l/hab.día) [qf]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="connOcupancyRateStartLabel">
+            <property name="text">
+             <string>Tasa de ocupación inicio de plan (hab/vivienda) [Hi_Ini]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="connOcupancyRateEndLabel">
+            <property name="text">
+             <string>Tasa de ocupación final de plan (hab/vivienda) [Hf_Fin]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="connReturnCoefficientLabel">
+            <property name="text">
+             <string>Coeficiente de retorno [C]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="connGrowthRateVal"/>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="connEconomyConnVal">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="connStartConsumptionVal">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>150</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="connEndConsumptionVal">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>150</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="connOcupancyRateStartVal">
+            <property name="maximum">
+             <double>999999999999.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QDoubleSpinBox" name="connOcupancyRateEndVal">
+            <property name="maximum">
+             <double>9999999999999.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QDoubleSpinBox" name="connReturnCoefficientVal">
+            <property name="maximum">
+             <double>9999999999.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.800000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="flowTab">
+      <attribute name="title">
+       <string>Caudal</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_5">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="flowLabel">
+         <property name="text">
+          <string>Seleccione la capa</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="flowSelectedVal">
+         <property name="text">
+          <string>Sólo seleccionados</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>Caudal actual (inicio de plan)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QComboBox" name="flowCurrentStartPlan"/>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Caudal proyectado (opcional)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QComboBox" name="flowProjected"/>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="flowProjectionRateLabel">
+            <property name="text">
+             <string>Tasa de proyección [ProjRate]</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="flowProjectionRateVal"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QComboBox" name="flowLayer"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="manholeLayerLabel">
+     <property name="text">
+      <string>Capa de caja de inspección</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="manholeLayerSelect"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="manholeOnlySelectedLabel">
+     <property name="text">
+      <string>Sólo seleccionados</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="manholeOnlySelectedVal">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="influenceAreaBufferLabel">
+     <property name="text">
+      <string>Buffer del área de influencia (% de extensión)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QSpinBox" name="influenceAreaBufferVal"/>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="errorMessage">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: red</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="textVisible">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>FlowDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>FlowDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

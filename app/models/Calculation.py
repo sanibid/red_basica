@@ -84,7 +84,7 @@ class Calculation(QSqlRelationalTableModel):
         if role == Qt.DisplayRole:
             col = index.column()
             val = QSqlRelationalTableModel.data(self, index, Qt.DisplayRole)
-            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 41, 42, 44, 45, 46, 48, 49, 51]:
+            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 40, 41, 42, 44, 45, 46, 47, 48, 49, 51]:
                 if val == None:
                     return ''
                 if not isinstance(val, float):

@@ -2919,12 +2919,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="775"/>
         <source>0</source>
-        <translation>Não</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="780"/>
         <source>1</source>
-        <translation>Sim</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="873"/>

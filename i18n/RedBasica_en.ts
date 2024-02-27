@@ -1546,12 +1546,12 @@
     <message>
         <location filename="../base/red_basica.py" line="2417"/>
         <source>tooltip_total_flow_rate_end</source>
-        <translation>Average end-of-plan flow on the segment. Are considered: distributed flows + concentrated flows + Intake [l/s]</translation>
+        <translation>Average end-of-plan flow on the segment. Are considered: distributed flows + concentrated flows [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2418"/>
         <source>tooltip_total_flow_rate_start</source>
-        <translation>Average start-of-plan flow on the segment. Are considered: distributed flows + concentrated flows + Intake [l/s]</translation>
+        <translation>Average start-of-plan flow on the segment. Are considered: distributed flows + concentrated flows [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2419"/>

@@ -1546,12 +1546,12 @@
     <message>
         <location filename="../base/red_basica.py" line="2417"/>
         <source>tooltip_total_flow_rate_end</source>
-        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2418"/>
         <source>tooltip_total_flow_rate_start</source>
-        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2419"/>

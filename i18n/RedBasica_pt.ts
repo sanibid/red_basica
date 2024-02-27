@@ -1551,7 +1551,7 @@
     <message>
         <location filename="../base/red_basica.py" line="2418"/>
         <source>tooltip_total_flow_rate_start</source>
-        <translation>Vazão média de inicio de plano no trecho. Consideram-se: vazões distribuidas + vazões concentradas + infiltração e os coeficientes de vazão adotados nos parâmetros do projeto [l/s]</translation>
+        <translation>Vazão média de início de plano no trecho. Consideram-se: vazões distribuidas + vazões concentradas [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2419"/>

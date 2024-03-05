@@ -181,6 +181,7 @@ class FlowController(QObject):
 
     def calculate_flow(self, inputs, tab, selected_layer, only_selected):
       selected_layer.startEditing()
+      features = selected_layer.selectedFeatures() if only_selected else selected_layer.getFeatures()
 
       if tab == 'population':
         initial_consumption = inputs[tab]['initial_consumption']
@@ -188,7 +189,6 @@ class FlowController(QObject):
         return_coeff = inputs[tab]['return_coeff']
         initial_selected = inputs[tab]['initial_selected']
         final_selected = inputs[tab]['final_selected']
-        features = selected_layer.selectedFeatures() if only_selected else selected_layer.getFeatures()
         for feature in features:
           initial_population = feature[initial_selected]
           final_population = feature[final_selected]
@@ -212,26 +212,29 @@ class FlowController(QObject):
         return_coeff = inputs[tab]['return_coeff']
         no_conn_selected = inputs[tab]['no_conn_selected']
         no_conn_end_selected = inputs[tab]['no_conn_end_selected']
-        for feature in selected_layer.getFeatures():
+        for feature in features:
           no_connections = feature[no_conn_selected]
-          initial_flow = initial_consumption * no_connections * economy_conn * initial_occupancy_rate * return_coeff / 86400
-
-          if no_conn_end_selected != "":
-            no_end_conn = feature[no_conn_end_selected]
-            final_flow = end_consumption * no_end_conn * economy_conn * end_occupancy_rate * return_coeff / 86400
-          else:
-            final_flow = end_consumption * (no_connections * grow_rate) * economy_conn * end_occupancy_rate * return_coeff / 86400
-
-          feature.setAttribute('Gr', grow_rate)
-          feature.setAttribute('econ_con', economy_conn)
-          feature.setAttribute('qi', initial_consumption)
-          feature.setAttribute('qf', end_consumption)
-          feature.setAttribute('HI_Ini', initial_occupancy_rate)
-          feature.setAttribute('HF_Fin', end_occupancy_rate)
-          feature.setAttribute('C', return_coeff)
-          feature.setAttribute('Qi_con', initial_flow)
-          feature.setAttribute('Qf_con', final_flow)
-          selected_layer.updateFeature(feature)
+          if type(no_connections) != QVariant:
+            initial_flow = initial_consumption * no_connections * economy_conn * initial_occupancy_rate * return_coeff / 86400
+            if no_conn_end_selected != "":
+              no_end_conn = feature[no_conn_end_selected]
+              if type(no_end_conn) != QVariant:
+                final_flow = end_consumption * no_end_conn * economy_conn * end_occupancy_rate * return_coeff / 86400
+              else:
+                #cuando hay finde plan pero feature es NULL se usa formula default
+                final_flow = end_consumption * (no_connections * grow_rate) * economy_conn * end_occupancy_rate * return_coeff / 86400
+            else:
+              final_flow = end_consumption * (no_connections * grow_rate) * economy_conn * end_occupancy_rate * return_coeff / 86400
+            feature.setAttribute('Gr', grow_rate)
+            feature.setAttribute('econ_con', economy_conn)
+            feature.setAttribute('qi', initial_consumption)
+            feature.setAttribute('qf', end_consumption)
+            feature.setAttribute('HI_Ini', initial_occupancy_rate)
+            feature.setAttribute('HF_Fin', end_occupancy_rate)
+            feature.setAttribute('C', return_coeff)
+            feature.setAttribute('Qi_con', initial_flow)
+            feature.setAttribute('Qf_con', final_flow)
+            selected_layer.updateFeature(feature)
 
       else:
         flow_start_selected = inputs[tab]['flow_start_selected']

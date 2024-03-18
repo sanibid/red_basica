@@ -410,7 +410,7 @@
     <message>
         <location filename="../base/red_basica.py" line="2316"/>
         <source>tooltip_Qmed_i</source>
-        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2317"/>
@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../base/resources/ui_segment_dock.ui" line="212"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;saniHUB RedBasica v. 1.0&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;SaniHUB RedBasica is an open source software&lt;br/&gt;that aims to assist in the design and sizing of&lt;br/&gt;sewage collection networks, with tools for&lt;br/&gt;designing Condominial systems.&lt;/p&gt;&lt;p&gt;For questions, bugs reporting&lt;br/&gt;and more information:&lt;/p&gt;&lt;p&gt;e-mail: &lt;a href=&quot;mailto:sanihub.rb@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;sanihub.rb@gmail.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;site: &lt;a href=&quot;https://gitlab.com/sanihub/red_basica&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://gitlab.com/sanihub/red_basica&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Concept Analyst:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Leonardo Porto Nazareth&lt;/p&gt;&lt;p&gt;Development coordination:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Marta Fernandez&lt;/p&gt;&lt;p&gt;Developers: &lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Federico Sanchez&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Martin Dell&apos; Oro&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;saniHUB RedBasica v. 1.0&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;SaniHUB RedBasica es un software libre&lt;br/&gt;que tiene como objetivo ayudar a&lt;br/&gt;dibujar y dimensionar redes de&lt;br/&gt;alcantarillado, con herramientas&lt;br/&gt;para el diseño de sistemas&lt;br/&gt;del tipo condominial.&lt;/p&gt;&lt;p&gt;Para preguntas, informes de problemas&lt;br/&gt;y más información:&lt;br/&gt;e-mail: &lt;a href=&quot;mailto:sanihub.rb@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;sanihub.rb@gmail.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;site: &lt;a href=&quot;https://gitlab.com/sanihub/red_basica&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://gitlab.com/sanihub/red_basica&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Concept Analyst:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Leonardo Porto Nazareth&lt;/p&gt;&lt;p&gt;Development coordination:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Marta Fernandez&lt;/p&gt;&lt;p&gt;Developers: &lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Federico Sanchez&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Martin Dell&apos; Oro&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;saniHUB RedBasica v. 1.3&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;SaniHUB RedBasica es un software libre&lt;br/&gt;que tiene como objetivo ayudar a&lt;br/&gt;dibujar y dimensionar redes de&lt;br/&gt;alcantarillado, con herramientas&lt;br/&gt;para el diseño de sistemas&lt;br/&gt;del tipo condominial.&lt;/p&gt;&lt;p&gt;Para preguntas, informes de problemas&lt;br/&gt;y más información:&lt;br/&gt;e-mail: &lt;a href=&quot;mailto:sanihub.rb@gmail.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;sanihub.rb@gmail.com&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;site: &lt;a href=&quot;https://sanihub.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://sanihub.org/&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;repositorio: &lt;a href=&quot;https://github.com/EL-BID/red_basica&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/EL-BID/red_basica&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Concept Analyst:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Leonardo Porto Nazareth&lt;/p&gt;&lt;p&gt;Development coordination:&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Marta Fernandez&lt;/p&gt;&lt;p&gt;Developers: &lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Federico Sanchez&lt;br/&gt;&lt;span style=&quot; font-family:&apos;arial,sans-serif&apos;; font-size:14px; color:#70757a; background-color:#ffffff;&quot;&gt;⚫&lt;/span&gt;Martin Dell&apos; Oro&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../base/resources/ui_segment_dock.ui" line="30"/>
@@ -1546,12 +1546,12 @@
     <message>
         <location filename="../base/red_basica.py" line="2417"/>
         <source>tooltip_total_flow_rate_end</source>
-        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2418"/>
         <source>tooltip_total_flow_rate_start</source>
-        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de fin de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2419"/>
@@ -2919,12 +2919,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="775"/>
         <source>0</source>
-        <translation>No</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="780"/>
         <source>1</source>
-        <translation>Si</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../app/resources/parameter_dialog.ui" line="873"/>

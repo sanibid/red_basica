@@ -10,7 +10,7 @@
 name=saniHUB RedBasica
 
 description=Plugin to help sewage collection networks design
-version=1.0
+version=1.3
 author=Leonardo Nazareth, Pery Nazareth, Marta Fernandez, Federico Sanchez, Martin Dell'Oro 
 email=sanihub.rb@gmail.com
 qgisMinimumVersion=3.0

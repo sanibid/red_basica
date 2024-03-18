@@ -206,8 +206,8 @@ class DataController(QObject):
 
         fieldnames.append("QConcF")
         fieldnames.append("QConcI")
-        fieldnames.append("Qc_i")
         fieldnames.append("Qc_f")
+        fieldnames.append("Qc_i")        
 
         fieldnames.append(self.h.readValueFromProject("AUX_PROF_I"))
         fieldnames.append(self.h.readValueFromProject("AUX_POS"))
@@ -347,16 +347,17 @@ class DataController(QObject):
                         values.append(None)
                         #QCONCI
                         values.append(None)
-                    #Qc_i
-                    if q_dict.get("Qc_i") is not None:
-                        values.append(q_dict.get("Qc_i"))
-                    else:
-                        values.append(0)
+                    
                     #Qc_f
                     if q_dict.get("Qc_f") is not None:
                         values.append(q_dict.get("Qc_f"))
                     else:
                         values.append(0)
+                    #Qc_i
+                    if q_dict.get("Qc_i") is not None:
+                        values.append(q_dict.get("Qc_i"))
+                    else:
+                        values.append(0)                   
 
                     #COTA_I
                     values.append(str(point1.attributes()[cota_idx]))

@@ -1,5 +1,5 @@
 import math
-from PyQt5.QtCore import Qt, QCoreApplication, QT_TRANSLATE_NOOP
+from PyQt5.QtCore import Qt, QCoreApplication, QT_TRANSLATE_NOOP, QVariant
 from PyQt5.QtSql import QSqlRelationalTableModel, QSqlQuery
 from PyQt5.QtGui import QColor, QBrush
 
@@ -73,20 +73,25 @@ class Calculation(QSqlRelationalTableModel):
     def data(self, index, role):
         if role == Qt.ForegroundRole:
             val = index.data()
-            if (val == 'DN !!' or type(val) not in [bool, str] and val < 0):
-                return QBrush(Qt.red)
+            if (val == 'DN !!' or type(val) not in [bool, str, QVariant]):
+                if val < 0:
+                    return QBrush(Qt.red)
+            
             if (type(val) == str):
                 try:
                     if (float(val) < 0):
                         return QBrush(Qt.red)
                 except ValueError:
                     return False
+        
         if role == Qt.DisplayRole:
             col = index.column()
             val = QSqlRelationalTableModel.data(self, index, Qt.DisplayRole)
-            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 41, 42, 44, 45, 46, 48, 49, 51]:
-                if val == None:
-                    return ''
+            
+            if val in [None, ''] or type(val) == QVariant:
+                return ''
+            
+            if col in [7, 14, 15, 17, 18, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 40, 41, 42, 44, 45, 46, 47, 48, 49, 51]:                
                 if not isinstance(val, float):
                     val = float(val)
                 if (val < -88888):

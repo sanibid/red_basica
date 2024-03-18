@@ -208,7 +208,7 @@ class CalculationController(QObject):
                     if (self.model.insertRecord(rowCount,rec)):
                         cRec = self.contModel.record()
                         cRec.setValue('calculation_id', self.model.query().lastInsertId())
-                        condominial_lines_end = self.strToFloat(qeFp) * self.paramVal('occupancy_rate_end') * self.critVal('water_consumption_pc') * self.critVal('coefficient_return_c') / 86400
+                        condominial_lines_end = self.strToFloat(qeFp) * self.paramVal('occupancy_rate_end') * self.critVal('water_consumption_pc_end') * self.critVal('coefficient_return_c') / 86400
                         cRec.setValue('condominial_lines_end', condominial_lines_end)
                         cRec.setValue('initial_segment',row['AUX_TRM_I'])
                         cRec.setValue('col_seg',row['ID_TRM_(N)'])

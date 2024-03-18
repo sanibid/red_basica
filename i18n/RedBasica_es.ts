@@ -410,7 +410,7 @@
     <message>
         <location filename="../base/red_basica.py" line="2316"/>
         <source>tooltip_Qmed_i</source>
-        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados + infiltración [l/s]</translation>
+        <translation>Caudal medio de inicio de plan en el tramo. Se considera: caudales distribuidos + caudales concentrados [l/s]</translation>
     </message>
     <message>
         <location filename="../base/red_basica.py" line="2317"/>

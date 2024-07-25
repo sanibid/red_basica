@@ -119,7 +119,7 @@ class MainView(QDockWidget, Ui_ProfileWidget):
     def set_plot_widget(self):
         """ creates instance of pg.PlotWidget and sets initial config """
         plotWdg = pg.PlotWidget()
-        plotWdg.showGrid(True,True,0.5)
+        plotWdg.showGrid(True,True,int(1))
         datavline = pg.InfiniteLine(0, angle=90 ,pen=pg.mkPen('b',  width=1) , name = 'cross_vertical' )
         datahline = pg.InfiniteLine(0, angle=0 , pen=pg.mkPen('b',  width=1) , name = 'cross_horizontal')
         plotWdg.addItem(datavline)
